@@ -1,8 +1,8 @@
 import winston from 'winston';
 import 'winston-daily-rotate-file';
 import path from 'path';
-import fs from "fs";
 import { fileURLToPath } from 'url';
+import LokiTransport from 'winston-loki';
 
 const { combine, timestamp, json, errors } = winston.format;
 const __filename = fileURLToPath(import.meta.url);
@@ -37,8 +37,19 @@ const sillyFilter = winston.format((info, opts) => {
 
 export const logger = winston.createLogger({
     level: process.env.LOG_LEVEL_DEV || 'silly',
-    format: combine(timestamp(), json()),
+    format: winston.format.combine(
+        winston.format.timestamp(),
+        winston.format.json(),
+        winston.format.label({ label: "sven" })),
     transports: [
+        new LokiTransport({
+            host: "http://loki:3100",
+            labels: { app: 'sven' },
+            json: true,
+            format: winston.format.json(),
+            replaceTimestamp: true,
+            onConnectionError: (err) => console.error(err),
+        }),
         new winston.transports.DailyRotateFile({
             filename: path.join(logsDirectory, 'combined-%DATE%.log'),
             datePattern: 'YYYY-MM-DD',
