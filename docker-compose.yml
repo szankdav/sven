@@ -36,6 +36,8 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
   sven:
     image: ghcr.io/szankdav/sven:latest # Specify the build directory for your app or use an image
+    labels:
+      - "traefik.http.routers.sven.rule=Host(`svenbot.cloud`)"
     ports:
       - '3000:3000' # Expose your app's port (if applicable)
     # networks:
