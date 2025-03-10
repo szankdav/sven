@@ -1,0 +1,8 @@
+# traefik.yml
+
+certificatesResolvers:
+  myresolver:
+    acme:
+      email: "szankdav@svenbot.cloud"
+      storage: /letsencrypt/acme.json
+      tlsChallenge: {}
