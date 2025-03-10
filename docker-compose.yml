@@ -32,7 +32,7 @@ services:
       - "--providers.docker.exposedbydefault=false"
       - "--entryPoints.websecure.address=:443"
       - "--certificateresolvers.myresolver.acme.tlschallenge=true"
-      - "--certificateresolvers.myresolver.acme.email=szankdav.svenbot.cloud"
+      - "--certificateresolvers.myresolver.acme.email=szankdav@svenbot.cloud"
       - "--certificateresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
     ports:
       - "443:443"
@@ -67,6 +67,7 @@ services:
 #     driver: bridge
 
 # # Volumes to persist Grafana and Loki data
-# volumes:
+volumes:
+  letsencrypt:
 #   grafana-data:
 #   loki-data:
