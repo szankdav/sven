@@ -24,6 +24,14 @@ services:
   #     - LOKI_STORAGE_PATH=/data/loki
 
   # Your app service
+  watchtower:
+    image: containrrr/watchtower
+    command:
+      - "--label-enable"
+      - "--interval"
+      - "30"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
   reverse-proxy:
     image: traefik:v3.3
     command:
@@ -46,12 +54,13 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./traefik.yml:/etc/traefik/traefik.yml
   sven:
-    image: ghcr.io/szankdav/sven:latest # Specify the build directory for your app or use an image
+    image: ghcr.io/szankdav/sven:dev # Specify the build directory for your app or use an image
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.sven.rule=Host(`svenbot.cloud`)"
       - "traefik.http.routers.sven.entrypoints=websecure"
       - "traefik.http.routers.sven.tls.certresolver=myresolver"
+      - "com.centurylinklabs.watchtower.enable=true"
     deploy:
       mode: replicated
       replicas: 3
