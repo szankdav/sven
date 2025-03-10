@@ -30,6 +30,7 @@ services:
       - "--label-enable"
       - "--interval"
       - "30"
+      - "--docker-login"
     environment:
       - DOCKER_USERNAME=${GHCR_USERNAME}
       - DOCKER_PASSWORD=${GHCR_TOKEN}
