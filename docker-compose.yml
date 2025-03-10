@@ -38,6 +38,9 @@ services:
     image: ghcr.io/szankdav/sven:latest # Specify the build directory for your app or use an image
     labels:
       - "traefik.http.routers.sven.rule=Host(`svenbot.cloud`)"
+    deploy:
+      mode: replicated
+      replicas: 3
     # networks:
     #   - monitoring
     # environment:
