@@ -1,51 +1,51 @@
 version: '3'
 services:
   # Grafana service
-  grafana:
-    image: grafana/grafana:latest
-    ports:
-      - '3200:3000' # Expose Grafana's default port to your local machine
-    volumes:
-      - grafana-data:/var/lib/grafana
-    networks:
-      - monitoring
-    environment:
-      - GF_SECURITY_ADMIN_PASSWORD=admin # Optional: Set admin password for Grafana
+  # grafana:
+  #   image: grafana/grafana:latest
+  #   ports:
+  #     - '3200:3000' # Expose Grafana's default port to your local machine
+  #   volumes:
+  #     - grafana-data:/var/lib/grafana
+  #   networks:
+  #     - monitoring
+  #   environment:
+  #     - GF_SECURITY_ADMIN_PASSWORD=admin # Optional: Set admin password for Grafana
 
-  # Loki service
-  loki:
-    image: grafana/loki:latest
-    ports:
-      - '3100:3100' # Expose Loki's default port to your local machine
-    volumes:
-      - loki-data:/data
-    networks:
-      - monitoring
-    environment:
-      - LOKI_STORAGE_PATH=/data/loki
+  # # Loki service
+  # loki:
+  #   image: grafana/loki:latest
+  #   ports:
+  #     - '3100:3100' # Expose Loki's default port to your local machine
+  #   volumes:
+  #     - loki-data:/data
+  #   networks:
+  #     - monitoring
+  #   environment:
+  #     - LOKI_STORAGE_PATH=/data/loki
 
   # Your app service
   sven:
-    build: . # Specify the build directory for your app or use an image
+    image: ghcr.io/szankdav/sven:latest # Specify the build directory for your app or use an image
     ports:
       - '3000:3000' # Expose your app's port (if applicable)
-    networks:
-      - monitoring
-    environment:
-      - LOKI_URL=http://loki:3100 # Pointing your app to Loki service within the Docker network
-    depends_on:
-      - loki
-      - grafana
+    # networks:
+    #   - monitoring
+    # environment:
+    #   - LOKI_URL=http://loki:3100 # Pointing your app to Loki service within the Docker network
+    # depends_on:
+    #   - loki
+    #   - grafana
     env_file:
       - .env
     # Other environment variables for your app can be defined here
 
 # Define the shared network
-networks:
-  monitoring:
-    driver: bridge
+# networks:
+#   monitoring:
+#     driver: bridge
 
-# Volumes to persist Grafana and Loki data
-volumes:
-  grafana-data:
-  loki-data:
+# # Volumes to persist Grafana and Loki data
+# volumes:
+#   grafana-data:
+#   loki-data:

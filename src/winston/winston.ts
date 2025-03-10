@@ -42,14 +42,14 @@ export const logger = winston.createLogger({
         winston.format.json(),
         winston.format.label({ label: "sven" })),
     transports: [
-        new LokiTransport({
-            host: "http://loki:3100",
-            labels: { app: 'sven' },
-            json: true,
-            format: winston.format.json(),
-            replaceTimestamp: true,
-            onConnectionError: (err) => console.error(err),
-        }),
+        // new LokiTransport({
+        //     host: "http://loki:3100",
+        //     labels: { app: 'sven' },
+        //     json: true,
+        //     format: winston.format.json(),
+        //     replaceTimestamp: true,
+        //     onConnectionError: (err) => console.error(err),
+        // }),
         new winston.transports.DailyRotateFile({
             filename: path.join(logsDirectory, 'combined-%DATE%.log'),
             datePattern: 'YYYY-MM-DD',
