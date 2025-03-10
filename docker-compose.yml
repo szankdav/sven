@@ -32,7 +32,7 @@ services:
       - "30"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ~/.docker/config.json:/root/.docker/config.json
+      - ~/.docker/config.json:/config.json
   reverse-proxy:
     image: traefik:v3.3
     command:
