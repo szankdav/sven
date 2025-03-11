@@ -61,9 +61,6 @@ services:
       - "traefik.http.routers.sven.entrypoints=websecure"
       - "traefik.http.routers.sven.tls.certresolver=myresolver"
       - "com.centurylinklabs.watchtower.enable=true"
-    deploy:
-      mode: replicated
-      replicas: 3
     # networks:
     #   - monitoring
     # environment:
