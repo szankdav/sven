@@ -1,16 +1,17 @@
 import sqlite3, { Database } from "sqlite3";
 import { SqlParams } from "../types/sqlparams.type.js";
 import path from "path";
-import fs from "fs";
 import { fileURLToPath } from "url";
 import { logger } from "../../winston/winston.js";
+import { config } from "../../config.js";
 
 // Initialize database
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const dbFilePath = path.join(__dirname, 'DiscordMessages.db');
+const dbFilePath = config.DB_PATH || path.join(__dirname, 'DiscordMessages.db');
 
 logger.info(`Using SQLite database at: ${dbFilePath}`);
+console.log(`Using SQLite database at: ${dbFilePath}`);
 
 export const db = new sqlite3.Database(dbFilePath, (err) => {
     if (err) {
