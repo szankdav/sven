@@ -8,7 +8,7 @@ import { config } from "../../config.js";
 // Initialize database
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const dbFilePath = config.DB_PATH || path.join(__dirname, 'DiscordMessages.db');
+const dbFilePath = config.DB_PATH || path.join(__dirname, 'db/DiscordMessages.db');
 
 logger.info(`Using SQLite database at: ${dbFilePath}`);
 console.log(`Using SQLite database at: ${dbFilePath}`);

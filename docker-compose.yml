@@ -69,7 +69,7 @@ services:
     #   - loki
     #   - grafana
     volumes:
-      - /home/szankdav/database:/sven/dist/logger/database
+      - /home/szankdav/database:/sven/dist/logger/database/db
     env_file:
       - .env
     # Other environment variables for your app can be defined here
