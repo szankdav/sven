@@ -73,3 +73,17 @@
 {"label":"sven","level":"info","message":"Connected to SQLite database successfully at path: D:\\Apps\\Viktor\\sven\\src\\logger\\database\\db\\DiscordMessages.db","timestamp":"2025-03-15T10:31:43.108Z"}
 {"label":"sven","level":"info","message":"Database filled with fake data.","timestamp":"2025-03-15T10:31:56.683Z"}
 {"label":"sven","level":"info","message":"Connected to SQLite database successfully at path: D:\\Apps\\Viktor\\sven\\src\\logger\\database\\db\\DiscordMessages.db","timestamp":"2025-03-15T10:32:18.452Z"}
+{"label":"sven","level":"info","message":"Connected to SQLite database successfully at path: D:\\Apps\\Viktor\\sven\\src\\logger\\database\\db\\DiscordMessages.db","timestamp":"2025-03-15T15:06:54.086Z"}
+{"label":"sven","level":"info","message":"Started refreshing application (/) commands.","timestamp":"2025-03-15T15:06:54.660Z"}
+{"label":"sven","level":"info","message":"Successfully reloaded application (/) commands.","timestamp":"2025-03-15T15:06:54.900Z"}
+{"label":"sven","level":"info","message":"Discord bot is ready! 🤖","timestamp":"2025-03-15T15:06:54.901Z"}
+{"label":"sven","level":"info","message":"Author added to the database!","timestamp":"2025-03-15T15:06:59.542Z","username":"Szankovszky Dávid"}
+{"authorId":201,"label":"sven","level":"info","message":"Message added to the database! FC","timestamp":"2025-03-15T15:06:59.554Z"}
+{"authorId":201,"label":"sven","level":"info","message":"Letters added for the author!","timestamp":"2025-03-15T15:06:59.559Z"}
+{"authorId":201,"label":"sven","level":"info","message":"Message added to the database! FC2","timestamp":"2025-03-15T15:07:53.976Z"}
+{"label":"sven","level":"info","message":"Connected to SQLite database successfully at path: D:\\Apps\\Viktor\\sven\\src\\logger\\database\\db\\DiscordMessages.db","timestamp":"2025-03-15T15:25:00.530Z"}
+{"label":"sven","level":"info","message":"Started refreshing application (/) commands.","timestamp":"2025-03-15T15:25:01.080Z"}
+{"label":"sven","level":"info","message":"Successfully reloaded application (/) commands.","timestamp":"2025-03-15T15:25:01.310Z"}
+{"label":"sven","level":"info","message":"Discord bot is ready! 🤖","timestamp":"2025-03-15T15:25:01.311Z"}
+{"authorId":201,"label":"sven","level":"info","message":"Message added to the database! teszt","timestamp":"2025-03-15T15:25:07.363Z"}
+{"label":"sven","level":"info","message":"Message logged by user: Szankovszky Dávid","timestamp":"2025-03-15T15:25:07.394Z"}
