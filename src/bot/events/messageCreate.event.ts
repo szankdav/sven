@@ -1,5 +1,8 @@
 import { Collection, Message, OmitPartialGroupDMChannel, User } from "discord.js";
 import { logger } from "../../winston/winston.js";
+import { DiscordMessage } from "../../logger/types/discordMessage.type.js";
+import { logMessages } from "../services/api/logger.js";
+//import { messageLoggerHandlerByFunction } from "../../logger/handlers/messageLogger.handler.js";
 
 export async function createMessage(message: OmitPartialGroupDMChannel<Message<boolean>>) {
   try {
@@ -11,24 +14,16 @@ export async function createMessage(message: OmitPartialGroupDMChannel<Message<b
       messageWithoutMemberId = messageWithoutMemberId.replace(`<@${user[0]}>`, user[1].username);
     }
 
-    const messageData = {
+    const messageData: DiscordMessage = {
       discordId: message.author.id,
-      username: message.author.globalName,
+      username: message.author.globalName!,
       messageCreatedAt: message.createdTimestamp,
       content: messageWithoutMemberId,
     }
 
-    const result = await fetch("http://localhost:3000/logMessage", {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ message: messageData }),
-    })
+    //await messageLoggerHandlerByFunction(messageData);
 
-    if (result.status === 200) {
-      logger.info(`Message logged by user: ${message.author.globalName}`)
-    }
+    await logMessages(messageData);
   } catch (error) {
     logger.error("Error creating message:", error);
   }

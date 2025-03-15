@@ -24,7 +24,7 @@ app.set("views", path.join(__dirname, 'logger/view'));
 app.use(express.static(path.join(__dirname, '../public')));
 app.use(express.static(path.join(__dirname, 'dist')));
 app.use(express.json())
-const port = process.env.PORT || 3000;
+const port = Number(process.env.PORT) || 3000;
 
 try {
     await createTables(db);
@@ -32,7 +32,7 @@ try {
     logger.error("Error creating tables:", error);
 }
 
-app.listen(port, () => {
+app.listen(port, "0.0.0.0", () => {
     console.log(`Server running at port: ${port}`);
 });
 

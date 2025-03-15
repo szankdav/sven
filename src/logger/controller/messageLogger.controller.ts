@@ -19,9 +19,7 @@ export const insertAuthorIntoDatabase = async (db: Database, message: DiscordMes
             await createAuthor(db, authorToCreate);
             logger.info('Author added to the database!', { username: message.username });
         }
-
         const newAuthor: AuthorModel | undefined = await getAuthorByDiscordId(db, [message.discordId]);
-
         return newAuthor ? newAuthor.id : 0;
     } catch (error) {
         logger.error("Error creating author in database:", error);

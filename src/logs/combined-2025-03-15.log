@@ -315,3 +315,9 @@
 {"level":"info","message":"Discord bot is ready! 🤖","timestamp":"2025-03-15T15:25:01.311Z"}
 {"authorId":201,"level":"info","message":"Message added to the database! teszt","timestamp":"2025-03-15T15:25:07.363Z"}
 {"level":"info","message":"Message logged by user: Szankovszky Dávid","timestamp":"2025-03-15T15:25:07.394Z"}
+{"level":"info","message":"Connected to SQLite database successfully at path: D:\\Apps\\Viktor\\sven\\src\\logger\\database\\db\\DiscordMessages.db","timestamp":"2025-03-15T15:59:13.608Z"}
+{"level":"info","message":"Started refreshing application (/) commands.","timestamp":"2025-03-15T15:59:14.239Z"}
+{"level":"info","message":"Successfully reloaded application (/) commands.","timestamp":"2025-03-15T15:59:14.430Z"}
+{"level":"info","message":"Discord bot is ready! 🤖","timestamp":"2025-03-15T15:59:14.431Z"}
+{"authorId":201,"level":"info","message":"Message added to the database! API teszt","timestamp":"2025-03-15T15:59:24.386Z"}
+{"level":"info","message":"Message logged by user: Szankovszky Dávid","timestamp":"2025-03-15T15:59:24.426Z"}
