@@ -1,0 +1,33 @@
+{"level":"info","message":"Connected to SQLite database successfully at path: D:\\Apps\\Viktor\\sven\\src\\logger\\database\\db\\DiscordMessages.db","timestamp":"2025-03-14T13:54:56.102Z"}
+{"level":"info","message":"Started refreshing application (/) commands.","timestamp":"2025-03-14T13:54:56.708Z"}
+{"level":"info","message":"Successfully reloaded application (/) commands.","timestamp":"2025-03-14T13:54:56.950Z"}
+{"level":"info","message":"Discord bot is ready! 🤖","timestamp":"2025-03-14T13:54:56.950Z"}
+{"level":"info","message":"Message logged by user: Szankovszky Dávid","timestamp":"2025-03-14T13:55:03.184Z"}
+{"level":"info","message":"Connected to SQLite database successfully at path: D:\\Apps\\Viktor\\sven\\src\\logger\\database\\db\\DiscordMessages.db","timestamp":"2025-03-14T14:02:12.131Z"}
+{"level":"info","message":"Started refreshing application (/) commands.","timestamp":"2025-03-14T14:02:12.873Z"}
+{"level":"info","message":"Successfully reloaded application (/) commands.","timestamp":"2025-03-14T14:02:13.119Z"}
+{"level":"info","message":"Discord bot is ready! 🤖","timestamp":"2025-03-14T14:02:13.120Z"}
+{"level":"info","message":"Connected to SQLite database successfully at path: D:\\Apps\\Viktor\\sven\\src\\logger\\database\\db\\DiscordMessages.db","timestamp":"2025-03-14T14:02:46.983Z"}
+{"level":"info","message":"Started refreshing application (/) commands.","timestamp":"2025-03-14T14:02:47.733Z"}
+{"level":"info","message":"Successfully reloaded application (/) commands.","timestamp":"2025-03-14T14:02:48.016Z"}
+{"level":"info","message":"Discord bot is ready! 🤖","timestamp":"2025-03-14T14:02:48.017Z"}
+{"level":"info","message":"Author added to the database!","timestamp":"2025-03-14T14:02:57.593Z","username":"Szankovszky Dávid"}
+{"level":"info","message":"Message logged by user: Szankovszky Dávid","timestamp":"2025-03-14T14:02:57.808Z"}
+{"level":"info","message":"Connected to SQLite database successfully at path: D:\\Apps\\Viktor\\sven\\src\\logger\\database\\db\\DiscordMessages.db","timestamp":"2025-03-14T14:14:35.875Z"}
+{"level":"info","message":"Started refreshing application (/) commands.","timestamp":"2025-03-14T14:14:36.520Z"}
+{"level":"info","message":"Successfully reloaded application (/) commands.","timestamp":"2025-03-14T14:14:36.717Z"}
+{"level":"info","message":"Discord bot is ready! 🤖","timestamp":"2025-03-14T14:14:36.718Z"}
+{"level":"info","message":"Author added to the database!","timestamp":"2025-03-14T14:14:41.261Z","username":"Szankovszky Dávid"}
+{"level":"info","message":"Message logged by user: Szankovszky Dávid","timestamp":"2025-03-14T14:14:41.433Z"}
+{"level":"info","message":"Connected to SQLite database successfully at path: D:\\Apps\\Viktor\\sven\\src\\logger\\database\\db\\DiscordMessages.db","timestamp":"2025-03-14T15:42:29.079Z"}
+{"level":"info","message":"Started refreshing application (/) commands.","timestamp":"2025-03-14T15:42:29.625Z"}
+{"level":"info","message":"Successfully reloaded application (/) commands.","timestamp":"2025-03-14T15:42:29.825Z"}
+{"level":"info","message":"Discord bot is ready! 🤖","timestamp":"2025-03-14T15:42:29.825Z"}
+{"authorId":1,"level":"info","message":"Messsage added to the database! Refactored lokal","timestamp":"2025-03-14T15:42:40.250Z"}
+{"level":"info","message":"Message logged by user: Szankovszky Dávid","timestamp":"2025-03-14T15:42:40.317Z"}
+{"level":"info","message":"Connected to SQLite database successfully at path: D:\\Apps\\Viktor\\sven\\src\\logger\\database\\db\\DiscordMessages.db","timestamp":"2025-03-14T16:27:54.261Z"}
+{"level":"info","message":"Started refreshing application (/) commands.","timestamp":"2025-03-14T16:27:55.013Z"}
+{"level":"info","message":"Successfully reloaded application (/) commands.","timestamp":"2025-03-14T16:27:55.210Z"}
+{"level":"info","message":"Discord bot is ready! 🤖","timestamp":"2025-03-14T16:27:55.211Z"}
+{"authorId":1,"level":"info","message":"Messsage added to the database! Test test","timestamp":"2025-03-14T16:28:02.209Z"}
+{"level":"info","message":"Message logged by user: Szankovszky Dávid","timestamp":"2025-03-14T16:28:02.249Z"}

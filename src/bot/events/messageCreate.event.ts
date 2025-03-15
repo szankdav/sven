@@ -12,6 +12,7 @@ export async function createMessage(message: OmitPartialGroupDMChannel<Message<b
     }
 
     const messageData = {
+      discordId: message.author.id,
       username: message.author.globalName,
       messageCreatedAt: message.createdTimestamp,
       content: messageWithoutMemberId,

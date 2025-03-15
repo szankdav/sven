@@ -1,6 +1,6 @@
 import { fakerHU } from '@faker-js/faker';
 import { Database } from 'sqlite3';
-import { execute, fetchAll } from "../database.js";
+import { execute, fetchAll } from "../database.operations.js";
 import { db } from "../database.js";
 import { logger } from '../../../winston/winston.js';
 
@@ -8,14 +8,15 @@ const createFakeAuthors = (): string[] => {
     const fakeAuthors: string[] = [];
     for (let i = 0; i < 100; i++) {
         const name = fakerHU.person.fullName();
+        const discordId = fakerHU.number.int();
         const createdAt = fakerHU.date.past().toISOString();
-        fakeAuthors.push(`('${name}', '${createdAt}')`);
+        fakeAuthors.push(`('${name}', '${discordId}', '${createdAt}')`);
     }
     return fakeAuthors;
 };
 
 const insertAuthors = async (db: Database, fakeAuthors: string[]): Promise<void> => {
-    await execute(db, `INSERT INTO Authors (name, createdAt) VALUES ${fakeAuthors.join(", ")}`);
+    await execute(db, `INSERT INTO Authors (name, discordId, createdAt) VALUES ${fakeAuthors.join(", ")}`);
 };
 
 const fetchAuthors = async (db: Database): Promise<{ id: number; createdAt: string }[]> => {
@@ -88,6 +89,6 @@ const fillDatabaseWithFakeData = async (db: Database): Promise<void> => {
 };
 
 export const runFaker = async () => {
-    logger.info("Database filled with fake data.");
     await fillDatabaseWithFakeData(db);
+    logger.info("Database filled with fake data.");
 } 

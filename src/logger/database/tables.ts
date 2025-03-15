@@ -1,5 +1,5 @@
 import { Database } from "sqlite3";
-import { execute } from "./database.js";
+import { execute } from "./database.operations.js";
 import { logger } from "../../winston/winston.js";
 
 export const createAuthorsTable = async (db: Database): Promise<void> => {
@@ -9,6 +9,7 @@ export const createAuthorsTable = async (db: Database): Promise<void> => {
             `CREATE TABLE IF NOT EXISTS Authors (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
+            discordId TEXT NOT NULL,
             createdAt TEXT NOT NULL)`
         );
     } catch (error) {

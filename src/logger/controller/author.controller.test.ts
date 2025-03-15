@@ -1,32 +1,39 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import * as authorModel from "../model/author.model";
-import * as messageModel from "../model/message.model";
-import { createTables } from "../database/tables";
+import { afterEach, beforeEach, describe, expect, it, MockInstance, vi } from "vitest";
 import sqlite3, { Database } from "sqlite3";
 import { AuthorModel } from "../model/author.model";
-import { MessageModel } from "../model/message.model";
+import * as authorModel from "../model/author.model";
 import * as authorsController from "../controller/author.controller";
 import { RenderObject } from "../types/renderObject.type";
 import { AuthorsError } from "../utils/customErrorClasses/authorsError.class";
+import { logger } from "../../winston/winston";
 
 let db: Database;
 const createdAtTime = new Date().toLocaleString();
+let loggerInfo: MockInstance;
+let loggerError: MockInstance;
+
+vi.mock("sqlite3", async (importOriginal) => {
+    const actual = await importOriginal<typeof import("sqlite3")>();
+
+    return {
+        ...actual,
+        Database: vi.fn().mockImplementation(() => ({
+            all: vi.fn(),
+            get: vi.fn(),
+            run: vi.fn(),
+            close: vi.fn(),
+        })),
+    };
+});
 
 describe('author.controller tests', () => {
     beforeEach(async () => {
         vi.clearAllMocks();
-        vi.spyOn(console, 'error').mockImplementation(() => { });
-        vi.spyOn(console, 'log').mockImplementation(() => { });
+        loggerInfo = vi.spyOn(logger, 'info');
+        loggerInfo.mockResolvedValue("Test call");
+        loggerError = vi.spyOn(logger, 'error');
+        loggerError.mockResolvedValue("Test call");
         db = new sqlite3.Database(":memory:");
-        await createTables(db);
-        const testAuthor1: AuthorModel = { id: 1, name: "Teszt Elek", createdAt: createdAtTime };
-        const testAuthor2: AuthorModel = { id: 2, name: "Teszt Elekné", createdAt: createdAtTime };
-        await authorModel.createAuthor(db, [testAuthor1.name, testAuthor1.createdAt]);
-        await authorModel.createAuthor(db, [testAuthor2.name, testAuthor2.createdAt]);
-        const testMessage1: MessageModel = { id: 1, authorId: 1, content: "Teszt", messageCreatedAt: createdAtTime };
-        const testMessage2: MessageModel = { id: 2, authorId: 2, content: "Teszt", messageCreatedAt: createdAtTime };
-        await messageModel.createMessage(db, [testMessage1.authorId, testMessage1.content, testMessage1.messageCreatedAt]);
-        await messageModel.createMessage(db, [testMessage2.authorId, testMessage2.content, testMessage2.messageCreatedAt]);
     });
 
     afterEach(() => {
@@ -36,25 +43,36 @@ describe('author.controller tests', () => {
 
     describe('authorsController tests', () => {
         it('should return with a valid renderObject if data is valid', async () => {
-            vi.spyOn(authorsController, 'authorsController');
-            const renderObject: RenderObject = await authorsController.authorsController(db, 1);
             const testAuthor1: AuthorModel = { id: 1, name: "Teszt Elek", createdAt: createdAtTime };
             const testAuthor2: AuthorModel = { id: 2, name: "Teszt Elekné", createdAt: createdAtTime };
-            expect(renderObject.viewName).toBe("authors");
-            const authorsPageNumber = 1;
-            const authorsSlicedByTen = [testAuthor1, testAuthor2];
+            const authorsPageNumber: number = 1;
+            const authorsSlicedByTen: AuthorModel[] = [testAuthor1, testAuthor2];
             const error = "";
-            expect(renderObject.options).toStrictEqual({authorsPageNumber, authorsSlicedByTen, error});
+            vi.spyOn(authorModel, 'getAllAuthors').mockResolvedValue([testAuthor1, testAuthor2]);
+            vi.spyOn(authorModel, 'getTenAuthors').mockResolvedValue([testAuthor1, testAuthor2]);
+            vi.spyOn(authorsController, 'authorsController');
+            const result: RenderObject = await authorsController.authorsController(db, 1);
+            expect(result.viewName).toBe("authors");
+            expect(result.options).toStrictEqual({ authorsPageNumber, authorsSlicedByTen, error });
+        })
+
+        it('should return with an error renderObject if data is invalid', async () => {
+            vi.spyOn(authorsController, 'authorsController');
+            const result: RenderObject = await authorsController.authorsController(db, NaN);
+            expect(result.viewName).toBe("error");
+            expect(result.options).toStrictEqual({ err: "Page not found!" });
         })
 
         it('should return with a valid renderObject if data is not valid', async () => {
-            vi.spyOn(authorsController, 'authorsController');
-            const renderObject: RenderObject = await authorsController.authorsController(db, 10);
-            expect(renderObject.viewName).toBe("authors");
-            const authorsPageNumber = 1;
-            const authorsSlicedByTen: [] = [];
+            const testAuthor1: AuthorModel = { id: 1, name: "Teszt Elek", createdAt: createdAtTime };
+            const testAuthor2: AuthorModel = { id: 2, name: "Teszt Elekné", createdAt: createdAtTime };
+            vi.spyOn(authorModel, 'getAllAuthors').mockResolvedValue([testAuthor1, testAuthor2]);
+            vi.spyOn(authorModel, 'getTenAuthors').mockResolvedValue([testAuthor1, testAuthor2]);
+            const authorsPageNumber: number = 1;
+            const authorsSlicedByTen: AuthorModel[] = [testAuthor1, testAuthor2];
             const error = "No authors to show... Are you sure you are at the right URL?";
-            expect(renderObject.options).toStrictEqual({authorsPageNumber, authorsSlicedByTen, error});
+            const result: RenderObject = await authorsController.authorsController(db, 2);
+            expect(result.options).toStrictEqual({ authorsPageNumber, authorsSlicedByTen, error });
         })
 
         it('should throw an error with the correct message', async () => {
@@ -62,6 +80,14 @@ describe('author.controller tests', () => {
 
             await expect(authorsController.authorsController(db, 1)).rejects.toThrow(AuthorsError);
             await expect(authorsController.authorsController(db, 1)).rejects.toThrow("Error fetching authors!");
+        })
+
+        it('should log an error with the correct message', async () => {
+            vi.spyOn(authorsController, 'authorsController');
+            vi.spyOn(authorModel, 'getTenAuthors').mockRejectedValue(new Error("Error fetching authors!"))
+
+            await expect(authorsController.authorsController(db, 1)).rejects.toThrow("Error fetching authors!");
+            expect(loggerError).toHaveBeenCalled();
         })
     })
 })

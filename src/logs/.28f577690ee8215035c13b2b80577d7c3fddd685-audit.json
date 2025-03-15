@@ -9,6 +9,21 @@
             "date": 1741098974596,
             "name": "D:\\Apps\\Viktor\\sven\\src\\logs\\combined-2025-03-04.log",
             "hash": "64f46b16fb728e9b57b0a7249fe3c7908d6594af3e70bf571491a520a405d5f7"
+        },
+        {
+            "date": 1741863153399,
+            "name": "D:\\Apps\\Viktor\\sven\\src\\logs\\combined-2025-03-13.log",
+            "hash": "195e47c79a86827ac3dd3cedf17b1cec5c18a3b3b90a8c89b6ef3d0ffe608df9"
+        },
+        {
+            "date": 1741957197652,
+            "name": "D:\\Apps\\Viktor\\sven\\src\\logs\\combined-2025-03-14.log",
+            "hash": "b67e480a552111b2329fc220c9740fde180b31cd6eab2b15324ef57326c55967"
+        },
+        {
+            "date": 1742022578947,
+            "name": "D:\\Apps\\Viktor\\sven\\src\\logs\\combined-2025-03-15.log",
+            "hash": "c4b410fd990ba7c8ca51ea69899ac3b4e4e45f7f2f5b3747509789cd5c2c3d07"
         }
     ],
     "hashType": "sha256"

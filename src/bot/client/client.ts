@@ -5,7 +5,7 @@ import { cooldownForInteraction } from "../interactions/cooldown.interaction.js"
 import { createMessage, answerBotMention } from "../events/messageCreate.event.js"
 import { logger } from "../../winston/winston.js";
 
-const client = new Client({
+export const client = new Client({
   intents: ["Guilds", "GuildMessages", "DirectMessages", "MessageContent"],
 });
 

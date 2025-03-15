@@ -2,17 +2,17 @@ import { Database } from "sqlite3";
 import { SqlParams } from "../types/sqlparams.type.js";
 import { LetterStatistic } from "../types/letterStatistic.type.js";
 import { StatisticError } from "../utils/customErrorClasses/statisticError.class.js";
-import { getAllAuthors, getAuthorById } from "../model/author.model.js";
-import { getLetterCountersByAuthorId } from "../model/letterCounter.model.js";
+import { AuthorModel, getAllAuthors, getAuthorById } from "../model/author.model.js";
+import { getLetterCountersByAuthorId, LetterModel } from "../model/letterCounter.model.js";
 import { RenderObject } from "../types/renderObject.type.js";
 import { logger } from "../../winston/winston.js";
 
 export const statisticsByAuthorController = async (db: Database, params: SqlParams): Promise<RenderObject> => {
     try {
-        let author = await getAuthorById(db, params);
-        let authors = await getAllAuthors(db);
-        const letterCounters = await getLetterCountersByAuthorId(db, params);
-        const letterStatistics = await getLetterStatictics(db, params);
+        let author: AuthorModel | undefined = await getAuthorById(db, params);
+        let authors: AuthorModel[] = await getAllAuthors(db);
+        const letterCounters: LetterModel[] = await getLetterCountersByAuthorId(db, params);
+        const letterStatistics: LetterStatistic[] = await getLetterStatictics(db, params);
 
         if (!author) {
             author = { id: 0, name: "-", createdAt: "-" }

@@ -2,7 +2,6 @@ import winston from 'winston';
 import 'winston-daily-rotate-file';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import LokiTransport from 'winston-loki';
 
 const { combine, timestamp, json, errors } = winston.format;
 const __filename = fileURLToPath(import.meta.url);
