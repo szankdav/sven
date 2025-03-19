@@ -28,7 +28,9 @@ export function cooldownForInteraction(interaction: Interaction<CacheType>) {
 
     if (now < expirationTime * 1000) {
       const remainingTime = Math.round(expirationTime - now / 1000);
-      logger.info(`Interaction: ${interaction.commandName} was tried to get use within the expiration time by user: ${interaction.user.globalName}`);
+      logger.info(
+        `Interaction: ${interaction.commandName} was tried to get use within the expiration time by user: ${interaction.user.globalName}`,
+      );
       return interaction.reply({
         content: `Kérlek várj még ${remainingTime} másodpercet, mielőtt újra használnád a \`${command}\` parancsot.`,
         flags: MessageFlags.Ephemeral,
@@ -40,9 +42,7 @@ export function cooldownForInteraction(interaction: Interaction<CacheType>) {
   setTimeout(() => timestamps.delete(interaction.user.id), cooldownAmount);
 
   if (!command) {
-    logger.error(
-      `No command matching ${interaction.commandName} was found.`
-    );
+    logger.error(`No command matching ${interaction.commandName} was found.`);
     return;
   }
 

@@ -1,39 +1,48 @@
 # Overview & Introduction
+
 ## Project name
+
 SVSimulator-chatbot
 
 ## Description
+
 The goal of this program is to create a Discord bot that logs messages sent on a server into a database.
 
 ## Target audience
+
 Anyone who wants to log messages sent on their Discord server or needs a configurable bot to suit their requirements.
 
 ## Key Features
-* Initialize Discord bot
-* Log messages sent by the bot
-* Display messages and related data
+
+- Initialize Discord bot
+- Log messages sent by the bot
+- Display messages and related data
 
 ## Tech stack
-* Node.JS with Express.JS
-* Discord.JS
-* TypeScript
-* EJS framework
-* Winston logger
-* SQLite3
-* PlayWright
-* Vitest
+
+- Node.JS with Express.JS
+- Discord.JS
+- TypeScript
+- EJS framework
+- Winston logger
+- SQLite3
+- PlayWright
+- Vitest
 
 # Installation & Setup
+
 ## Installation Steps
+
 Clone the repository's development branch:
 
     git clone -b development --single-branch https://github.com/szankdav/SVSimulator-chatbot.git
 
- Navigate to the cloned folder and install dependencies:
+Navigate to the cloned folder and install dependencies:
 
      npm install
 
 ## Configuration
+
 To set up your bot, refer to the Discord Developer Portal:
 [Setting up a bot application](https://discordjs.guide/preparations/setting-up-a-bot-application.html)
 
@@ -45,6 +54,7 @@ Create a .env file in your root folder and add these variables:
     LOG_LEVEL_DEV=silly
 
 # Usage Guide
+
 ## How to Run the Software
 
 To run the program in developer mode:
@@ -95,11 +105,9 @@ Statistics Page (After Clicking Show Statistics)
 
 Statistics Page (After Clicking Show Statistics)
 
-
-
 Advanced Features
 
-You can customize your bot by modifying the files in: **/src/bot/*/**.
+You can customize your bot by modifying the files in: **/src/bot/\*/**.
 Refer to the [Discord.js](https://discordjs.guide/creating-your-bot/slash-commands.html) guide for more details.
 The application uses [Winston Logger](https://github.com/winstonjs/winston) to log activities into log files, stored in /src/logs. You can adjust the log level in .env.
 
@@ -108,14 +116,16 @@ The application uses [Winston Logger](https://github.com/winstonjs/winston) to l
 ## Endpoints
 
 GET Requests::
-* /
-* /authors/:page
-* /mesages/:page
-* /messages/author/:id
-* /statistics/author/:id
+
+- /
+- /authors/:page
+- /mesages/:page
+- /messages/author/:id
+- /statistics/author/:id
 
 POST Requests::
-* /logMessage
+
+- /logMessage
 
 ## Request & Response Examples
 
@@ -170,13 +180,12 @@ The application uses custom error classes:
     	}
     }
 
-
 Example usage:
 
     export const authorsController = async (db: Database, page: number): Promise<RenderObject> => {
     	try {
         	if (isNaN(page)) {
-            	const renderObject: RenderObject = { viewName: "error", options: { err: "Page not found!" } } 
+            	const renderObject: RenderObject = { viewName: "error", options: { err: "Page not found!" } }
             	return renderObject;
         	}
         	const authorsPageNumber = Math.ceil((await getAllAuthors(db)).length / 10);
@@ -202,7 +211,7 @@ Example usage:
 
 The application uses [SQLite3](https://www.sqlitetutorial.net/) for data storage. Configure the file location in:
 
-	const dbFilePath = path.join(__dirname, 'DiscordMessages.db');
+    const dbFilePath = path.join(__dirname, 'DiscordMessages.db');
 
 ## Database Structure
 
@@ -220,50 +229,50 @@ Root Folder:
 
 ![](https://i.ibb.co/6cJwS0qz/rootfolder.jpg)
 
-* **/dist**: Contains the built application.
-* **/public**: Includes JavaScript and CSS files for EJS templates.
-* **/src**: Main application folder.
-* **/tests**: Contains Playwright tests.
+- **/dist**: Contains the built application.
+- **/public**: Includes JavaScript and CSS files for EJS templates.
+- **/src**: Main application folder.
+- **/tests**: Contains Playwright tests.
 
 **/src** Folder Structure
 
 ![](https://i.ibb.co/cSh27Vqk/srcfolder.jpg)
 
-* **/bot**: Folder for the discord bot.
-* **/logger**: Folder for the logging logic.
-* **/scripts**: Folder for reusable scripts.
-* **/winston**: Folder of the winston logger.
+- **/bot**: Folder for the discord bot.
+- **/logger**: Folder for the logging logic.
+- **/scripts**: Folder for reusable scripts.
+- **/winston**: Folder of the winston logger.
 
 **/bot** Folder Structure
 
 ![](https://i.ibb.co/rRv8x1V0/botfolder.jpg)
 
-* **/client**: Bot initialization files.
-* **/commands/utility**: Slash commands for the bot.
-* **/events**: Events the bot listens to.
-* **/interactions**: Bot interactions.
+- **/client**: Bot initialization files.
+- **/commands/utility**: Slash commands for the bot.
+- **/events**: Events the bot listens to.
+- **/interactions**: Bot interactions.
 
 **/logger** Folder Structure
 
 ![](https://i.ibb.co/pBdPNdL7/loggerfolder.jpg)
 
-* **/controller**: Controllers.
-* **/database**: Database-related files.
-* **/database/faker**: Faker.js-based fake data generator.
-* **/handlers**: Handlers.
-* **/model**: Models.
-* **/types**: Type definitions.
-* **/utils/customErrorClasses**: Custom error classes.
-* **/view**: EJS files.
-* **/view/core**: Reused EJS files.
+- **/controller**: Controllers.
+- **/database**: Database-related files.
+- **/database/faker**: Faker.js-based fake data generator.
+- **/handlers**: Handlers.
+- **/model**: Models.
+- **/types**: Type definitions.
+- **/utils/customErrorClasses**: Custom error classes.
+- **/view**: EJS files.
+- **/view/core**: Reused EJS files.
 
 ## Key Components
 
 The project follows the MVC pattern:
 
-* **/src/logger/model** Manages data.
-* **/src/logger/view**: Handles layout and display.
-* **/src/logger/controller**: Routes commands to the model and view parts.
+- **/src/logger/model** Manages data.
+- **/src/logger/view**: Handles layout and display.
+- **/src/logger/controller**: Routes commands to the model and view parts.
 
 ## Testing
 
@@ -286,4 +295,5 @@ This command generates fake data, runs the tests, and removes test data afterwar
 # Licensing & Legal
 
 ## Created by
+
 David Szankovszky - https://github.com/szankdav

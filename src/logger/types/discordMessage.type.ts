@@ -1,6 +1,6 @@
 export type DiscordMessage = {
-    discordId: string,
-    username: string, 
-    messageCreatedAt: number, 
-    content: string
-}
+  discordId: string;
+  username: string;
+  messageCreatedAt: number;
+  content: string;
+};

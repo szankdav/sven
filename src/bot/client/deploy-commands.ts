@@ -13,10 +13,13 @@ export async function deployCommands() {
     logger.info("Started refreshing application (/) commands.");
 
     await rest.put(
-      Routes.applicationGuildCommands(config.DISCORD_CLIENT_ID_DEV, config.GUILD_ID_DEV),
+      Routes.applicationGuildCommands(
+        config.DISCORD_CLIENT_ID_DEV,
+        config.GUILD_ID_DEV,
+      ),
       {
         body: commandsData,
-      }
+      },
     );
 
     console.log("Successfully reloaded application (/) commands.");

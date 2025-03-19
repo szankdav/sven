@@ -1,57 +1,96 @@
 import { Database } from "sqlite3";
-import { execute, fetchAll, fetchFirst } from "../database/database.operations.js";
+import {
+  execute,
+  fetchAll,
+  fetchFirst,
+} from "../database/database.operations.js";
 import { SqlParams } from "../types/sqlparams.type.js";
 
 export type AuthorModel = {
-    id: number;
-    name: string;
-    createdAt: string;
+  id: number;
+  name: string;
+  createdAt: string;
 };
 
-export const createAuthor = async (db: Database, params: SqlParams): Promise<void> => {
-    const sql: string = `INSERT INTO Authors(name, discordId, createdAt) VALUES (?, ?, ?)`;
-    await execute(db, sql, params);
+export const createAuthor = async (
+  db: Database,
+  params: SqlParams,
+): Promise<void> => {
+  const sql: string =
+    "INSERT INTO Authors(name, discordId, createdAt) VALUES (?, ?, ?)";
+  await execute(db, sql, params);
 };
 
 export const getAllAuthors = async (db: Database): Promise<AuthorModel[]> => {
-    const sql = `SELECT * FROM Authors`;
-    const rows = await fetchAll<{ id: number; name: string; createdAt: string }>(db, sql);
+  const sql = "SELECT * FROM Authors";
+  const rows = await fetchAll<{ id: number; name: string; createdAt: string }>(
+    db,
+    sql,
+  );
 
-    return rows.map((row) => ({
-        id: row.id,
-        name: row.name,
-        createdAt: row.createdAt,
-    }));
+  return rows.map((row) => ({
+    id: row.id,
+    name: row.name,
+    createdAt: row.createdAt,
+  }));
 };
 
-export const getAuthorByDiscordId = async (db: Database, params: SqlParams): Promise<AuthorModel | undefined> => {
-    const sql = `SELECT * FROM Authors WHERE discordId = ?`;
-    return await fetchFirst<{ id: number; name: string; createdAt: string }>(db, sql, params);
-}
+export const getAuthorByDiscordId = async (
+  db: Database,
+  params: SqlParams,
+): Promise<AuthorModel | undefined> => {
+  const sql = "SELECT * FROM Authors WHERE discordId = ?";
+  return await fetchFirst<{ id: number; name: string; createdAt: string }>(
+    db,
+    sql,
+    params,
+  );
+};
 
-export const getAuthorByName = async (db: Database, params: SqlParams): Promise<AuthorModel | undefined> => {
-    const sql = `SELECT * FROM Authors WHERE name = ?`;
-    return await fetchFirst<{ id: number; name: string; createdAt: string }>(db, sql, params);
-}
+export const getAuthorByName = async (
+  db: Database,
+  params: SqlParams,
+): Promise<AuthorModel | undefined> => {
+  const sql = "SELECT * FROM Authors WHERE name = ?";
+  return await fetchFirst<{ id: number; name: string; createdAt: string }>(
+    db,
+    sql,
+    params,
+  );
+};
 
-export const getAuthorById = async (db: Database, params: SqlParams): Promise<AuthorModel | undefined> => {
-    const sql = `SELECT * FROM Authors WHERE id = ?`;
-    return await fetchFirst<{ id: number; name: string; createdAt: string }>(db, sql, params);
-}
+export const getAuthorById = async (
+  db: Database,
+  params: SqlParams,
+): Promise<AuthorModel | undefined> => {
+  const sql = "SELECT * FROM Authors WHERE id = ?";
+  return await fetchFirst<{ id: number; name: string; createdAt: string }>(
+    db,
+    sql,
+    params,
+  );
+};
 
-export const getTenAuthors = async (db: Database, params: SqlParams): Promise<AuthorModel[]> => {
-    const sql = `SELECT * FROM Authors LIMIT 10 OFFSET ?`;
-    const rows = await fetchAll<({ id: number; name: string; createdAt: string })>(db, sql, params);
+export const getTenAuthors = async (
+  db: Database,
+  params: SqlParams,
+): Promise<AuthorModel[]> => {
+  const sql = "SELECT * FROM Authors LIMIT 10 OFFSET ?";
+  const rows = await fetchAll<{ id: number; name: string; createdAt: string }>(
+    db,
+    sql,
+    params,
+  );
 
-    return rows.map((row) => ({
-        id: row.id,
-        name: row.name,
-        createdAt: row.createdAt,
-    }))
-}
+  return rows.map((row) => ({
+    id: row.id,
+    name: row.name,
+    createdAt: row.createdAt,
+  }));
+};
 
 export const deleteAllAuthors = async (db: Database): Promise<void> => {
-    await execute(db, "PRAGMA foreign_keys = ON;");
-    const sql = `DELETE FROM Authors`;
-    const rows = await execute(db, sql);
-}
+  await execute(db, "PRAGMA foreign_keys = ON;");
+  const sql = "DELETE FROM Authors";
+  await execute(db, sql);
+};

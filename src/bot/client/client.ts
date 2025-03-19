@@ -2,7 +2,10 @@ import { Client } from "discord.js";
 import { config } from "../../config.js";
 import { deployCommands } from "./deploy-commands.js";
 import { cooldownForInteraction } from "../interactions/cooldown.interaction.js";
-import { createMessage, answerBotMention } from "../events/messageCreate.event.js"
+import {
+  createMessage,
+  answerBotMention,
+} from "../events/messageCreate.event.js";
 import { logger } from "../../winston/winston.js";
 
 export const client = new Client({
@@ -23,7 +26,7 @@ client.on("messageCreate", async (message) => {
   if (message.author.bot) return;
   await createMessage(message);
   await answerBotMention(message);
-})
+});
 
 export function startClient() {
   client.login(config.DISCORD_TOKEN_DEV);
