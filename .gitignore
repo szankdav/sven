@@ -3,6 +3,7 @@ node_modules
 DiscordMessages.db
 dist
 coverage
+/src/logs
 
 # Playwright
 /test-results/
