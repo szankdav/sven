@@ -2,7 +2,7 @@ import { Collection, Message, OmitPartialGroupDMChannel, User } from "discord.js
 import { logger } from "../../winston/winston.js";
 import { DiscordMessage } from "../../logger/types/discordMessage.type.js";
 import { logMessages } from "../services/api/logger.js";
-//import { messageLoggerHandlerByFunction } from "../../logger/handlers/messageLogger.handler.js";
+import { messageLoggerHandlerByFunction } from "../../logger/handlers/messageLogger.handler.js";
 
 export async function createMessage(message: OmitPartialGroupDMChannel<Message<boolean>>) {
   try {

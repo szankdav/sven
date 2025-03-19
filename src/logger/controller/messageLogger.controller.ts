@@ -44,7 +44,7 @@ export const messageLoggerController = async (db: Database, message: DiscordMess
             id: 0,
             authorId: newAuthorId,
             content: message.content,
-            messageCreatedAt: message.messageCreatedAt.toLocaleString(),
+            messageCreatedAt: new Date(message.messageCreatedAt).toLocaleString(),
         };
         await insertMessageIntoDatabase(db, messageToCreate);
         await createLetterCountersInDatabase(db, messageToCreate);

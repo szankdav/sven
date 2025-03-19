@@ -1,8 +1,0 @@
-{"level":"error","message":"Missing environment variables","timestamp":"2025-02-26T11:59:42.862Z"}
-{"level":"error","message":"Missing environment variables","timestamp":"2025-02-26T12:01:03.644Z"}
-{"level":"error","message":"Missing environment variables","timestamp":"2025-02-26T12:01:32.510Z"}
-{"level":"info","message":"Using SQLite database at: D:\\Apps\\Viktor\\discord-chatbot\\src\\logger\\database\\DiscordMessages.db","timestamp":"2025-02-26T12:04:46.943Z"}
-{"level":"info","message":"Connected to SQLite database successfully.","timestamp":"2025-02-26T12:04:47.004Z"}
-{"level":"info","message":"Started refreshing application (/) commands.","timestamp":"2025-02-26T12:04:47.534Z"}
-{"level":"info","message":"Successfully reloaded application (/) commands.","timestamp":"2025-02-26T12:04:47.736Z"}
-{"level":"info","message":"Discord bot is ready! 🤖","timestamp":"2025-02-26T12:04:47.737Z"}
