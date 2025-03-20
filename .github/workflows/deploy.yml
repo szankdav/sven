@@ -42,12 +42,6 @@ jobs:
         run: npx wait-on http://localhost:3000
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
-      - name: Debug Environment
-        run: |
-             echo "Current directory:"
-             pwd
-             echo "List files:"
-             ls -alh dist/logger/database/db
       - name: Run Playwright tests
         run: npm run playwright-prod
       - uses: actions/upload-artifact@v4
