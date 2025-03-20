@@ -34,6 +34,7 @@ try {
 }
 
 app.listen(port, () => {
+  /* eslint no-console: ["error", { allow: ["log"] }] */
   console.log(`Server running at port: ${port}`);
 });
 

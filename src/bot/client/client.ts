@@ -14,6 +14,7 @@ export const client = new Client({
 
 client.once("ready", async () => {
   await deployCommands();
+  /* eslint no-console: ["error", { allow: ["log"] }] */
   console.log("Discord bot is ready! 🤖");
   logger.info("Discord bot is ready! 🤖");
 });

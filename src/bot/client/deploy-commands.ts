@@ -9,6 +9,7 @@ const rest = new REST({ version: "10" }).setToken(config.DISCORD_TOKEN_DEV);
 
 export async function deployCommands() {
   try {
+    /* eslint no-console: ["error", { allow: ["log", "error"] }] */
     console.log("Started refreshing application (/) commands.");
     logger.info("Started refreshing application (/) commands.");
 
