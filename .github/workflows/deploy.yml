@@ -17,6 +17,7 @@ jobs:
         run: npm run test
   playwright-test:
     timeout-minutes: 60
+    needs: unit-test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -49,7 +50,7 @@ jobs:
           retention-days: 30
   deploy:
     name: Deploy docker image
-    needs: [playwright-test, unit-test]
+    needs: playwright-test
     runs-on: ubuntu-latest
     concurrency: deploy-group # optional: ensure only one action runs at a time
     steps:
