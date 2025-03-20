@@ -15,8 +15,8 @@ export async function deployCommands() {
 
     await rest.put(
       Routes.applicationGuildCommands(
-        config.DISCORD_CLIENT_ID_DEV,
-        config.GUILD_ID_DEV,
+        config.DISCORD_CLIENT_ID,
+        config.GUILD_ID,
       ),
       {
         body: commandsData,
