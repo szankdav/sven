@@ -7,7 +7,7 @@ export const statisticsByAuthorHandler = async (
   req: Request,
   res: Response,
   next: NextFunction,
-) => {
+): Promise<void> => {
   try {
     const authorId = [req.params["id"]];
     const renderObject = await statisticsByAuthorController(db, authorId);

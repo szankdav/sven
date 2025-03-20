@@ -10,7 +10,7 @@ export const messagesHandler = async (
   req: Request,
   res: Response,
   next: NextFunction,
-) => {
+): Promise<void> => {
   try {
     const page = parseInt(req.params["page"]);
     const renderObject = await messagesController(db, page);

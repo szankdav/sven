@@ -1,7 +1,6 @@
 import { startClient } from "./bot/client/client.js";
 import express from "express";
 import path from "path";
-import { fileURLToPath } from "url";
 import { createTables } from "./logger/database/tables.js";
 import { db } from "./logger/database/database.js";
 import { errorHandler } from "./logger/handlers/error.handler.js";
@@ -19,8 +18,7 @@ import { logger } from "./winston/winston.js";
 startClient();
 
 // Set filepaths
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = import.meta.dirname;
 const app = express();
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "logger/view"));

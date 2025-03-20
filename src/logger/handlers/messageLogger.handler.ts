@@ -8,7 +8,7 @@ export const messageLoggerHandler = async (
   req: Request,
   res: Response,
   next: NextFunction,
-) => {
+): Promise<void> => {
   try {
     const message = req.body.message;
     await messageLoggerController(db, message);

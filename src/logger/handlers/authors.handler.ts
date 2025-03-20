@@ -7,7 +7,7 @@ export const authorsHandler = async (
   req: Request,
   res: Response,
   next: NextFunction,
-) => {
+): Promise<void> => {
   try {
     const page = parseInt(req.params["page"]);
     const renderObject = await authorsController(db, page);
