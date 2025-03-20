@@ -1,6 +1,6 @@
-import { join } from "path";
+import { dirname, join } from "path";
 
-const __dirname = import.meta.dirname;
+const __dirname = dirname(new URL(import.meta.url).pathname);
 const authorModelPath = join(__dirname, "../logger/model/author.model.js");
 const dbFilePath = join(__dirname, "../logger/database/database.js");
 
