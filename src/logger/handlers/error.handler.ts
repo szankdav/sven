@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response } from "express";
 
-export const errorHandler = (req: Request, res: Response, next: NextFunction) => {
+export const errorHandler = (req: Request, res: Response) => {
   res.status(404).render("error", { err: "Page not found!" });
 };

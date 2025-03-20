@@ -9,14 +9,18 @@ const rest = new REST({ version: "10" }).setToken(config.DISCORD_TOKEN);
 
 export async function deployCommands() {
   try {
+    /* eslint no-console: ["error", { allow: ["log", "error"] }] */
     console.log("Started refreshing application (/) commands.");
     logger.info("Started refreshing application (/) commands.");
 
     await rest.put(
-      Routes.applicationGuildCommands(config.DISCORD_CLIENT_ID, config.GUILD_ID),
+      Routes.applicationGuildCommands(
+        config.DISCORD_CLIENT_ID_DEV,
+        config.GUILD_ID_DEV,
+      ),
       {
         body: commandsData,
-      }
+      },
     );
 
     console.log("Successfully reloaded application (/) commands.");

@@ -1,0 +1,31 @@
+# traefik.yml
+
+# Entry points for HTTP and HTTPS
+entryPoints:
+  web:
+    address: ":80" # HTTP (port 80)
+    http:
+      redirections:
+        entryPoint:
+          to: websecure # Redirect HTTP to HTTPS
+          scheme: https # Ensure the redirection uses HTTPS
+
+  websecure:
+    address: ":443" # HTTPS (port 443)
+
+# ACME configuration for Let's Encrypt
+certificatesResolvers:
+  myresolver:
+    acme:
+      email: "szankdav@svenbot.cloud"
+      storage: /letsencrypt/acme.json
+      tlsChallenge: {}
+
+# Docker provider to expose services with specific labels
+providers:
+  docker:
+    exposedByDefault: false # Don't expose all services by default
+
+# Optional API and Dashboard settings
+api:
+  insecure: true # Expose the API and dashboard for debugging (consider security)
