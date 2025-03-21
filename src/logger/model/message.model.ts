@@ -1,5 +1,5 @@
-import { Database } from "sqlite3";
-import { execute, fetchAll } from "../database/database.operations.js";
+import { Database, RunResult } from "sqlite3";
+import { fetchAll, run } from "../database/database.operations.js";
 import { SqlParams } from "../types/sqlparams.type.js";
 
 export type MessageModel = {
@@ -15,7 +15,7 @@ export const createMessage = async (
 ): Promise<void> => {
   const sql: string =
     "INSERT INTO Messages(authorId, message, createdAt) VALUES (?, ?, ?)";
-  await execute(db, sql, params);
+  await run(db, sql, params);
 };
 
 export const getAllMessages = async (db: Database): Promise<MessageModel[]> => {

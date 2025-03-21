@@ -1,9 +1,5 @@
 import { Database } from "sqlite3";
-import {
-  execute,
-  fetchAll,
-  fetchFirst,
-} from "../database/database.operations.js";
+import { fetchAll, fetchFirst, run } from "../database/database.operations.js";
 import { SqlParams } from "../types/sqlparams.type.js";
 
 export type LetterModel = {
@@ -21,7 +17,7 @@ export const updateLetterCounter = async (
 ): Promise<void> => {
   const sql =
     "UPDATE Letters SET count = count + 1, updatedAt = ? WHERE authorId = ? AND letter = ?";
-  await execute(db, sql, params);
+  await run(db, sql, params);
 };
 
 export const getLetterCounterByAuthorId = async (
@@ -135,7 +131,7 @@ export const createLetterCounters = async (
     alphabet.forEach((letter: string) => {
       params[1] = letter;
       db.serialize(async (): Promise<void> => {
-        await execute(db, sql, params);
+        await run(db, sql, params);
         resolve();
       });
     });

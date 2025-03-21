@@ -5,7 +5,7 @@ import {
 } from "../model/author.model.js";
 import { createMessage, MessageModel } from "../model/message.model.js";
 import { DatabaseError } from "../utils/customErrorClasses/databaseError.class.js";
-import { Database } from "sqlite3";
+import { Database, RunResult } from "sqlite3";
 import { SqlParams } from "../types/sqlparams.type.js";
 import {
   createLetterCounters,
@@ -29,20 +29,19 @@ export const insertAuthorIntoDatabase = async (
       message.discordId,
       messageCreatedAt.toLocaleString(),
     ];
-    const existingAuthor: AuthorModel | undefined = await getAuthorByDiscordId(
-      db,
-      [message.discordId],
-    );
-    if (!existingAuthor) {
-      await createAuthor(db, authorToCreate);
+
+    const authorExistedInDatabase: AuthorModel | undefined =
+      await getAuthorByDiscordId(db, [message.discordId]);
+
+    if (authorExistedInDatabase) {
+      return authorExistedInDatabase!.id;
+    } else {
+      const author: RunResult = await createAuthor(db, authorToCreate);
       logger.info("Author added to the database!", {
         username: message.username,
       });
+      return author.lastID;
     }
-    const newAuthor: AuthorModel | undefined = await getAuthorByDiscordId(db, [
-      message.discordId,
-    ]);
-    return newAuthor ? newAuthor.id : 0;
   } catch (error) {
     logger.error("Error creating author in database:", error);
     throw new AuthorsError("Error creating author in database:", 500);
@@ -74,13 +73,10 @@ export const messageLoggerController = async (
   message: DiscordMessage,
 ): Promise<void> => {
   try {
-    const newAuthorId: number | undefined = await insertAuthorIntoDatabase(
-      db,
-      message,
-    );
+    const authorId: number = await insertAuthorIntoDatabase(db, message);
     const messageToCreate: MessageModel = {
       id: 0,
-      authorId: newAuthorId,
+      authorId: authorId,
       content: message.content,
       messageCreatedAt: new Date(message.messageCreatedAt).toLocaleString(),
     };

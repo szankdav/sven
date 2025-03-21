@@ -1,8 +1,9 @@
-import { Database } from "sqlite3";
+import { Database, RunResult } from "sqlite3";
 import {
   execute,
   fetchAll,
   fetchFirst,
+  run,
 } from "../database/database.operations.js";
 import { SqlParams } from "../types/sqlparams.type.js";
 
@@ -15,10 +16,10 @@ export type AuthorModel = {
 export const createAuthor = async (
   db: Database,
   params: SqlParams,
-): Promise<void> => {
+): Promise<RunResult> => {
   const sql: string =
-    "INSERT INTO Authors(name, discordId, createdAt) VALUES (?, ?, ?)";
-  await execute(db, sql, params);
+    "INSERT OR IGNORE INTO Authors(name, discordId, createdAt) VALUES (?, ?, ?)";
+  return await run(db, sql, params);
 };
 
 export const getAllAuthors = async (db: Database): Promise<AuthorModel[]> => {

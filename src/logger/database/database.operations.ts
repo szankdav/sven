@@ -1,29 +1,39 @@
-import { Database } from "sqlite3";
+import { Database, RunResult, Statement } from "sqlite3";
 import { SqlParams } from "../types/sqlparams.type";
+import { DatabaseError } from "../utils/customErrorClasses/databaseError.class.js";
+
+export const run = async (
+  db: Database,
+  sql: string,
+  params: SqlParams = [],
+): Promise<RunResult> => {
+  return new Promise((resolve, reject) => {
+    if (params && params.length > 0) {
+      db.run(sql, params, function (this: RunResult, err) {
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve(this);
+      });
+    } else {
+      reject(new DatabaseError("Missing query params:", 500));
+    }
+  });
+};
 
 export const execute = async (
   db: Database,
   sql: string,
-  params: SqlParams = [],
-): Promise<void> => {
+): Promise<Statement> => {
   return new Promise((resolve, reject) => {
-    if (params && params.length > 0) {
-      db.run(sql, params, (err) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-        resolve();
-      });
-    } else {
-      db.exec(sql, (err) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-        resolve();
-      });
-    }
+    db.exec(sql, function (this: Statement, err) {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve(this);
+    });
   });
 };
 

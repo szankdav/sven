@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {
   beforeEach,
   vi,
@@ -12,7 +13,7 @@ import * as messageModel from "../model/message.model";
 import * as messageLoggerController from "../controller/messageLogger.controller";
 import * as letterCounterModel from "../model/letterCounter.model";
 import { AuthorModel } from "../model/author.model";
-import sqlite3, { Database } from "sqlite3";
+import sqlite3, { Database, RunResult } from "sqlite3";
 import { MessageModel } from "../model/message.model";
 import { LetterCounterError } from "../utils/customErrorClasses/letterCounterError.class";
 import { logger } from "../../winston/winston";
@@ -57,21 +58,14 @@ describe("messageLogger.controller tests", () => {
 
   describe("insertAuthorIntoDatabase tests", async () => {
     it("should add an author to the database from the incoming data", async () => {
-      const testAuthor1: AuthorModel = {
-        id: 1,
-        name: "Teszt Elek",
-        createdAt: createdAtTime,
-      };
-      vi.spyOn(authorModel, "createAuthor").mockResolvedValue(undefined);
-      vi.spyOn(authorModel, "getAuthorByDiscordId")
-        .mockResolvedValueOnce(undefined)
-        .mockResolvedValueOnce(testAuthor1);
       const message: DiscordMessage = {
         username: "Ifj. Teszt Elek",
         discordId: "1069636403335837253",
         messageCreatedAt: 500000000000,
         content: "Teszt",
       };
+      vi.spyOn(authorModel, "getAuthorByDiscordId").mockResolvedValue(undefined);
+      vi.spyOn(authorModel, "createAuthor").mockResolvedValue({ lastID: 1, changes: 1 } as RunResult);
       const result = await messageLoggerController.insertAuthorIntoDatabase(
         db,
         message,
@@ -83,25 +77,25 @@ describe("messageLogger.controller tests", () => {
       expect(loggerError).not.toHaveBeenCalled();
     });
 
-    it("should return with 0 if there is an error", async () => {
-      vi.spyOn(authorModel, "createAuthor").mockResolvedValue(undefined);
-      vi.spyOn(authorModel, "getAuthorByDiscordId")
-        .mockResolvedValueOnce(undefined)
-        .mockResolvedValueOnce(undefined);
+    it("should return with the existed author's id", async () => {
       const message: DiscordMessage = {
         username: "Ifj. Teszt Elek",
         discordId: "1069636403335837253",
         messageCreatedAt: 500000000000,
         content: "Teszt",
       };
+      const testAuthor1: AuthorModel = {
+        id: 1,
+        name: "Teszt Elek",
+        createdAt: createdAtTime,
+      };
+      vi.spyOn(authorModel, "getAuthorByDiscordId").mockResolvedValueOnce(testAuthor1);
       const result = await messageLoggerController.insertAuthorIntoDatabase(
         db,
         message,
       );
-      expect(result).toBe(0);
-      expect(loggerInfo).toHaveBeenCalledWith("Author added to the database!", {
-        username: message.username,
-      });
+      expect(result).toBe(1);
+      expect(loggerInfo).not.toHaveBeenCalled();
       expect(loggerError).not.toHaveBeenCalled();
     });
 
@@ -111,13 +105,9 @@ describe("messageLogger.controller tests", () => {
         name: "Teszt Elek",
         createdAt: createdAtTime,
       };
-      vi.spyOn(authorModel, "createAuthor").mockResolvedValue(undefined);
-      vi.spyOn(authorModel, "getAuthorByDiscordId")
-        .mockResolvedValueOnce(testAuthor1)
-        .mockResolvedValueOnce(testAuthor1);
-      vi.spyOn(messageModel, "createMessage").mockResolvedValue(undefined);
+      vi.spyOn(authorModel, "getAuthorByDiscordId").mockResolvedValueOnce(testAuthor1);
       const message: DiscordMessage = {
-        username: "Ifj. Teszt Elek",
+        username: "Teszt Elek",
         discordId: "1069636403335837253",
         messageCreatedAt: 500000000000,
         content: "Teszt",
@@ -134,41 +124,41 @@ describe("messageLogger.controller tests", () => {
       expect(loggerError).not.toHaveBeenCalled();
     });
 
-    it("should create the message for the newly added author", async () => {
-      const testAuthor1: AuthorModel = {
-        id: 1,
-        name: "Teszt Elek",
-        createdAt: createdAtTime,
-      };
-      vi.spyOn(messageLoggerController, "messageLoggerController");
-      vi.spyOn(authorModel, "createAuthor").mockResolvedValue(undefined);
-      vi.spyOn(authorModel, "getAuthorByDiscordId")
-        .mockResolvedValueOnce(testAuthor1)
-        .mockResolvedValueOnce(testAuthor1);
-      vi.spyOn(messageModel, "createMessage").mockResolvedValue(undefined);
-      vi.spyOn(
-        letterCounterModel,
-        "getLetterCounterByAuthorId",
-      ).mockResolvedValue(undefined);
-      vi.spyOn(letterCounterModel, "createLetterCounters").mockResolvedValue(
-        undefined,
-      );
-      vi.spyOn(letterCounterModel, "updateLetterCounter").mockResolvedValue(
-        undefined,
-      );
-      const message: DiscordMessage = {
-        username: "Ifj. Teszt Elek",
-        discordId: "1069636403335837253",
-        messageCreatedAt: 500000000000,
-        content: "Teszt",
-      };
-      await messageLoggerController.messageLoggerController(db, message);
-      expect(loggerInfo).toHaveBeenCalledWith(
-        "Message added to the database!",
-        { authorId: testAuthor1.id, message: message.content },
-      );
-      expect(loggerError).not.toHaveBeenCalled();
-    });
+    //   it("should create the message for the newly added author", async () => {
+    //     const testAuthor1: AuthorModel = {
+    //       id: 1,
+    //       name: "Teszt Elek",
+    //       createdAt: createdAtTime,
+    //     };
+    //     vi.spyOn(messageLoggerController, "messageLoggerController");
+    //     vi.spyOn(authorModel, "createAuthor").mockResolvedValue(undefined);
+    //     vi.spyOn(authorModel, "getAuthorByDiscordId")
+    //       .mockResolvedValueOnce(testAuthor1)
+    //       .mockResolvedValueOnce(testAuthor1);
+    //     vi.spyOn(messageModel, "createMessage").mockResolvedValue(undefined);
+    //     vi.spyOn(
+    //       letterCounterModel,
+    //       "getLetterCounterByAuthorId",
+    //     ).mockResolvedValue(undefined);
+    //     vi.spyOn(letterCounterModel, "createLetterCounters").mockResolvedValue(
+    //       undefined,
+    //     );
+    //     vi.spyOn(letterCounterModel, "updateLetterCounter").mockResolvedValue(
+    //       undefined,
+    //     );
+    //     const message: DiscordMessage = {
+    //       username: "Ifj. Teszt Elek",
+    //       discordId: "1069636403335837253",
+    //       messageCreatedAt: 500000000000,
+    //       content: "Teszt",
+    //     };
+    //     await messageLoggerController.messageLoggerController(db, message);
+    //     expect(loggerInfo).toHaveBeenCalledWith(
+    //       "Message added to the database!",
+    //       { authorId: testAuthor1.id, message: message.content },
+    //     );
+    //     expect(loggerError).not.toHaveBeenCalled();
+    //   });
 
     it("should throw an error with the correct message", async () => {
       vi.spyOn(

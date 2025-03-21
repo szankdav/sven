@@ -9,7 +9,7 @@ export const createAuthorsTable = async (db: Database): Promise<void> => {
       `CREATE TABLE IF NOT EXISTS Authors (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
-            discordId TEXT NOT NULL,
+            discordId TEXT NOT NULL UNIQUE,
             createdAt TEXT NOT NULL)`,
     );
   } catch (error) {
