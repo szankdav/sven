@@ -1,12 +1,12 @@
-import { CacheType, Collection, Interaction, MessageFlags } from "discord.js";
-import { commands } from "../commands/utility/index.js";
-import { logger } from "../../winston/winston.js";
+import { CacheType, Collection, Interaction, InteractionResponse, MessageFlags } from 'discord.js';
+import { commands } from '../commands/utility/index.js';
+import { logger } from '../../winston/winston.js';
 
 const cooldowns = new Collection<string, Collection<string, number>>();
 
-export function cooldownForInteraction(interaction: Interaction<CacheType>) {
+export async function cooldownForInteraction(interaction: Interaction<CacheType>): Promise<InteractionResponse<boolean> | void> {
   if (!interaction.isCommand()) {
-    return;
+    return Promise.resolve();
   }
   const { commandName } = interaction;
 
@@ -43,10 +43,12 @@ export function cooldownForInteraction(interaction: Interaction<CacheType>) {
 
   if (!command) {
     logger.error(`No command matching ${interaction.commandName} was found.`);
-    return;
+    return Promise.resolve();
   }
 
   if (commands[commandName as keyof typeof commands]) {
-    commands[commandName as keyof typeof commands].execute(interaction);
+    return commands[commandName as keyof typeof commands].execute(interaction);
   }
+
+  return Promise.resolve();
 }

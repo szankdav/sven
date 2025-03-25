@@ -1,16 +1,16 @@
-import sqlite3 from "sqlite3";
-import path from "path";
-import { logger } from "../../winston/winston.js";
-import { config } from "../../config.js";
+import sqlite3 from 'sqlite3';
+import path from 'path';
+import { logger } from '../../winston/winston.js';
+import { config } from '../../config.js';
 
 // Initialize database
 const __dirname = import.meta.dirname;
 const dbFilePath =
-  config.DB_PATH || path.join(__dirname, "db/DiscordMessages.db");
+  config.DB_PATH || path.join(__dirname, 'db/DiscordMessages.db');
 
 export const db = new sqlite3.Database(dbFilePath, (err) => {
   if (err) {
-    logger.error("Failed to connect to database:", err);
+    logger.error('Failed to connect to database:', err);
   } else {
     logger.info(
       `Connected to SQLite database successfully at path: ${dbFilePath}`,

@@ -1,6 +1,6 @@
-import { Database } from "sqlite3";
-import { fetchAll, fetchFirst, run } from "../database/database.operations.js";
-import { SqlParams } from "../types/sqlparams.type.js";
+import { Database } from 'sqlite3';
+import { fetchAll, fetchFirst, run } from '../database/database.operations.js';
+import { SqlParams } from '../types/sqlparams.type.js';
 
 export type LetterModel = {
   id: number;
@@ -16,7 +16,7 @@ export const updateLetterCounter = async (
   params: SqlParams,
 ): Promise<void> => {
   const sql =
-    "UPDATE Letters SET count = count + 1, updatedAt = ? WHERE authorId = ? AND letter = ?";
+    'UPDATE Letters SET count = count + 1, updatedAt = ? WHERE authorId = ? AND letter = ?';
   await run(db, sql, params);
 };
 
@@ -24,14 +24,14 @@ export const getLetterCounterByAuthorId = async (
   db: Database,
   params: SqlParams,
 ): Promise<{ authorId: number } | undefined> => {
-  const sql = "SELECT authorId FROM Letters WHERE authorId = ?";
-  return await fetchFirst<{ authorId: number }>(db, sql, params);
+  const sql = 'SELECT authorId FROM Letters WHERE authorId = ?';
+  return fetchFirst<{ authorId: number }>(db, sql, params);
 };
 
 export const getAllLetterCounters = async (
   db: Database,
 ): Promise<LetterModel[]> => {
-  const sql = "SELECT * FROM Letters";
+  const sql = 'SELECT * FROM Letters';
   const rows = await fetchAll<{
     id: number;
     authorId: number;
@@ -54,15 +54,15 @@ export const getAllLetterCounters = async (
 export const getAllLetterCountersAuthors = async (
   db: Database,
 ): Promise<{ authorId: number }[]> => {
-  const sql = "SELECT authorId FROM Letters GROUP BY authorId";
-  return await fetchAll<{ authorId: number }>(db, sql);
+  const sql = 'SELECT authorId FROM Letters GROUP BY authorId';
+  return fetchAll<{ authorId: number }>(db, sql);
 };
 
 export const getLetterCountersByAuthorId = async (
   db: Database,
   params: SqlParams,
 ): Promise<LetterModel[]> => {
-  const sql = "SELECT * FROM Letters WHERE authorId = ?";
+  const sql = 'SELECT * FROM Letters WHERE authorId = ?';
   const rows = await fetchAll<{
     id: number;
     authorId: number;
@@ -87,53 +87,70 @@ export const createLetterCounters = async (
   params: SqlParams,
 ): Promise<void> => {
   const alphabet: string[] = [
-    "a",
-    "á",
-    "b",
-    "c",
-    "d",
-    "e",
-    "é",
-    "f",
-    "g",
-    "h",
-    "i",
-    "í",
-    "j",
-    "k",
-    "l",
-    "m",
-    "n",
-    "o",
-    "ó",
-    "ö",
-    "ő",
-    "p",
-    "q",
-    "r",
-    "s",
-    "t",
-    "u",
-    "ú",
-    "ü",
-    "ű",
-    "v",
-    "w",
-    "x",
-    "y",
-    "z",
+    'a',
+    'á',
+    'b',
+    'c',
+    'd',
+    'e',
+    'é',
+    'f',
+    'g',
+    'h',
+    'i',
+    'í',
+    'j',
+    'k',
+    'l',
+    'm',
+    'n',
+    'o',
+    'ó',
+    'ö',
+    'ő',
+    'p',
+    'q',
+    'r',
+    's',
+    't',
+    'u',
+    'ú',
+    'ü',
+    'ű',
+    'v',
+    'w',
+    'x',
+    'y',
+    'z',
   ];
 
-  const sql: string =
-    "INSERT INTO Letters (authorId, letter, count, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?)";
+  const sql =
+    'INSERT INTO Letters (authorId, letter, count, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?)';
 
-  return new Promise(async (resolve) => {
-    alphabet.forEach((letter: string) => {
-      params[1] = letter;
-      db.serialize(async (): Promise<void> => {
-        await run(db, sql, params);
-        resolve();
+  // return new Promise(async (resolve) => {
+  //   alphabet.forEach((letter: string) => {
+  //     params[1] = letter;
+  //     db.serialize(async (): Promise<void> => {
+  //       await run(db, sql, params);
+  //       resolve();
+  //     });
+  //   });
+  // });
+
+  return new Promise<void>((resolve, reject) => {
+    try {
+      alphabet.forEach((letter: string) => {
+        const updatedParams: (string | number)[] = [...params];
+        updatedParams[1] = letter;
+  
+        db.serialize(() => {
+          run(db, sql, updatedParams)
+            .then(() => resolve()) 
+            .catch(reject); 
+        });
       });
-    });
+    } catch (error) {
+      reject(error);
+    }
   });
 };

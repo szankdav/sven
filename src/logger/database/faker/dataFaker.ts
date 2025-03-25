@@ -1,8 +1,7 @@
-import { fakerHU } from "@faker-js/faker";
-import { Database } from "sqlite3";
-import { execute, fetchAll } from "../database.operations.js";
-import { db } from "../database.js";
-import { logger } from "../../../winston/winston.js";
+import { fakerHU } from '@faker-js/faker';
+import { execute, fetchAll } from '../database.operations.js';
+import { db } from '../database.js';
+import { logger } from '../../../winston/winston.js';
 
 const createFakeAuthors = (): string[] => {
   const fakeAuthors: string[] = [];
@@ -16,61 +15,56 @@ const createFakeAuthors = (): string[] => {
 };
 
 const insertAuthors = async (
-  db: Database,
   fakeAuthors: string[],
 ): Promise<void> => {
   await execute(
     db,
-    `INSERT INTO Authors (name, discordId, createdAt) VALUES ${fakeAuthors.join(", ")}`,
+    `INSERT INTO Authors (name, discordId, createdAt) VALUES ${fakeAuthors.join(', ')}`,
   );
 };
 
 const fetchAuthors = async (
-  db: Database,
-): Promise<{ id: number; createdAt: string }[]> => {
-  return await fetchAll(db, "SELECT id, createdAt FROM Authors");
-};
+): Promise<{ id: number; createdAt: string }[]> => fetchAll(db, 'SELECT id, createdAt FROM Authors');
 
 const insertLetters = async (
-  db: Database,
   authors: { id: number; createdAt: string }[],
 ): Promise<void> => {
   const alphabet: string[] = [
-    "a",
-    "á",
-    "b",
-    "c",
-    "d",
-    "e",
-    "é",
-    "f",
-    "g",
-    "h",
-    "i",
-    "í",
-    "j",
-    "k",
-    "l",
-    "m",
-    "n",
-    "o",
-    "ó",
-    "ö",
-    "ő",
-    "p",
-    "q",
-    "r",
-    "s",
-    "t",
-    "u",
-    "ú",
-    "ü",
-    "ű",
-    "v",
-    "w",
-    "x",
-    "y",
-    "z",
+    'a',
+    'á',
+    'b',
+    'c',
+    'd',
+    'e',
+    'é',
+    'f',
+    'g',
+    'h',
+    'i',
+    'í',
+    'j',
+    'k',
+    'l',
+    'm',
+    'n',
+    'o',
+    'ó',
+    'ö',
+    'ő',
+    'p',
+    'q',
+    'r',
+    's',
+    't',
+    'u',
+    'ú',
+    'ü',
+    'ű',
+    'v',
+    'w',
+    'x',
+    'y',
+    'z',
   ];
 
   const lettersData: string[] = [];
@@ -82,80 +76,102 @@ const insertLetters = async (
     });
   });
   if (lettersData.length) {
-    await execute(
+    execute(
       db,
-      `INSERT INTO Letters (authorId, letter, createdAt, updatedAt, count) VALUES ${lettersData.join(", ")}`,
+      `INSERT INTO Letters (authorId, letter, createdAt, updatedAt, count) VALUES ${lettersData.join(', ')}`,
     );
   }
 };
 
 const insertMessages = async (
-  db: Database,
   authors: { id: number; createdAt: string }[],
   letterCountMap: Map<string, number>,
 ): Promise<void> => {
   const fakeMessages: string[] = [];
 
-  for (const author of authors) {
+  authors.forEach((author) => {
     const randomMessageNumber = Math.floor(Math.random() * (20 - 1 + 1) + 1);
 
-    for (let i = 0; i < randomMessageNumber; i++) {
-      const content = fakerHU.string.fromCharacters(
-        "aábcdeéfghiíjklmnoóöőpqrstuúüűvwxyz",
+    Array.from({ length: randomMessageNumber }).forEach(() => {
+      const content: string = fakerHU.string.fromCharacters(
+        'aábcdeéfghiíjklmnoóöőpqrstuúüűvwxyz',
         { min: 4, max: 100 },
       );
       const messageCreatedAt = fakerHU.date.past().toLocaleString();
       fakeMessages.push(`(${author.id}, '${content}', '${messageCreatedAt}')`);
 
-      for (const letter of content) {
+      content.split('').forEach((letter) => {
         const key = `${author.id}-${letter}`;
         letterCountMap.set(key, (letterCountMap.get(key) || 0) + 1);
-      }
-    }
-  }
+      });
+    });
+  });
 
   if (fakeMessages.length) {
     await execute(
       db,
-      `INSERT INTO Messages (authorId, message, createdAt) VALUES ${fakeMessages.join(", ")}`,
+      `INSERT INTO Messages (authorId, message, createdAt) VALUES ${fakeMessages.join(', ')}`,
     );
   }
 };
 
+// const insertMessages = async (
+//   authors: { id: number; createdAt: string }[],
+//   letterCountMap: Map<string, number>,
+// ): Promise<void> => {
+//   const fakeMessages: string[] = [];
+
+//   for (const author of authors) {
+//     const randomMessageNumber = Math.floor(Math.random() * (20 - 1 + 1) + 1);
+
+//     for (let i = 0; i < randomMessageNumber; i++) {
+//       const content: string = fakerHU.string.fromCharacters(
+//         'aábcdeéfghiíjklmnoóöőpqrstuúüűvwxyz',
+//         { min: 4, max: 100 },
+//       );
+//       const messageCreatedAt = fakerHU.date.past().toLocaleString();
+//       fakeMessages.push(`(${author.id}, '${content}', '${messageCreatedAt}')`);
+
+//       for (const letter of content) {
+//         const key = `${author.id}-${letter}`;
+//         letterCountMap.set(key, (letterCountMap.get(key) || 0) + 1);
+//       }
+//     }
+//   }
+
 const updateLetterCounters = async (
-  db: Database,
   letterCountMap: Map<string, number>,
 ): Promise<void> => {
-  const updateLetterCounters: string[] = [];
+  const updateLetterCountersArray: string[] = [];
   letterCountMap.forEach((count, key) => {
-    const [authorId, letter] = key.split("-");
-    updateLetterCounters.push(
+    const [authorId, letter] = key.split('-');
+    updateLetterCountersArray.push(
       `UPDATE Letters SET count = count + ${count} WHERE authorId = ${authorId} AND letter = '${letter}';`,
     );
   });
 
-  if (updateLetterCounters.length) {
-    await execute(db, updateLetterCounters.join(" "));
+  if (updateLetterCountersArray.length) {
+    await execute(db, updateLetterCountersArray.join(' '));
   }
 };
 
-const fillDatabaseWithFakeData = async (db: Database): Promise<void> => {
+const fillDatabaseWithFakeData = async (): Promise<void> => {
   try {
     const fakeAuthors = createFakeAuthors();
-    await insertAuthors(db, fakeAuthors);
+    await insertAuthors(fakeAuthors);
 
-    const authors = await fetchAuthors(db);
-    await insertLetters(db, authors);
+    const authors = await fetchAuthors();
+    await insertLetters(authors);
 
     const letterCountMap = new Map<string, number>();
-    await insertMessages(db, authors, letterCountMap);
-    await updateLetterCounters(db, letterCountMap);
+    await insertMessages(authors, letterCountMap);
+    await updateLetterCounters(letterCountMap);
   } catch (error) {
     logger.error(error);
   }
 };
 
 export const runFaker = async () => {
-  await fillDatabaseWithFakeData(db);
-  logger.info("Database filled with fake data.");
+  await fillDatabaseWithFakeData();
+  logger.info('Database filled with fake data.');
 };

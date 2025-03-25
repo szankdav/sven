@@ -1,5 +1,5 @@
-import { NextFunction, Request, Response } from "express";
-import { logger } from "../../winston/winston.js";
+import { NextFunction, Request, Response } from 'express';
+import { logger } from '../../winston/winston.js';
 
 export const homeHandler = async (
   req: Request,
@@ -7,9 +7,9 @@ export const homeHandler = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    res.render("index");
+    res.render('index');
   } catch (error) {
-    logger.error("Home handler error:", error);
+    logger.error('Home handler error:', error);
     next(error);
   }
 };

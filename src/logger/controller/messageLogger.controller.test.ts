@@ -7,28 +7,28 @@ import {
   expect,
   afterEach,
   MockInstance,
-} from "vitest";
-import * as authorModel from "../model/author.model";
-import * as messageModel from "../model/message.model";
-import * as messageLoggerController from "../controller/messageLogger.controller";
-import * as letterCounterModel from "../model/letterCounter.model";
-import { AuthorModel } from "../model/author.model";
-import sqlite3, { Database, RunResult } from "sqlite3";
-import { MessageModel } from "../model/message.model";
-import { LetterCounterError } from "../utils/customErrorClasses/letterCounterError.class";
-import { logger } from "../../winston/winston";
-import { DiscordMessage } from "../types/discordMessage.type";
-import { MessagesError } from "../utils/customErrorClasses/messagesError.class";
-import { AuthorsError } from "../utils/customErrorClasses/authorsError.class";
-import { DatabaseError } from "../utils/customErrorClasses/databaseError.class";
+} from 'vitest';
+import sqlite3, { Database, RunResult } from 'sqlite3';
+import * as authorModel from '../model/author.model';
+import * as messageModel from '../model/message.model';
+import * as messageLoggerController from './messageLogger.controller';
+import * as letterCounterModel from '../model/letterCounter.model';
+import { AuthorModel } from '../model/author.model';
+import { MessageModel } from '../model/message.model';
+import { LetterCounterError } from '../utils/customErrorClasses/letterCounterError.class';
+import { logger } from '../../winston/winston';
+import { DiscordMessage } from '../types/discordMessage.type';
+import { MessagesError } from '../utils/customErrorClasses/messagesError.class';
+import { AuthorsError } from '../utils/customErrorClasses/authorsError.class';
+import { DatabaseError } from '../utils/customErrorClasses/databaseError.class';
 
 let db: Database;
 const createdAtTime = new Date().toLocaleString();
 let loggerInfo: MockInstance;
 let loggerError: MockInstance;
 
-vi.mock("sqlite3", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("sqlite3")>();
+vi.mock('sqlite3', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('sqlite3')>();
 
   return {
     ...actual,
@@ -41,14 +41,14 @@ vi.mock("sqlite3", async (importOriginal) => {
   };
 });
 
-describe("messageLogger.controller tests", () => {
+describe('messageLogger.controller tests', () => {
   beforeEach(async () => {
     vi.clearAllMocks();
-    loggerInfo = vi.spyOn(logger, "info");
-    loggerInfo.mockResolvedValue("Test call");
-    loggerError = vi.spyOn(logger, "error");
-    loggerError.mockResolvedValue("Test call");
-    db = new sqlite3.Database(":memory:");
+    loggerInfo = vi.spyOn(logger, 'info');
+    loggerInfo.mockResolvedValue('Test call');
+    loggerError = vi.spyOn(logger, 'error');
+    loggerError.mockResolvedValue('Test call');
+    db = new sqlite3.Database(':memory:');
   });
 
   afterEach(() => {
@@ -56,22 +56,22 @@ describe("messageLogger.controller tests", () => {
     vi.restoreAllMocks();
   });
 
-  describe("insertAuthorIntoDatabase tests", async () => {
-    it("should add an author to the database from the incoming data", async () => {
+  describe('insertAuthorIntoDatabase tests', async () => {
+    it('should add an author to the database from the incoming data', async () => {
       const message: DiscordMessage = {
-        username: "Ifj. Teszt Elek",
-        discordId: "1069636403335837253",
+        username: 'Ifj. Teszt Elek',
+        discordId: '1069636403335837253',
         messageCreatedAt: 500000000000,
-        content: "Teszt",
+        content: 'Teszt',
       };
-      vi.spyOn(authorModel, "getAuthorByDiscordId").mockResolvedValue(undefined);
-      vi.spyOn(authorModel, "createAuthor").mockResolvedValue({ lastID: 1, changes: 1 } as RunResult);
+      vi.spyOn(authorModel, 'getAuthorByDiscordId').mockResolvedValue(undefined);
+      vi.spyOn(authorModel, 'createAuthor').mockResolvedValue({ lastID: 1, changes: 1 } as RunResult);
       const result = await messageLoggerController.insertAuthorIntoDatabase(
         db,
         message,
       );
       expect(result).toBe(1);
-      expect(loggerInfo).toHaveBeenCalledWith("Author added to the database!", {
+      expect(loggerInfo).toHaveBeenCalledWith('Author added to the database!', {
         username: message.username,
       });
       expect(loggerError).not.toHaveBeenCalled();
@@ -79,17 +79,17 @@ describe("messageLogger.controller tests", () => {
 
     it("should return with the existed author's id", async () => {
       const message: DiscordMessage = {
-        username: "Ifj. Teszt Elek",
-        discordId: "1069636403335837253",
+        username: 'Ifj. Teszt Elek',
+        discordId: '1069636403335837253',
         messageCreatedAt: 500000000000,
-        content: "Teszt",
+        content: 'Teszt',
       };
       const testAuthor1: AuthorModel = {
         id: 1,
-        name: "Teszt Elek",
+        name: 'Teszt Elek',
         createdAt: createdAtTime,
       };
-      vi.spyOn(authorModel, "getAuthorByDiscordId").mockResolvedValueOnce(testAuthor1);
+      vi.spyOn(authorModel, 'getAuthorByDiscordId').mockResolvedValueOnce(testAuthor1);
       const result = await messageLoggerController.insertAuthorIntoDatabase(
         db,
         message,
@@ -99,18 +99,18 @@ describe("messageLogger.controller tests", () => {
       expect(loggerError).not.toHaveBeenCalled();
     });
 
-    it("should not add an author to the database from the incoming data if author already exists", async () => {
+    it('should not add an author to the database from the incoming data if author already exists', async () => {
       const testAuthor1: AuthorModel = {
         id: 1,
-        name: "Teszt Elek",
+        name: 'Teszt Elek',
         createdAt: createdAtTime,
       };
-      vi.spyOn(authorModel, "getAuthorByDiscordId").mockResolvedValueOnce(testAuthor1);
+      vi.spyOn(authorModel, 'getAuthorByDiscordId').mockResolvedValueOnce(testAuthor1);
       const message: DiscordMessage = {
-        username: "Teszt Elek",
-        discordId: "1069636403335837253",
+        username: 'Teszt Elek',
+        discordId: '1069636403335837253',
         messageCreatedAt: 500000000000,
-        content: "Teszt",
+        content: 'Teszt',
       };
       const result = await messageLoggerController.insertAuthorIntoDatabase(
         db,
@@ -118,7 +118,7 @@ describe("messageLogger.controller tests", () => {
       );
       expect(result).toBe(1);
       expect(loggerInfo).not.toHaveBeenCalledWith(
-        "Author added to the database!",
+        'Author added to the database!',
         { username: message.username },
       );
       expect(loggerError).not.toHaveBeenCalled();
@@ -160,75 +160,75 @@ describe("messageLogger.controller tests", () => {
     //     expect(loggerError).not.toHaveBeenCalled();
     //   });
 
-    it("should throw an error with the correct message", async () => {
+    it('should throw an error with the correct message', async () => {
       vi.spyOn(
         messageLoggerController,
-        "insertAuthorIntoDatabase",
+        'insertAuthorIntoDatabase',
       ).mockRejectedValue(
-        new AuthorsError("Error creating author in database:", 500),
+        new AuthorsError('Error creating author in database:', 500),
       );
       const message: DiscordMessage = {
-        username: "Ifj. Teszt Elek",
-        discordId: "1069636403335837253",
+        username: 'Ifj. Teszt Elek',
+        discordId: '1069636403335837253',
         messageCreatedAt: 500000000000,
-        content: "Teszt",
+        content: 'Teszt',
       };
       await expect(
         messageLoggerController.insertAuthorIntoDatabase(db, message),
       ).rejects.toThrow(AuthorsError);
       await expect(
         messageLoggerController.insertAuthorIntoDatabase(db, message),
-      ).rejects.toThrow("Error creating author in database:");
+      ).rejects.toThrow('Error creating author in database:');
     });
 
-    it("should log an error with the correct message", async () => {
-      vi.spyOn(messageLoggerController, "insertAuthorIntoDatabase");
-      const error = new AuthorsError("Error creating author in database:", 500);
-      vi.spyOn(authorModel, "getAuthorByDiscordId").mockRejectedValue(error);
+    it('should log an error with the correct message', async () => {
+      vi.spyOn(messageLoggerController, 'insertAuthorIntoDatabase');
+      const error = new AuthorsError('Error creating author in database:', 500);
+      vi.spyOn(authorModel, 'getAuthorByDiscordId').mockRejectedValue(error);
       const message: DiscordMessage = {
-        username: "Ifj. Teszt Elek",
-        discordId: "1069636403335837253",
+        username: 'Ifj. Teszt Elek',
+        discordId: '1069636403335837253',
         messageCreatedAt: 500000000000,
-        content: "Teszt",
+        content: 'Teszt',
       };
       await expect(
         messageLoggerController.insertAuthorIntoDatabase(db, message),
-      ).rejects.toThrow("Error creating author in database:");
+      ).rejects.toThrow('Error creating author in database:');
       expect(loggerError).toHaveBeenCalledWith(
-        "Error creating author in database:",
+        'Error creating author in database:',
         error,
       );
     });
   });
 
-  describe("insertMessageIntoDatabase tests", async () => {
-    it("should add a message to the database from the incoming data", async () => {
-      vi.spyOn(messageModel, "createMessage").mockResolvedValue(undefined);
+  describe('insertMessageIntoDatabase tests', async () => {
+    it('should add a message to the database from the incoming data', async () => {
+      vi.spyOn(messageModel, 'createMessage').mockResolvedValue(undefined);
       const message: MessageModel = {
         id: 0,
         authorId: 1,
-        content: "Test",
+        content: 'Test',
         messageCreatedAt: createdAtTime,
       };
       await messageLoggerController.insertMessageIntoDatabase(db, message);
       expect(loggerInfo).toHaveBeenCalledWith(
-        "Message added to the database!",
+        'Message added to the database!',
         { authorId: message.authorId, message: message.content },
       );
       expect(loggerError).not.toHaveBeenCalled();
     });
 
-    it("should throw an error with the correct message", async () => {
+    it('should throw an error with the correct message', async () => {
       vi.spyOn(
         messageLoggerController,
-        "insertMessageIntoDatabase",
+        'insertMessageIntoDatabase',
       ).mockRejectedValue(
-        new MessagesError("Error creating message in database:", 500),
+        new MessagesError('Error creating message in database:', 500),
       );
       const message: MessageModel = {
         id: 0,
         authorId: 1,
-        content: "Test",
+        content: 'Test',
         messageCreatedAt: createdAtTime,
       };
       await expect(
@@ -236,199 +236,199 @@ describe("messageLogger.controller tests", () => {
       ).rejects.toThrow(MessagesError);
       await expect(
         messageLoggerController.insertMessageIntoDatabase(db, message),
-      ).rejects.toThrow("Error creating message in database:");
+      ).rejects.toThrow('Error creating message in database:');
     });
 
-    it("should log an error with the correct message", async () => {
+    it('should log an error with the correct message', async () => {
       const error = new MessagesError(
-        "Error creating message in database:",
+        'Error creating message in database:',
         500,
       );
-      vi.spyOn(messageLoggerController, "insertMessageIntoDatabase");
-      vi.spyOn(messageModel, "createMessage").mockRejectedValue(error);
+      vi.spyOn(messageLoggerController, 'insertMessageIntoDatabase');
+      vi.spyOn(messageModel, 'createMessage').mockRejectedValue(error);
       const message: MessageModel = {
         id: 0,
         authorId: 1,
-        content: "Test",
+        content: 'Test',
         messageCreatedAt: createdAtTime,
       };
       await expect(
         messageLoggerController.insertMessageIntoDatabase(db, message),
-      ).rejects.toThrow("Error creating message in database:");
+      ).rejects.toThrow('Error creating message in database:');
       expect(loggerError).toHaveBeenCalledWith(
-        "Error creating message in database:",
+        'Error creating message in database:',
         error,
       );
     });
   });
 
-  describe("messageLoggerController tests", async () => {
-    it("should throw an error with the correct message", async () => {
+  describe('messageLoggerController tests', async () => {
+    it('should throw an error with the correct message', async () => {
       vi.spyOn(
         messageLoggerController,
-        "messageLoggerController",
-      ).mockRejectedValue(new DatabaseError("Error logging message:", 500));
+        'messageLoggerController',
+      ).mockRejectedValue(new DatabaseError('Error logging message:', 500));
       const message: DiscordMessage = {
-        username: "Ifj. Teszt Elek",
-        discordId: "1069636403335837253",
+        username: 'Ifj. Teszt Elek',
+        discordId: '1069636403335837253',
         messageCreatedAt: 500000000000,
-        content: "Teszt",
+        content: 'Teszt',
       };
       await expect(
         messageLoggerController.messageLoggerController(db, message),
       ).rejects.toThrow(DatabaseError);
       await expect(
         messageLoggerController.messageLoggerController(db, message),
-      ).rejects.toThrow("Error logging message:");
+      ).rejects.toThrow('Error logging message:');
     });
 
-    it("should log an error with the correct message", async () => {
-      const error = new DatabaseError("Error logging message:", 500);
-      vi.spyOn(messageLoggerController, "messageLoggerController");
+    it('should log an error with the correct message', async () => {
+      const error = new DatabaseError('Error logging message:', 500);
+      vi.spyOn(messageLoggerController, 'messageLoggerController');
       vi.spyOn(
         messageLoggerController,
-        "insertAuthorIntoDatabase",
+        'insertAuthorIntoDatabase',
       ).mockRejectedValue(error);
       const message: DiscordMessage = {
-        username: "Ifj. Teszt Elek",
-        discordId: "1069636403335837253",
+        username: 'Ifj. Teszt Elek',
+        discordId: '1069636403335837253',
         messageCreatedAt: 500000000000,
-        content: "Teszt",
+        content: 'Teszt',
       };
       await expect(
         messageLoggerController.messageLoggerController(db, message),
-      ).rejects.toThrow("Error logging message");
+      ).rejects.toThrow('Error logging message');
       expect(loggerError).toHaveBeenCalled();
     });
   });
 
-  describe("createLetterCountersInDatabase tests", async () => {
-    it("should create the letters for the newly added author", async () => {
+  describe('createLetterCountersInDatabase tests', async () => {
+    it('should create the letters for the newly added author', async () => {
       const testAuthor1: AuthorModel = {
         id: 1,
-        name: "Teszt Elek",
+        name: 'Teszt Elek',
         createdAt: createdAtTime,
       };
       vi.spyOn(
         letterCounterModel,
-        "getLetterCounterByAuthorId",
+        'getLetterCounterByAuthorId',
       ).mockResolvedValue(undefined);
-      vi.spyOn(letterCounterModel, "createLetterCounters").mockResolvedValue(
+      vi.spyOn(letterCounterModel, 'createLetterCounters').mockResolvedValue(
         undefined,
       );
-      vi.spyOn(letterCounterModel, "updateLetterCounter").mockResolvedValue(
+      vi.spyOn(letterCounterModel, 'updateLetterCounter').mockResolvedValue(
         undefined,
       );
       const message: MessageModel = {
         id: 0,
         authorId: testAuthor1.id,
-        content: "Test",
+        content: 'Test',
         messageCreatedAt: createdAtTime.toLocaleString(),
       };
       await messageLoggerController.createLetterCountersInDatabase(db, message);
-      expect(loggerInfo).toHaveBeenCalledWith("Letters added for the author!", {
+      expect(loggerInfo).toHaveBeenCalledWith('Letters added for the author!', {
         authorId: testAuthor1.id,
       });
       expect(loggerError).not.toHaveBeenCalled();
     });
 
-    it("should not create the letters again for the author if already existed", async () => {
+    it('should not create the letters again for the author if already existed', async () => {
       const testAuthor1: AuthorModel = {
         id: 1,
-        name: "Teszt Elek",
+        name: 'Teszt Elek',
         createdAt: createdAtTime,
       };
       vi.spyOn(
         letterCounterModel,
-        "getLetterCounterByAuthorId",
+        'getLetterCounterByAuthorId',
       ).mockResolvedValue({ authorId: testAuthor1.id });
-      vi.spyOn(letterCounterModel, "createLetterCounters").mockResolvedValue(
+      vi.spyOn(letterCounterModel, 'createLetterCounters').mockResolvedValue(
         undefined,
       );
-      vi.spyOn(letterCounterModel, "updateLetterCounter").mockResolvedValue(
+      vi.spyOn(letterCounterModel, 'updateLetterCounter').mockResolvedValue(
         undefined,
       );
       const message: MessageModel = {
         id: 0,
         authorId: testAuthor1.id,
-        content: "Test",
+        content: 'Test',
         messageCreatedAt: createdAtTime.toLocaleString(),
       };
       await messageLoggerController.createLetterCountersInDatabase(db, message);
       expect(loggerInfo).not.toHaveBeenCalledWith(
-        "Letters added for the author!",
+        'Letters added for the author!',
         { authorId: testAuthor1.id },
       );
       expect(loggerError).not.toHaveBeenCalled();
     });
 
-    it("should throw an error with the correct message", async () => {
+    it('should throw an error with the correct message', async () => {
       vi.spyOn(
         messageLoggerController,
-        "messageLoggerController",
+        'messageLoggerController',
       ).mockRejectedValue(
-        new LetterCounterError("Error creating letters:", 500),
+        new LetterCounterError('Error creating letters:', 500),
       );
       const message: DiscordMessage = {
-        username: "Ifj. Teszt Elek",
-        discordId: "1069636403335837253",
+        username: 'Ifj. Teszt Elek',
+        discordId: '1069636403335837253',
         messageCreatedAt: 500000000000,
-        content: "Teszt",
+        content: 'Teszt',
       };
       await expect(
         messageLoggerController.messageLoggerController(db, message),
       ).rejects.toThrow(LetterCounterError);
       await expect(
         messageLoggerController.messageLoggerController(db, message),
-      ).rejects.toThrow("Error creating letters");
+      ).rejects.toThrow('Error creating letters');
     });
 
-    it("should log an error with the correct message if author is not found during getLetterCounterByAuthor", async () => {
-      vi.spyOn(messageLoggerController, "messageLoggerController");
+    it('should log an error with the correct message if author is not found during getLetterCounterByAuthor', async () => {
+      vi.spyOn(messageLoggerController, 'messageLoggerController');
       vi.spyOn(
         letterCounterModel,
-        "getLetterCounterByAuthorId",
-      ).mockRejectedValue(new Error("Author not found!"));
+        'getLetterCounterByAuthorId',
+      ).mockRejectedValue(new Error('Author not found!'));
       const message: MessageModel = {
         id: 1,
         authorId: 1,
-        content: "",
-        messageCreatedAt: "",
+        content: '',
+        messageCreatedAt: '',
       };
       await expect(
         messageLoggerController.createLetterCountersInDatabase(db, message),
-      ).rejects.toThrow("Error creating letters");
+      ).rejects.toThrow('Error creating letters');
       expect(loggerError).toHaveBeenCalled();
     });
 
-    it("should log an error with the correct message if author is not found during createLetterCounters", async () => {
-      vi.spyOn(messageLoggerController, "messageLoggerController");
-      vi.spyOn(letterCounterModel, "createLetterCounters").mockRejectedValue(
-        new Error("Author not found!"),
+    it('should log an error with the correct message if author is not found during createLetterCounters', async () => {
+      vi.spyOn(messageLoggerController, 'messageLoggerController');
+      vi.spyOn(letterCounterModel, 'createLetterCounters').mockRejectedValue(
+        new Error('Author not found!'),
       );
       const message: MessageModel = {
         id: 1,
         authorId: 1,
-        content: "",
-        messageCreatedAt: "",
+        content: '',
+        messageCreatedAt: '',
       };
       await expect(
         messageLoggerController.createLetterCountersInDatabase(db, message),
-      ).rejects.toThrow("Error creating letters");
+      ).rejects.toThrow('Error creating letters');
       expect(loggerError).toHaveBeenCalled();
     });
   });
 
-  describe("letterIterator tests", async () => {
-    it("should call updateLetterCounter by the amount of letters", async () => {
-      vi.spyOn(messageLoggerController, "letterIterator");
-      vi.spyOn(letterCounterModel, "updateLetterCounter").mockResolvedValue(
+  describe('letterIterator tests', async () => {
+    it('should call updateLetterCounter by the amount of letters', async () => {
+      vi.spyOn(messageLoggerController, 'letterIterator');
+      vi.spyOn(letterCounterModel, 'updateLetterCounter').mockResolvedValue(
         undefined,
       );
       const messageParams: MessageModel = {
         id: 0,
         authorId: 1,
-        content: "Teszt",
+        content: 'Teszt',
         messageCreatedAt: new Date().toLocaleString(),
       };
       await messageLoggerController.letterIterator(db, messageParams);
