@@ -1,5 +1,5 @@
-import dotenv from "dotenv";
-import { logger } from "./winston/winston.js";
+import dotenv from 'dotenv';
+import { logger } from './winston/winston.js';
 
 dotenv.config();
 

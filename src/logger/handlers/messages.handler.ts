@@ -1,10 +1,10 @@
-import { NextFunction, Response, Request } from "express";
+import { NextFunction, Response, Request } from 'express';
 import {
   messagesByAuthorsController,
   messagesController,
-} from "../controller/message.controller.js";
-import { db } from "../database/database.js";
-import { logger } from "../../winston/winston.js";
+} from '../controller/message.controller.js';
+import { db } from '../database/database.js';
+import { logger } from '../../winston/winston.js';
 
 export const messagesHandler = async (
   req: Request,
@@ -12,11 +12,11 @@ export const messagesHandler = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const page = parseInt(req.params["page"]);
+    const page = parseInt(req.params.page, 10);
     const renderObject = await messagesController(db, page);
     res.render(renderObject.viewName, renderObject.options);
   } catch (error) {
-    logger.error("Messages handler error:", error);
+    logger.error('Messages handler error:', error);
     next(error);
   }
 };
@@ -27,11 +27,11 @@ export const messagesByAuthorsHandler = async (
   next: NextFunction,
 ) => {
   try {
-    const authorId = [parseInt(req.params["id"])];
+    const authorId = [parseInt(req.params.id, 10)];
     const renderObject = await messagesByAuthorsController(db, authorId);
     res.render(renderObject.viewName, renderObject.options);
   } catch (error) {
-    logger.error("Messages handler error:", error);
+    logger.error('Messages handler error:', error);
     next(error);
   }
 };

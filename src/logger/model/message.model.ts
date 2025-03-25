@@ -1,6 +1,6 @@
-import { Database } from "sqlite3";
-import { execute, fetchAll } from "../database/database.operations.js";
-import { SqlParams } from "../types/sqlparams.type.js";
+import { Database } from 'sqlite3';
+import { fetchAll, run } from '../database/database.operations.js';
+import { SqlParams } from '../types/sqlparams.type.js';
 
 export type MessageModel = {
   id: number;
@@ -13,13 +13,13 @@ export const createMessage = async (
   db: Database,
   params: SqlParams,
 ): Promise<void> => {
-  const sql: string =
-    "INSERT INTO Messages(authorId, message, createdAt) VALUES (?, ?, ?)";
-  await execute(db, sql, params);
+  const sql =
+    'INSERT INTO Messages(authorId, message, createdAt) VALUES (?, ?, ?)';
+  await run(db, sql, params);
 };
 
 export const getAllMessages = async (db: Database): Promise<MessageModel[]> => {
-  const sql = "SELECT * FROM Messages";
+  const sql = 'SELECT * FROM Messages';
   const rows = await fetchAll<{
     id: number;
     authorId: number;
@@ -39,7 +39,7 @@ export const getMessagesByAuthorId = async (
   db: Database,
   params: SqlParams,
 ): Promise<MessageModel[]> => {
-  const sql = "SELECT * FROM Messages WHERE authorId = ?";
+  const sql = 'SELECT * FROM Messages WHERE authorId = ?';
   const rows = await fetchAll<{
     id: number;
     authorId: number;
@@ -59,7 +59,7 @@ export const getTenMessages = async (
   db: Database,
   params: SqlParams,
 ): Promise<MessageModel[]> => {
-  const sql = "SELECT * FROM Messages LIMIT 10 OFFSET ?";
+  const sql = 'SELECT * FROM Messages LIMIT 10 OFFSET ?';
   const rows = await fetchAll<{
     id: number;
     authorId: number;

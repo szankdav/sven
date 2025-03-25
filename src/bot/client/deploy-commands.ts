@@ -1,17 +1,17 @@
-import { REST, Routes } from "discord.js";
-import { config } from "../../config.js";
-import { commands } from "../commands/utility/index.js";
-import { logger } from "../../winston/winston.js";
+import { REST, Routes } from 'discord.js';
+import { config } from '../../config.js';
+import { commands } from '../commands/utility/index.js';
+import { logger } from '../../winston/winston.js';
 
 const commandsData = Object.values(commands).map((command) => command.data);
 
-const rest = new REST({ version: "10" }).setToken(config.DISCORD_TOKEN);
+const rest = new REST({ version: '10' }).setToken(config.DISCORD_TOKEN_DEV);
 
 export async function deployCommands() {
   try {
     /* eslint no-console: ["error", { allow: ["log", "error"] }] */
-    console.log("Started refreshing application (/) commands.");
-    logger.info("Started refreshing application (/) commands.");
+    console.log('Started refreshing application (/) commands.');
+    logger.info('Started refreshing application (/) commands.');
 
     await rest.put(
       Routes.applicationGuildCommands(
@@ -23,10 +23,10 @@ export async function deployCommands() {
       },
     );
 
-    console.log("Successfully reloaded application (/) commands.");
-    logger.info("Successfully reloaded application (/) commands.");
+    console.log('Successfully reloaded application (/) commands.');
+    logger.info('Successfully reloaded application (/) commands.');
   } catch (error) {
-    console.error("Error updating application (/) commands: ", error);
-    logger.error("Error updating application (/) commands: ", error);
+    console.error('Error updating application (/) commands: ', error);
+    logger.error('Error updating application (/) commands: ', error);
   }
 }
