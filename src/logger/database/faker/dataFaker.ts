@@ -172,6 +172,12 @@ const fillDatabaseWithFakeData = async (): Promise<void> => {
 };
 
 export const runFaker = async () => {
-  await fillDatabaseWithFakeData();
-  logger.info('Database filled with fake data.');
+  try {
+    await fillDatabaseWithFakeData();
+    logger.info('Database filled with fake data.');
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.log(error);
+    logger.error(error);
+  }
 };
