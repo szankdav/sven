@@ -181,3 +181,5 @@ export const runFaker = async () => {
     logger.error(error);
   }
 };
+
+await runFaker();
