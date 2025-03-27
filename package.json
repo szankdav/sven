@@ -8,7 +8,7 @@
     "docker-test:build": "docker build -t sven-local -f Dockerfile.test .",
     "docker-test:start": "docker run -d --name sven-test -p 3000:3000 --env-file .env sven-local",
     "wait": "npx wait-on http://localhost:3000/",
-    "generateFakeDatabaseData": "node dist/logger/database/faker/dataFaker.js",
+    "generateFakeDatabaseData": "node dist/scripts/generateFakeDatabaseData.js",
     "dev": "tsx watch src/index.ts",
     "copy-css-files": "copyfiles -u 1 \"src/logger/public/**/*.css\" \"dist/\"",
     "copy-view-files": "copyfiles -u 1 \"src/logger/view/**/*\" \"dist/\"",
