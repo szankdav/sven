@@ -18,6 +18,8 @@ jobs:
         run: npm run build
       - name: Install wait-on package
         run: npm install wait-on
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
       - name: Start the app in the background
         env:
           DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
@@ -25,13 +27,11 @@ jobs:
           GUILD_ID: ${{ secrets.GUILD_ID }}
           PORT: ${{ secrets.PORT }}
           LOG_LEVEL: ${{ secrets.LOG_LEVEL }}
-        run: npm start &
-      - name: Wait for the app to be ready
-        run: npx wait-on http://localhost:3000
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
-      - name: Run Playwright tests
-        run: npm run playwright-prod
+        run: npm start & npx wait-on http://localhost:3000 && npm run playwright-prod
+      # - name: Wait for the app to be ready
+      #   run: npx wait-on http://localhost:3000
+      # - name: Run Playwright tests
+      #   run: npm run playwright-prod
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
