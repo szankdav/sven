@@ -50,19 +50,14 @@ jobs:
     name: Deploy Docker Image
     needs: unit-test
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
     concurrency: deploy-group # Ensures only one deployment at a time
 
     steps:
     # ✅ Checkout code
     - uses: actions/checkout@v4
-
-    # ✅ Log in to GHCR
-    - name: Log in to GHCR
-      uses: docker/login-action@v2
-      with:
-        registry: ghcr.io
-        username: ${{ secrets.GITHUB_ACTOR }}
-        password: ${{ secrets.GITHUB_TOKEN }}  # GitHub automatically provides this
 
     # ✅ Build Docker image with caching
     - name: Build Docker Image
@@ -70,6 +65,9 @@ jobs:
         docker build --cache-from=type=local,src=/tmp/.buildx-cache \
                      --cache-to=type=local,dest=/tmp/.buildx-cache \
                      -t ghcr.io/szankdav/sven:latest .
+    
+    - name: Log in to registry
+      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
     # ✅ Push Docker image to GHCR
     - name: Push Docker Image to GHCR
