@@ -1,14 +1,9 @@
 const seeStatisticsButton: HTMLElement | null =
   document.getElementById('seeStatistics');
-if (seeStatisticsButton) {
+const statisticsDiv: HTMLElement | null = document.getElementById('statistics');
+if (seeStatisticsButton && statisticsDiv) {
   seeStatisticsButton.addEventListener('click', () => {
-    const statisticsDiv = document.getElementById('statistics');
-    if (statisticsDiv!.classList.contains('d-none')) {
-      statisticsDiv!.classList.remove('d-none');
-      seeStatisticsButton.innerText = 'Hide statistics';
-    } else {
-      statisticsDiv!.classList.add('d-none');
-      seeStatisticsButton.innerText = 'Show statistics';
-    }
+    const isHidden = statisticsDiv.classList.toggle('d-none');
+    seeStatisticsButton.innerText = isHidden ? 'Show statistics' : 'Hide statistics';
   });
-}
+};
