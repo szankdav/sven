@@ -11,17 +11,17 @@ services:
   #   environment:
   #     - GF_SECURITY_ADMIN_PASSWORD=admin # Optional: Set admin password for Grafana
 
-  # # Loki service
-  # loki:
-  #   image: grafana/loki:latest
-  #   ports:
-  #     - '3100:3100' # Expose Loki's default port to your local machine
-  #   volumes:
-  #     - loki-data:/data
-  #   networks:
-  #     - monitoring
-  #   environment:
-  #     - LOKI_STORAGE_PATH=/data/loki
+  # Loki service
+  loki:
+    image: grafana/loki:latest
+    ports:
+      - '3100:3100' # Expose Loki's default port to your local machine
+    volumes:
+      - loki-data:/data
+    networks:
+      - monitoring
+    environment:
+      - LOKI_STORAGE_PATH=/data/loki
 
   # Your app service
   watchtower:
@@ -63,8 +63,8 @@ services:
       - "com.centurylinklabs.watchtower.enable=true"
     # networks:
     #   - monitoring
-    # environment:
-    #   - LOKI_URL=http://loki:3100 # Pointing your app to Loki service within the Docker network
+    environment:
+      - LOKI_URL=http://loki:3100 # Pointing your app to Loki service within the Docker network
     # depends_on:
     #   - loki
     #   - grafana
@@ -76,12 +76,12 @@ services:
     # Other environment variables for your app can be defined here
 
 # Define the shared network
-# networks:
-#   monitoring:
-#     driver: bridge
+networks:
+  monitoring:
+    driver: bridge
 
 # # Volumes to persist Grafana and Loki data
 volumes:
   letsencrypt:
 #   grafana-data:
-#   loki-data:
+  loki-data:
