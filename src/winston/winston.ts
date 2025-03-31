@@ -21,7 +21,7 @@ export const logger = winston.createLogger({
   ),
   transports: [
     new LokiTransport({
-      host: 'http://loki:3100',
+      host: 'http://localhost:3100',
       labels: { app: 'sven' },
       json: true,
       format: winston.format.json(),
