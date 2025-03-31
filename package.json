@@ -7,7 +7,8 @@
   "scripts": {
     "docker-test:build": "docker build -t sven-test-local -f Dockerfile.test .",
     "docker-test:start": "docker run -d --name sven-test -p 3000:3000 --env-file .env sven-test-local",
-    "docker-test:remove": "docker rm sven-test",
+    "docker-dev:build": "docker build -t sven-local -f Dockerfile.dev .",
+    "docker-dev:start": "docker run -d --name sven-local -p 3000:3000 --env-file .env sven-local",
     "wait": "npx wait-on http://localhost:3000/",
     "generateFakeDatabaseData": "node dist/scripts/generateFakeDatabaseData.js",
     "dev": "tsx watch src/index.ts",
@@ -20,10 +21,11 @@
     "playwright-prod": "npm run generateFakeDatabaseData && npx playwright test",
     "playwright:docker": "npm run docker-test:build && npm run docker-test:start",
     "start": "node dist/index.js",
+    "start-dev-container": "npm run docker-dev:build && npm run docker-dev:start",
     "lint": "eslint src/**/*.ts",
     "lint-fix": "eslint --fix src/**/*.ts",
     "pretty": "prettier --write src/**/*.ts",
-    "prepare": "husky",
+    "prepare": "husky | true",
     "precommit": "npm run lint-fix && npm run pretty",
     "prepush": "npm run lint"
   },
