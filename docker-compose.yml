@@ -70,6 +70,7 @@ services:
     #   - grafana
     volumes:
       - /home/szankdav/database:/sven/dist/logger/database/db
+      - /home/szankdav/logs:/sven/dist/logs
     env_file:
       - .env
     # Other environment variables for your app can be defined here
