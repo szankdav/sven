@@ -35,7 +35,8 @@ export const logger = winston.createLogger({
         json: true,
         format: winston.format.json(),
         replaceTimestamp: true,
-        onConnectionError: (err) => logger.error(err),
+        // eslint-disable-next-line no-console
+        onConnectionError: (err) => console.error(err),
     }),
     new winston.transports.DailyRotateFile({
       filename: path.join(logsDirectory, 'combined-%DATE%.log'),
