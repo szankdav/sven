@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "docker-test:build": "docker build -t sven-test-local -f Dockerfile.test .",
-    "docker-test:start": "docker run -d --name sven-test -p 3000:3000 --env-file .env sven-test-local",
+    "docker-test:start": "docker run -d --name sven-test -p 3000:3000 --env-file .env -e DISABLE_LOKI=true sven-test-local",
     "docker-dev:build": "docker build -t sven-local -f Dockerfile.dev .",
     "docker-dev:start": "docker run -d --name sven-local -p 3000:3000 --env-file .env sven-local",
     "wait": "npx wait-on http://localhost:3000/",
