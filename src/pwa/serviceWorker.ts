@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable no-restricted-globals */
 const CACHE_NAME = 'sventrics';
 const urlsToCache = [
