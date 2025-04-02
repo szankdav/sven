@@ -20,6 +20,10 @@ RUN npm install --omit=dev
 
 COPY --from=build /sven/dist ./dist
 
+COPY ./src/pwa/index.html /sven/dist/pwa/
+
+COPY ./src/pwa/manifest.json /sven/dist/pwa/
+
 EXPOSE 3000
 
 CMD ["npm", "run", "start"]

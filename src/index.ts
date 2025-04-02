@@ -13,6 +13,7 @@ import {
 import { statisticsByAuthorHandler } from './logger/handlers/statistics.handler.js';
 import { messageLoggerHandler } from './logger/handlers/messageLogger.handler.js';
 import { logger } from './winston/winston.js';
+import { pwaHandler } from './logger/handlers/pwa.handler.js';
 
 // Start bot
 startClient();
@@ -22,8 +23,6 @@ const __dirname = import.meta.dirname;
 const app = express();
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'logger/view'));
-app.use(express.static(path.join(__dirname, './logger/public')));
-app.use(express.static(path.join(__dirname, 'dist')));
 app.use(express.json());
 const port = Number(process.env.PORT) || 3000;
 
@@ -33,15 +32,21 @@ try {
   logger.error('Error creating tables:', error);
 }
 
-app.listen(port, () => {
-  /* eslint no-console: ["error", { allow: ["log"] }] */
-  console.log(`Server running at port: ${port}`);
-});
-
 app.get('/', homeHandler);
 app.get('/authors/:page', authorsHandler);
 app.get('/messages/:page', messagesHandler);
 app.get('/messages/author/:id', messagesByAuthorsHandler);
 app.get('/statistics/author/:id', statisticsByAuthorHandler);
 app.post('/logMessage', messageLoggerHandler);
+app.get('/pwa', pwaHandler);
+
+app.use(express.static(path.join(__dirname, './logger/public')));
+app.use(express.static(path.join(__dirname, 'dist')));
+app.use(express.static(path.join(__dirname, 'pwa')));
+
 app.use(errorHandler);
+
+app.listen(port, () => {
+  /* eslint no-console: ["error", { allow: ["log"] }] */
+  console.log(`Server running at port: ${port}`);
+});

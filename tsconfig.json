@@ -11,7 +11,8 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "strictNullChecks": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "lib": ["WebWorker", "DOM"]
   },
   "include": ["src/**/*.ts", "eslint.config.ts"],
   "exclude": ["node_modules"]
