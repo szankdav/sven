@@ -13,7 +13,7 @@ const errorFilter = winston.format((info) => info.level === 'error' ? info : fal
 const infoFilter = winston.format((info) => info.level === 'info' ? info : false);
 
 export const logger = winston.createLogger({
-  level: process.env.LOG_LEVEL_DEV || 'silly',
+  level: process.env.LOG_LEVEL || 'info',
   format: winston.format.combine(
     winston.format.timestamp(),
     winston.format.json(),
