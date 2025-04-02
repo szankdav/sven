@@ -13,7 +13,6 @@ import {
 import { statisticsByAuthorHandler } from './logger/handlers/statistics.handler.js';
 import { messageLoggerHandler } from './logger/handlers/messageLogger.handler.js';
 import { logger } from './winston/winston.js';
-import { pwaHandler } from './logger/handlers/pwa.handler.js';
 
 // Start bot
 startClient();
@@ -38,11 +37,9 @@ app.get('/messages/:page', messagesHandler);
 app.get('/messages/author/:id', messagesByAuthorsHandler);
 app.get('/statistics/author/:id', statisticsByAuthorHandler);
 app.post('/logMessage', messageLoggerHandler);
-app.get('/pwa', pwaHandler);
 
 app.use(express.static(path.join(__dirname, './logger/public')));
 app.use(express.static(path.join(__dirname, 'dist')));
-app.use(express.static(path.join(__dirname, 'pwa')));
 
 app.use(errorHandler);
 
