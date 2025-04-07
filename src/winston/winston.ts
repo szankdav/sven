@@ -4,7 +4,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import LokiTransport from 'winston-loki';
 
-const { combine, timestamp, json } = winston.format;
+const { combine, timestamp } = winston.format;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const logsDirectory = path.resolve(__dirname, '../logs');
