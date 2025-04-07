@@ -4,7 +4,6 @@ import {
   messagesController,
 } from '../controller/message.controller.js';
 import { db } from '../database/database.js';
-import { logger } from '../../winston/winston.js';
 
 export const messagesHandler = async (
   req: Request,
@@ -16,7 +15,6 @@ export const messagesHandler = async (
     const renderObject = await messagesController(db, page);
     res.render(renderObject.viewName, renderObject.options);
   } catch (error) {
-    logger.error('Messages handler error:', error);
     next(error);
   }
 };
@@ -31,7 +29,6 @@ export const messagesByAuthorsHandler = async (
     const renderObject = await messagesByAuthorsController(db, authorId);
     res.render(renderObject.viewName, renderObject.options);
   } catch (error) {
-    logger.error('Messages handler error:', error);
     next(error);
   }
 };

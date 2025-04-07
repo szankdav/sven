@@ -36,15 +36,6 @@ export const getLetterStatictics = async (
       return letterStatistic;
     });
 
-
-    // for (const letterCounter of letterCountersByAuthorId) {
-    //   const letterStatistic: LetterStatistic = {
-    //     [letterCounter.letter]: Math.round(
-    //       (letterCounter.count / sumOfLetterCount) * 100,
-    //     ),
-    //   };
-    //   letterStatistics.push(letterStatistic);
-    // }
     return letterStatistics;
   } catch (error) {
     logger.error('Error calculating letter statistics:', error);

@@ -14,7 +14,6 @@ export const messageLoggerHandler = async (
     await messageLoggerController(db, message);
     res.sendStatus(200);
   } catch (error) {
-    logger.error('MessageLogger handler error:', error);
     next(error);
   }
 };
