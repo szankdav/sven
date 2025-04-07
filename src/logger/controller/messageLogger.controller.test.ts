@@ -213,7 +213,7 @@ describe('messageLogger.controller tests', () => {
       await messageLoggerController.insertMessageIntoDatabase(db, message);
       expect(loggerInfo).toHaveBeenCalledWith(
         'Message added to the database!',
-        { authorId: message.authorId, message: message.content },
+        { authorId: message.authorId, content: message.content },
       );
       expect(loggerError).not.toHaveBeenCalled();
     });
