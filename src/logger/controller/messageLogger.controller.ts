@@ -60,7 +60,7 @@ export const insertMessageIntoDatabase = async (
     ]);
     logger.info('Message added to the database!', {
       authorId: message.authorId,
-      message: message.content,
+      content: message.content,
     });
   } catch (error) {
     logger.error('Error creating message in database:', error);
