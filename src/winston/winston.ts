@@ -12,13 +12,16 @@ const logsDirectory = path.resolve(__dirname, '../logs');
 const errorFilter = winston.format((info) => info.level === 'error' ? info : false);
 const infoFilter = winston.format((info) => info.level === 'info' ? info : false);
 
+const jsonFormat = combine(
+  winston.format.label({ label: 'sven' }),
+  timestamp(),
+  winston.format.errors({ stack: true }),
+  json()
+);
+
 export const logger = winston.createLogger({
   level: process.env.LOG_LEVEL || 'info',
-  format: winston.format.combine(
-    winston.format.timestamp(),
-    winston.format.json(),
-    winston.format.label({ label: 'sven' }),
-  ),
+  format: jsonFormat,
   transports: [
     ...(process.env.DISABLE_LOKI) ? [] : [
       new LokiTransport({
@@ -39,14 +42,14 @@ export const logger = winston.createLogger({
       level: 'error',
       datePattern: 'YYYY-MM-DD',
       maxFiles: '14d',
-      format: combine(errorFilter(), timestamp(), json()),
+      format: combine(errorFilter(), jsonFormat),
     }),
     new winston.transports.DailyRotateFile({
       filename: path.join(logsDirectory, 'app-info-%DATE%.log'),
       level: 'info',
       datePattern: 'YYYY-MM-DD',
       maxFiles: '14d',
-      format: combine(infoFilter(), timestamp(), json()),
+      format: combine(infoFilter(), jsonFormat),
     }),
   ],
   exceptionHandlers: [
