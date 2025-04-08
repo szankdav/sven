@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 import LokiTransport from 'winston-loki';
 import dayjs from 'dayjs';
 
-const { combine, printf, label, json } = winston.format;
+const { combine, printf, label } = winston.format;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const logsDirectory = path.resolve(__dirname, '../logs');
