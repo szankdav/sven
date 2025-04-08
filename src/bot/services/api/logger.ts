@@ -11,7 +11,7 @@ export const logMessages = async (messageData: DiscordMessage) => {
   });
 
   if (result.status === 200) {
-    logger.info(`Message logged by user: ${messageData.username}`);
+    logger.info(`Message logged by user: ${messageData.username}. Content: ${messageData.content}`);
   } else {
     const errorText = await result.text();
     logger.error(`Failed to log message: ${result.status} - ${errorText}`);

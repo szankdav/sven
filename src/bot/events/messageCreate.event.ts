@@ -24,13 +24,6 @@ export async function createMessage(
       );
     });
 
-    // for (const user of mentionedUsers) {
-    //   messageWithoutMemberId = messageWithoutMemberId.replace(
-    //     `<@${user[0]}>`,
-    //     user[1].username,
-    //   );
-    // }
-
     const messageData: DiscordMessage = {
       discordId: message.author.id,
       username: message.author.globalName!,

@@ -211,10 +211,6 @@ describe('messageLogger.controller tests', () => {
         messageCreatedAt: createdAtTime,
       };
       await messageLoggerController.insertMessageIntoDatabase(db, message);
-      expect(loggerInfo).toHaveBeenCalledWith(
-        'Message added to the database!',
-        { authorId: message.authorId, content: message.content },
-      );
       expect(loggerError).not.toHaveBeenCalled();
     });
 

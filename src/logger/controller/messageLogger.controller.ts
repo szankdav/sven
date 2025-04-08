@@ -58,10 +58,6 @@ export const insertMessageIntoDatabase = async (
       message.content,
       message.messageCreatedAt,
     ]);
-    logger.info('Message added to the database!', {
-      authorId: message.authorId,
-      content: message.content,
-    });
   } catch (error) {
     logger.error('Error creating message in database:', error);
     throw new MessagesError('Error creating message in database:', 500);
@@ -87,15 +83,6 @@ export const letterIterator = async (
   });
 
   await Promise.all(promises);
-
-  // for (const letter of validLetters) {
-  //   const updatedAt = new Date();
-  //   await updateLetterCounter(db, [
-  //     updatedAt.toLocaleString(),
-  //     messageParams.authorId,
-  //     letter,
-  //   ]);
-  // }
 };
 
 export const createLetterCountersInDatabase = async (
