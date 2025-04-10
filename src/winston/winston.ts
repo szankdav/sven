@@ -28,22 +28,26 @@ const jsonFormat = printf(({ timestamp: time, level, message, label: appLabel, .
   })
 );
 
-const baseFormat = combine(
+const fileFormat = combine(
   label({ label: 'sven' }),
   shiftTimestamp(),
   jsonFormat
 );
 
+const lokiFormat = combine(
+  label({ label: 'sven' }),
+  winston.format.json()
+);
+
 export const logger = winston.createLogger({
   level: process.env.LOG_LEVEL || 'info',
-  format: baseFormat,
   transports: [
     ...(process.env.DISABLE_LOKI) ? [] : [
       new LokiTransport({
         host: 'http://loki:3100',
         labels: { app: 'sven' },
         json: true,
-        format: combine(baseFormat),
+        format: lokiFormat,
         replaceTimestamp: true,
         onConnectionError: (err) => logger.error('Loki error: ', err),
       })],
@@ -51,21 +55,21 @@ export const logger = winston.createLogger({
       filename: path.join(logsDirectory, 'combined-%DATE%.log'),
       datePattern: 'YYYY-MM-DD',
       maxFiles: '14d',
-      format: baseFormat,
+      format: fileFormat,
     }),
     new winston.transports.DailyRotateFile({
       filename: path.join(logsDirectory, 'app-error-%DATE%.log'),
       level: 'error',
       datePattern: 'YYYY-MM-DD',
       maxFiles: '14d',
-      format: combine(errorFilter(), baseFormat),
+      format: combine(errorFilter(), fileFormat),
     }),
     new winston.transports.DailyRotateFile({
       filename: path.join(logsDirectory, 'app-info-%DATE%.log'),
       level: 'info',
       datePattern: 'YYYY-MM-DD',
       maxFiles: '14d',
-      format: combine(infoFilter(), baseFormat),
+      format: combine(infoFilter(), fileFormat),
     }),
   ],
   exceptionHandlers: [
