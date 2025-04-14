@@ -5,7 +5,9 @@ import { logger } from '../../winston/winston.js';
 const cooldowns = new Collection<string, Collection<string, number>>();
 
 export async function cooldownForInteraction(interaction: Interaction<CacheType>): Promise<InteractionResponse<boolean> | void> {
+  logger.info(`Incoming interaction: ${interaction.type}`);
   if (!interaction.isCommand()) {
+    logger.info('Incoming interaction was not a command. No cooldown added.');
     return Promise.resolve();
   }
   const { commandName } = interaction;
@@ -14,6 +16,7 @@ export async function cooldownForInteraction(interaction: Interaction<CacheType>
 
   if (!cooldowns.has(command)) {
     cooldowns.set(command, new Collection<string, number>());
+    logger.info(`Command: ${command} added to cooldowns.`);
   }
 
   const now = Date.now();

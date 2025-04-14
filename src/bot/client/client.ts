@@ -24,11 +24,15 @@ client.on('interactionCreate', async (interaction) => {
 });
 
 client.on('messageCreate', async (message) => {
-  if (message.author.bot) return;
+  if(message.author.bot){ 
+    logger.info('Message created by Sven, and not added into database.');
+    return;
+  };
   await createMessage(message);
   await answerBotMention(message);
 });
 
 export function startClient() {
+  logger.info('Starting bot...');
   client.login(config.DISCORD_TOKEN);
 }

@@ -12,7 +12,6 @@ export async function createMessage(
   message: OmitPartialGroupDMChannel<Message<boolean>>,
 ) {
   try {
-    if (message.author.bot) return;
     if (message.content.startsWith('<@')) return;
     let messageWithoutMemberId: string = message.content;
     const mentionedUsers: Collection<string, User> = message.mentions.users;
@@ -42,7 +41,6 @@ export async function createMessage(
 export async function answerBotMention(
   message: OmitPartialGroupDMChannel<Message<boolean>>,
 ) {
-  if (message.author.bot) return;
   const user = message.mentions.users.first();
   if (user === undefined) {
     return;
