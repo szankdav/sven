@@ -45,11 +45,11 @@ export async function answerBotMention(
   if (user === undefined) {
     return;
   }
-  if (user.username === 'SVSimulator Sven') {
+  if (user.username === 'SvenBot') {
     message.channel.send(`Szia ${message.author}!`);
     message.channel.send(
       "Az elérhető parancsaimat a '/' jellel tudod előhozni! :)",
     );
-    logger.info(`SVSimulator Sven mentioned by: ${message.author}`);
+    logger.info(`SvenBot mentioned by: ${message.author}`);
   }
 }
