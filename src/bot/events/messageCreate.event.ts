@@ -50,6 +50,6 @@ export async function answerBotMention(
     message.channel.send(
       "Az elérhető parancsaimat a '/' jellel tudod előhozni! :)",
     );
-    logger.info(`SvenBot mentioned by: ${message.author}`);
+    logger.info(`SvenBot mentioned by: ${message.author.username}`);
   }
 }
