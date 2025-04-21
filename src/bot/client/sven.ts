@@ -13,20 +13,32 @@ export const client = new Client({
 });
 
 client.once('ready', async () => {
-  await deployCommands();
-  /* eslint no-console: ["error", { allow: ["log"] }] */
-  console.log('Discord bot is ready! 🤖');
-  logger.info('Discord bot is ready! 🤖');
+  try {
+    await deployCommands();
+    /* eslint no-console: ["error", { allow: ["log"] }] */
+    console.log('Sven is ready! 🤖');
+    logger.info('Sven is ready! 🤖');
+  } catch (error) {
+    logger.error('Error updating application (/) commands: ', error);
+  }
 });
 
 client.on('interactionCreate', async (interaction) => {
-  await cooldownForInteraction(interaction);
+  try {
+    await cooldownForInteraction(interaction);
+  } catch (error) {
+    logger.error('Error during set of interactions cooldown: ', error);
+  }
 });
 
 client.on('messageCreate', async (message) => {
-  if (message.author.bot) return;
-  await createMessage(message);
-  await answerBotMention(message);
+  try {
+    if (message.author.bot) return;
+    await createMessage(message);
+    await answerBotMention(message);
+  } catch (error) {
+    logger.error('Error while receiving message from discord: ', error);
+  }
 });
 
 export function startClient() {

@@ -26,7 +26,6 @@ export async function deployCommands() {
     console.log('Successfully reloaded application (/) commands.');
     logger.info('Successfully reloaded application (/) commands.');
   } catch (error) {
-    console.error('Error updating application (/) commands: ', error);
-    logger.error('Error updating application (/) commands: ', error);
+    throw new Error(`${error}`);
   }
 }

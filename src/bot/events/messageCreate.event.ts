@@ -6,44 +6,40 @@ import {
 } from 'discord.js';
 import { logger } from '../../winston/winston.js';
 import { DiscordMessage } from '../../logger/types/discordMessage.type.js';
-import { logMessages } from '../services/api/logger.js';
+import { messageLoggerHandlerByFunction } from '../../logger/handlers/messageLogger.handler.js';
 
 export async function createMessage(
   message: OmitPartialGroupDMChannel<Message<boolean>>,
 ) {
-  try {
-    if (message.author.bot) return;
-    if (message.content.startsWith('<@')) return;
-    let messageWithoutMemberId: string = message.content;
-    const mentionedUsers: Collection<string, User> = message.mentions.users;
+  if (message.author.bot) return;
+  if (message.content.startsWith('<@')) return;
+  let messageWithoutMemberId: string = message.content;
+  const mentionedUsers: Collection<string, User> = message.mentions.users;
 
-    mentionedUsers.forEach((user, key) => {
-      messageWithoutMemberId = messageWithoutMemberId.replace(
-        `<@${key}>`,
-        user.username,
-      );
-    });
+  mentionedUsers.forEach((user, key) => {
+    messageWithoutMemberId = messageWithoutMemberId.replace(
+      `<@${key}>`,
+      user.username,
+    );
+  });
 
-    // for (const user of mentionedUsers) {
-    //   messageWithoutMemberId = messageWithoutMemberId.replace(
-    //     `<@${user[0]}>`,
-    //     user[1].username,
-    //   );
-    // }
+  // for (const user of mentionedUsers) {
+  //   messageWithoutMemberId = messageWithoutMemberId.replace(
+  //     `<@${user[0]}>`,
+  //     user[1].username,
+  //   );
+  // }
 
-    const messageData: DiscordMessage = {
-      discordId: message.author.id,
-      username: message.author.globalName!,
-      messageCreatedAt: message.createdTimestamp,
-      content: messageWithoutMemberId,
-    };
+  const messageData: DiscordMessage = {
+    discordId: message.author.id,
+    username: message.author.globalName!,
+    messageCreatedAt: message.createdTimestamp,
+    content: messageWithoutMemberId,
+  };
 
-    // await messageLoggerHandlerByFunction(messageData);
+  await messageLoggerHandlerByFunction(messageData);
 
-    await logMessages(messageData);
-  } catch (error) {
-    logger.error('Error creating message:', error);
-  }
+  // await logMessages(messageData);
 }
 
 export async function answerBotMention(

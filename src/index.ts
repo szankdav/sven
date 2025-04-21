@@ -1,6 +1,6 @@
 import express from 'express';
 import path from 'path';
-import { startClient } from './bot/client/client.js';
+import { startClient } from './bot/client/sven.js';
 import { createTables } from './logger/database/tables.js';
 import { db } from './logger/database/database.js';
 import { errorHandler } from './logger/handlers/error.handler.js';
