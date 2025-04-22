@@ -4,10 +4,14 @@ import * as echo from './echo.js';
 import * as server from './server.js';
 import * as talk from './talk.js';
 
-export const commands = {
+export const svenCommands = {
   user,
   teszt,
   echo,
   server,
   talk
+};
+
+export const faendalCommands = {
+  talk,
 };

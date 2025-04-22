@@ -11,8 +11,8 @@ import { messageLoggerHandlerByFunction } from '../../logger/handlers/messageLog
 export async function createMessage(
   message: OmitPartialGroupDMChannel<Message<boolean>>,
 ) {
-  if (message.author.bot) return;
-  if (message.content.startsWith('<@')) return;
+  // if (message.author.bot) return;
+  // if (message.content.startsWith('<@')) return;
   let messageWithoutMemberId: string = message.content;
   const mentionedUsers: Collection<string, User> = message.mentions.users;
 
@@ -32,7 +32,7 @@ export async function createMessage(
 
   const messageData: DiscordMessage = {
     discordId: message.author.id,
-    username: message.author.globalName!,
+    username: message.author.globalName! || message.author.displayName,
     messageCreatedAt: message.createdTimestamp,
     content: messageWithoutMemberId,
   };
@@ -50,11 +50,11 @@ export async function answerBotMention(
   if (user === undefined) {
     return;
   }
-  if (user.username === 'SVSimulator Sven') {
-    message.channel.send(`Szia ${message.author}!`);
+  if (user.username === 'SvenDevBot') {
+    message.channel.send(`Szia ${message.author.displayName}!`);
     message.channel.send(
       "Az elérhető parancsaimat a '/' jellel tudod előhozni! :)",
     );
-    logger.info(`SVSimulator Sven mentioned by: ${message.author}`);
+    logger.info(`SvenDevBot mentioned by: ${message.author}`);
   }
 }

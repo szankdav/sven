@@ -1,6 +1,6 @@
 import express from 'express';
 import path from 'path';
-import { startClient } from './bot/client/sven.js';
+import { startSven } from './bot/client/sven.js';
 import { createTables } from './logger/database/tables.js';
 import { db } from './logger/database/database.js';
 import { errorHandler } from './logger/handlers/error.handler.js';
@@ -13,9 +13,11 @@ import {
 import { statisticsByAuthorHandler } from './logger/handlers/statistics.handler.js';
 import { messageLoggerHandler } from './logger/handlers/messageLogger.handler.js';
 import { logger } from './winston/winston.js';
+import { startFaendal } from './bot/client/faendal.js';
 
-// Start bot
-startClient();
+// Start bots
+startSven();
+startFaendal();
 
 // Set filepaths
 const __dirname = import.meta.dirname;

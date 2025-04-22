@@ -1,5 +1,5 @@
 import { CacheType, Collection, Interaction, InteractionResponse, MessageFlags } from 'discord.js';
-import { commands } from '../commands/utility/index.js';
+import { svenCommands } from '../commands/utility/index.js';
 import { logger } from '../../winston/winston.js';
 
 const cooldowns = new Collection<string, Collection<string, number>>();
@@ -47,8 +47,8 @@ export async function cooldownForInteraction(interaction: Interaction<CacheType>
       return Promise.resolve();
     }
 
-    if (commands[commandName as keyof typeof commands]) {
-      return commands[commandName as keyof typeof commands].execute(interaction);
+    if (svenCommands[commandName as keyof typeof svenCommands]) {
+      return svenCommands[commandName as keyof typeof svenCommands].execute(interaction);
     }
 
     return Promise.resolve();
