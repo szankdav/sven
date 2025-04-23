@@ -91,5 +91,5 @@ client.on('messageCreate', async (message) => {
 });
 
 export function startSven() {
-  client.login(config.DISCORD_TOKEN_SVEN_DEV);
+  client.login(config.DISCORD_TOKEN_SVEN);
 }

@@ -80,6 +80,6 @@ client.on('messageCreate', async (message) => {
 });
 
 export function startFaendal() {
-  client.login(config.DISCORD_TOKEN_FAENDAL_DEV);
+  client.login(config.DISCORD_TOKEN_FAENDAL);
 }
 
