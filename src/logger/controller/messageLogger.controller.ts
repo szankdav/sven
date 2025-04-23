@@ -12,11 +12,8 @@ import {
   getLetterCounterByAuthorId,
   updateLetterCounter,
 } from '../model/letterCounter.model.js';
-import { LetterCounterError } from '../utils/customErrorClasses/letterCounterError.class.js';
 import { logger } from '../../winston/winston.js';
 import { DiscordMessage } from '../types/discordMessage.type.js';
-import { AuthorsError } from '../utils/customErrorClasses/authorsError.class.js';
-import { MessagesError } from '../utils/customErrorClasses/messagesError.class.js';
 
 export const insertAuthorIntoDatabase = async (
   db: Database,
@@ -43,8 +40,7 @@ export const insertAuthorIntoDatabase = async (
     return author.lastID;
 
   } catch (error) {
-    logger.error('Error creating author in database:', error);
-    throw new AuthorsError('Error creating author in database:', 500);
+    throw new DatabaseError(`Error creating author in database: ${error}`, 500);
   }
 };
 
@@ -59,8 +55,7 @@ export const insertMessageIntoDatabase = async (
       message.messageCreatedAt,
     ]);
   } catch (error) {
-    logger.error('Error creating message in database:', error);
-    throw new MessagesError('Error creating message in database:', 500);
+    throw new DatabaseError(`Error creating message in database: ${error}`, 500);
   }
 };
 
@@ -107,8 +102,7 @@ export const createLetterCountersInDatabase = async (
     }
     await letterIterator(db, messageParams);
   } catch (error) {
-    logger.error('Error creating letters:', error);
-    throw new LetterCounterError('Error creating letters', 500);
+    throw new DatabaseError(`Error creating letters: ${error}`, 500);
   }
 };
 
@@ -127,7 +121,6 @@ export const messageLoggerController = async (
     await insertMessageIntoDatabase(db, messageToCreate);
     await createLetterCountersInDatabase(db, messageToCreate);
   } catch (error) {
-    logger.error('Error logging message:', error);
-    throw new DatabaseError('Error logging message', 500);
+    logger.crit('Database error: ', error);
   }
 };

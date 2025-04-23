@@ -14,6 +14,7 @@ export const messageLoggerHandler = async (
     await messageLoggerController(db, message);
     res.sendStatus(200);
   } catch (error) {
+    logger.crit('MessageLogger handler error:', error);
     next(error);
   }
 };
@@ -21,9 +22,5 @@ export const messageLoggerHandler = async (
 export const messageLoggerHandlerByFunction = async (
   message: DiscordMessage,
 ) => {
-  try {
-    await messageLoggerController(db, message);
-  } catch (error) {
-    logger.error('MessageLogger handler error:', error);
-  }
+  await messageLoggerController(db, message);
 };
