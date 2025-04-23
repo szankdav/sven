@@ -9,14 +9,9 @@ export const client = new Client({
 });
 
 client.once('ready', async () => {
-  try {
-    // await deployCommandsForFaendal();
-    /* eslint no-console: ["error", { allow: ["log"] }] */
-    console.log('Faendal is ready! 🤖');
-    logger.info('Faendal is ready! 🤖');
-  } catch (error) {
-    logger.error('Error updating application (/) commands for Faendal: ', error);
-  }
+  /* eslint no-console: ["error", { allow: ["log"] }] */
+  console.log('Faendal is ready! 🤖');
+  logger.info('Faendal is ready! 🤖');
 });
 
 client.on('interactionCreate', async (interaction) => {
@@ -39,27 +34,27 @@ async function answerBotConversation(
     if (sentenceIndex < hikeConversation.faendal.length) {
       if (sentenceIndex === 2) {
         message.channel.send(`${hikeConversation.faendal[sentenceIndex]}`);
-        message.channel.send(`${hikeConversation.faendal[sentenceIndex+1]}`);
-        sentenceIndex+=1;
+        message.channel.send(`${hikeConversation.faendal[sentenceIndex + 1]}`);
+        sentenceIndex += 1;
       } else if (sentenceIndex === 6) {
         message.channel.send(`${hikeConversation.faendal[sentenceIndex]}`);
-        message.channel.send(`${hikeConversation.faendal[sentenceIndex+1]}`);
-        message.channel.send(`${hikeConversation.faendal[sentenceIndex+2]}`);
-        message.channel.send(`${hikeConversation.faendal[sentenceIndex+3]}`);
-        sentenceIndex+=3;
+        message.channel.send(`${hikeConversation.faendal[sentenceIndex + 1]}`);
+        message.channel.send(`${hikeConversation.faendal[sentenceIndex + 2]}`);
+        message.channel.send(`${hikeConversation.faendal[sentenceIndex + 3]}`);
+        sentenceIndex += 3;
       } else if (sentenceIndex === 10) {
         message.channel.send(`${hikeConversation.faendal[sentenceIndex]}`);
-        message.channel.send(`${hikeConversation.faendal[sentenceIndex+1]}`);
-        sentenceIndex+=1;
+        message.channel.send(`${hikeConversation.faendal[sentenceIndex + 1]}`);
+        sentenceIndex += 1;
       } else if (sentenceIndex === 12) {
         message.channel.send(`${hikeConversation.faendal[sentenceIndex]}`);
-        message.channel.send(`${hikeConversation.faendal[sentenceIndex+1]}`);
-        message.channel.send(`${hikeConversation.faendal[sentenceIndex+2]}`);
-        sentenceIndex+=2;
+        message.channel.send(`${hikeConversation.faendal[sentenceIndex + 1]}`);
+        message.channel.send(`${hikeConversation.faendal[sentenceIndex + 2]}`);
+        sentenceIndex += 2;
       } else if (sentenceIndex === 15) {
         message.channel.send(`${hikeConversation.faendal[sentenceIndex]}`);
-        message.channel.send(`${hikeConversation.faendal[sentenceIndex+1]}`);
-        sentenceIndex+=1;
+        message.channel.send(`${hikeConversation.faendal[sentenceIndex + 1]}`);
+        sentenceIndex += 1;
       } else {
         message.channel.send(`${hikeConversation.faendal[sentenceIndex]}`);
       }
