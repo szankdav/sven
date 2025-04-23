@@ -8,7 +8,7 @@ import {
   export const data = new SlashCommandBuilder()
     .setName('deletemessages')
     .setDescription('A csatorna összes üzenetének törlése)')
-    .setDefaultMemberPermissions(0)
+    .setDefaultMemberPermissions(0);
   
   export async function execute(interaction: CommandInteraction) {
     const channelParent = await interaction.channel?.fetch();
@@ -17,8 +17,8 @@ import {
     await interaction.guild?.channels.create({
         name: 'általános',
         type: 0,
-        parent: channelProps['parentId'],
-    })
+        parent: channelProps.parentId,
+    });
     logger.info(
       `Interaction: ${interaction.commandName} used by user: ${interaction.user.globalName}`,
     );
