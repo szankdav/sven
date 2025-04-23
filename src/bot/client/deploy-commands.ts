@@ -6,7 +6,7 @@ import { logger } from '../../winston/winston.js';
 const svenCommandsData = Object.values(svenCommands).map((command) => command.data);
 
 export async function deployCommandsForSven() {
-  const rest = new REST({ version: '10' }).setToken(config.DISCORD_CLIENT_SVEN_ID);
+  const rest = new REST({ version: '10' }).setToken(config.DISCORD_TOKEN_SVEN);
   try {
     /* eslint no-console: ["error", { allow: ["log", "error"] }] */
     console.log('Started refreshing application (/) commands for Sven.');
