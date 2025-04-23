@@ -9,6 +9,7 @@ export const client = new Client({
 });
 
 client.once('ready', async () => {
+    /* eslint no-console: ["error", { allow: ["log"] }] */
     console.log('Faendal is ready! 🤖');
     logger.info('Faendal is ready! 🤖');
 });
