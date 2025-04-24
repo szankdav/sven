@@ -1,32 +1,30 @@
 import { REST, Routes } from 'discord.js';
 import { config } from '../../config.js';
-import { commands } from '../commands/utility/index.js';
+import { svenCommands } from '../commands/utility/index.js';
 import { logger } from '../../winston/winston.js';
 
-const commandsData = Object.values(commands).map((command) => command.data);
+const svenCommandsData = Object.values(svenCommands).map((command) => command.data);
 
-const rest = new REST({ version: '10' }).setToken(config.DISCORD_TOKEN);
-
-export async function deployCommands() {
+export async function deployCommandsForSven() {
+  const rest = new REST({ version: '10' }).setToken(config.DISCORD_TOKEN_SVEN);
   try {
     /* eslint no-console: ["error", { allow: ["log", "error"] }] */
-    console.log('Started refreshing application (/) commands.');
-    logger.info('Started refreshing application (/) commands.');
+    console.log('Started refreshing application (/) commands for Sven.');
+    logger.info('Started refreshing application (/) commands for Sven.');
 
     await rest.put(
       Routes.applicationGuildCommands(
-        config.DISCORD_CLIENT_ID,
+        config.DISCORD_CLIENT_SVEN_ID,
         config.GUILD_ID,
       ),
       {
-        body: commandsData,
+        body: svenCommandsData,
       },
     );
 
-    console.log('Successfully reloaded application (/) commands.');
-    logger.info('Successfully reloaded application (/) commands.');
+    console.log('Successfully reloaded application (/) commands for Sven.');
+    logger.info('Successfully reloaded application (/) commands for Sven.');
   } catch (error) {
-    console.error('Error updating application (/) commands: ', error);
-    logger.error('Error updating application (/) commands: ', error);
+    throw new Error(`${error}`);
   }
 }
