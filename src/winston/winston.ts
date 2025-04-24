@@ -68,8 +68,6 @@ export const logger = winston.createLogger({
         host: 'http://loki:3100',
         labels: { app: 'sven' },
         json: true,
-        format: winston.format.json(),
-        replaceTimestamp: true,
         onConnectionError: (err) => logger.error('Loki error: ', err),
       })],
     new winston.transports.DailyRotateFile({
