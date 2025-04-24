@@ -7,7 +7,7 @@ import {
   
   export const data = new SlashCommandBuilder()
     .setName('deletemessages')
-    .setDescription('A csatorna összes üzenetének törlése)')
+    .setDescription('A csatorna összes üzenetének törlése')
     .setDefaultMemberPermissions(0);
   
   export async function execute(interaction: CommandInteraction) {
