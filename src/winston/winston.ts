@@ -35,11 +35,6 @@ const fileFormat = combine(
   jsonFormat
 );
 
-const lokiFormat = combine(
-  label({ label: 'sven' }),
-  winston.format.json()
-);
-
 const myCustomLevels = {
   levels: {
     emerg: 0,
@@ -72,9 +67,8 @@ export const logger = winston.createLogger({
       new LokiTransport({
         host: 'http://loki:3100',
         labels: { app: 'sven' },
-        level: 'info',
         json: true,
-        format: lokiFormat,
+        format: winston.format.json(),
         replaceTimestamp: true,
         onConnectionError: (err) => logger.error('Loki error: ', err),
       })],
