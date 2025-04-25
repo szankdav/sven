@@ -68,6 +68,8 @@ export const logger = winston.createLogger({
         host: 'http://loki:3100',
         labels: { app: 'sven' },
         json: true,
+        format: winston.format.json(),
+        replaceTimestamp: true,
         onConnectionError: (err) => logger.error('Loki error: ', err),
       })],
     new winston.transports.DailyRotateFile({
@@ -109,3 +111,11 @@ export const logger = winston.createLogger({
     }),
   ],
 });
+
+for (let i = 0; i < 10; i++) {
+  logger.error(`Test error log, number: ${i + 1}`);
+}
+
+for (let i = 0; i < 10; i++) {
+  logger.crit(`Test crit log, number: ${i + 1}`);
+}
