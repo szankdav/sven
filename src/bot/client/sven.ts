@@ -40,7 +40,7 @@ async function answerBotConversation(
   if (user === undefined) {
     return;
   }
-  if (user.username === 'SvenDevBot' && message.author.displayName === 'FaendalDevBot') {
+  if (user.username === 'SvenBot' && message.author.displayName === 'Faendal') {
     if (sentenceIndex <= hikeConversation.faendal.length) {
       if (sentenceIndex === 2) {
         message.channel.send(`${hikeConversation.sven[sentenceIndex]}`);

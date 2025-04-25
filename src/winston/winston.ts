@@ -112,10 +112,10 @@ export const logger = winston.createLogger({
   ],
 });
 
-for (let i = 0; i < 10; i++) {
-  logger.error(`Test error log, number: ${i + 1}`);
-}
+// for (let i = 0; i < 10; i++) {
+//   logger.error(`Test error log, number: ${i + 1}`);
+// }
 
-for (let i = 0; i < 10; i++) {
-  logger.crit(`Test crit log, number: ${i + 1}`);
-}
+// for (let i = 0; i < 10; i++) {
+//   logger.crit(`Test crit log, number: ${i + 1}`);
+// }
