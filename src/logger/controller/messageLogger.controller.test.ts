@@ -68,7 +68,7 @@ describe('messageLogger.controller tests', () => {
         message,
       );
       expect(result).toBe(1);
-      expect(loggerInfo).toHaveBeenCalledWith('Author added to the database!', {
+      expect(loggerInfo).toHaveBeenCalledWith('New author inserted: ', {
         username: message.username,
       });
       expect(loggerCrit).not.toHaveBeenCalled();
@@ -115,7 +115,7 @@ describe('messageLogger.controller tests', () => {
       );
       expect(result).toBe(1);
       expect(loggerInfo).not.toHaveBeenCalledWith(
-        'Author added to the database!',
+        'New author inserted: ',
         { username: message.username },
       );
       expect(loggerCrit).not.toHaveBeenCalled();
@@ -205,7 +205,7 @@ describe('messageLogger.controller tests', () => {
       };
       await messageLoggerController.insertMessageIntoDatabase(db, message);
       expect(loggerInfo).toHaveBeenCalledWith(
-        'Message added to the database!',
+        'Message inserted: ',
         { authorId: message.authorId, message: message.content },
       );
       expect(loggerCrit).not.toHaveBeenCalled();
@@ -313,7 +313,7 @@ describe('messageLogger.controller tests', () => {
         messageCreatedAt: createdAtTime.toLocaleString(),
       };
       await messageLoggerController.createLetterCountersInDatabase(db, message);
-      expect(loggerInfo).toHaveBeenCalledWith('Letters added for the author!', {
+      expect(loggerInfo).toHaveBeenCalledWith('Letters inserted for the newly inserted author: ', {
         authorId: testAuthor1.id,
       });
       expect(loggerCrit).not.toHaveBeenCalled();
@@ -343,7 +343,7 @@ describe('messageLogger.controller tests', () => {
       };
       await messageLoggerController.createLetterCountersInDatabase(db, message);
       expect(loggerInfo).not.toHaveBeenCalledWith(
-        'Letters added for the author!',
+        'Letters inserted for the newly inserted author: ',
         { authorId: testAuthor1.id },
       );
       expect(loggerCrit).not.toHaveBeenCalled();
