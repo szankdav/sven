@@ -18,7 +18,7 @@ client.on('interactionCreate', async (interaction) => {
   try {
     await cooldownForInteraction(interaction);
   } catch (error) {
-    logger.error('Error during set of interactions cooldown: ', error);
+    logger.error('Error during set of interactions cooldown: ', { message: error });
   }
 });
 
@@ -70,7 +70,7 @@ client.on('messageCreate', async (message) => {
     // await createMessage(message);
     await answerBotConversation(message);
   } catch (error) {
-    logger.error('Error while receiving message from discord: ', error);
+    logger.error('Error while receiving message from discord: ', { message: error });
   }
 });
 

@@ -12,7 +12,6 @@ import {
 } from './logger/handlers/messages.handler.js';
 import { statisticsByAuthorHandler } from './logger/handlers/statistics.handler.js';
 import { messageLoggerHandler } from './logger/handlers/messageLogger.handler.js';
-import { logger } from './winston/winston.js';
 import { startFaendal } from './bot/client/faendal.js';
 
 // Start bots
@@ -27,11 +26,7 @@ app.set('views', path.join(__dirname, 'logger/view'));
 app.use(express.json());
 const port = Number(process.env.PORT) || 3000;
 
-try {
-  await createTables(db);
-} catch (error) {
-  logger.error('Error creating tables:', error);
-}
+await createTables(db);
 
 app.get('/', homeHandler);
 app.get('/authors/:page', authorsHandler);

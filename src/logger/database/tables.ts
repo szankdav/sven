@@ -1,6 +1,7 @@
 import { Database } from 'sqlite3';
 import { execute } from './database.operations.js';
 import { logger } from '../../winston/winston.js';
+import { DatabaseError } from '../utils/customErrorClasses/databaseError.class.js';
 
 export const createAuthorsTable = async (db: Database): Promise<void> => {
   try {
@@ -13,7 +14,7 @@ export const createAuthorsTable = async (db: Database): Promise<void> => {
             createdAt TEXT NOT NULL)`,
     );
   } catch (error) {
-    logger.error('Error creating Authors table:', error);
+    throw new DatabaseError(`Error creating Authors table: ${error}`, 500);
   }
 };
 
@@ -29,7 +30,7 @@ export const createMessagesTable = async (db: Database): Promise<void> => {
             FOREIGN KEY (authorId) REFERENCES Authors(id) ON DELETE CASCADE)`,
     );
   } catch (error) {
-    logger.error('Error creating Messages table:', error);
+    throw new DatabaseError(`Error creating Messages table: ${error}`, 500);
   }
 };
 
@@ -47,7 +48,7 @@ export const createLettersTable = async (db: Database): Promise<void> => {
         FOREIGN KEY (authorId) REFERENCES Authors(id) ON DELETE CASCADE)`,
     );
   } catch (error) {
-    logger.error('Error creating Letters table:', error);
+    throw new DatabaseError(`Error creating Letters table: ${error}`, 500);
   }
 };
 
@@ -58,6 +59,6 @@ export const createTables = async (db: Database): Promise<void> => {
     await createMessagesTable(db);
     await createLettersTable(db);
   } catch (error) {
-    logger.error('Error creating tables:', error);
+    logger.error('Error creating tables: ', { message: error });
   }
 };

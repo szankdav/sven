@@ -42,7 +42,7 @@ export async function answerBotMention(
   if (user === undefined) {
     return;
   }
-  if (user.username === 'SvenBot') {
+  if (!message.author.bot && user.username === 'SvenBot') {
     message.channel.send(`Szia ${message.author}!`);
     message.channel.send(
       "Az elérhető parancsaimat a '/' jellel tudod előhozni! :)",

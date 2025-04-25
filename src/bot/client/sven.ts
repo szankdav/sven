@@ -20,7 +20,7 @@ client.once('ready', async () => {
     console.log('Sven is ready! 🤖');
     logger.info('Sven is ready! 🤖');
   } catch (error) {
-    logger.error('Error updating application (/) commands: ', error);
+    logger.error('Error updating application (/) commands: ', { message: error });
   }
 });
 
@@ -28,7 +28,7 @@ client.on('interactionCreate', async (interaction) => {
   try {
     await cooldownForInteraction(interaction);
   } catch (error) {
-    logger.error('Error during set of interactions cooldown: ', error);
+    logger.error('Error during set of interactions cooldown: ', { message: error });
   }
 });
 
@@ -73,7 +73,7 @@ async function answerBotConversation(
         message.channel.send(`${hikeConversation.sven[sentenceIndex]}`);
       }
       sentenceIndex++;
-      logger.info(`SvenDevBot mentioned by: ${message.author}`);
+      logger.info('SvenDevBot mentioned by author: ', { author: message.author.displayName });
     }
   }
 }
@@ -86,7 +86,7 @@ client.on('messageCreate', async (message) => {
     await answerBotMention(message);
     await answerBotConversation(message);
   } catch (error) {
-    logger.error('Error while receiving message from discord: ', error);
+    logger.error('Error while receiving message from discord: ', { message: error });
   }
 });
 

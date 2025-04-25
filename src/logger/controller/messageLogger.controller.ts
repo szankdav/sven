@@ -34,7 +34,7 @@ export const insertAuthorIntoDatabase = async (
       return authorExistedInDatabase!.id;
     }
     const author: RunResult = await createAuthor(db, authorToCreate);
-    logger.info('Author added to the database!', {
+    logger.info('New author inserted: ', {
       username: message.username,
     });
     return author.lastID;
@@ -54,7 +54,7 @@ export const insertMessageIntoDatabase = async (
       message.content,
       message.messageCreatedAt,
     ]);
-    logger.info('Message added to the database!', { authorId: message.authorId, message: message.content });
+    logger.info('Message inserted: ', { message: message.content, authorId: message.authorId });
   } catch (error) {
     throw new DatabaseError(`Error creating message in database: ${error}`, 500);
   }
@@ -97,7 +97,7 @@ export const createLetterCountersInDatabase = async (
         messageParams.messageCreatedAt,
         new Date().toLocaleString(),
       ]);
-      logger.info('Letters added for the author!', {
+      logger.info('Letters inserted for the newly inserted author: ', {
         authorId: messageParams.authorId,
       });
     }
