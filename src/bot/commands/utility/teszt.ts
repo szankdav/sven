@@ -7,7 +7,8 @@ import { logger } from '../../../winston/winston.js';
 
 export const data = new SlashCommandBuilder()
   .setName('teszt')
-  .setDescription('Teszt parancs.');
+  .setDescription('Teszt parancs.')
+  .setDefaultMemberPermissions(0);
 
 export async function execute(interaction: CommandInteraction) {
   await interaction.reply({

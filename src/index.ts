@@ -14,6 +14,7 @@ import { statisticsByAuthorHandler } from './logger/handlers/statistics.handler.
 import { messageLoggerHandler } from './logger/handlers/messageLogger.handler.js';
 import { logger } from './winston/winston.js';
 import { startFaendal } from './bot/client/faendal.js';
+import { loginAttempHandler, loginHandler } from './logger/handlers/login.handler.js';
 
 // Start bots
 startSven();
@@ -39,6 +40,8 @@ app.get('/messages/:page', messagesHandler);
 app.get('/messages/author/:id', messagesByAuthorsHandler);
 app.get('/statistics/author/:id', statisticsByAuthorHandler);
 app.post('/logMessage', messageLoggerHandler);
+app.get('/login', loginHandler);
+app.post('/login', loginAttempHandler);
 
 app.use(express.static(path.join(__dirname, './logger/public')));
 app.use(express.static(path.join(__dirname, 'dist')));
