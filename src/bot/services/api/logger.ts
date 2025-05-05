@@ -2,7 +2,7 @@ import { logger } from '../../../winston/winston.js';
 import { DiscordMessage } from '../../../logger/types/discordMessage.type';
 
 export const logMessages = async (messageData: DiscordMessage) => {
-  const result = await fetch('http://localhost:3000/logMessage', {
+  const result = await fetch('/logMessage', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

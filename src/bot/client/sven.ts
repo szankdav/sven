@@ -1,4 +1,4 @@
-import { Client, Message, OmitPartialGroupDMChannel } from 'discord.js';
+import { ChannelType, Client, Message, OmitPartialGroupDMChannel } from 'discord.js';
 import { config } from '../../config.js';
 import { deployCommandsForSven } from './deploy-commands.js';
 import { cooldownForInteraction } from '../interactions/cooldown.interaction.js';
@@ -8,9 +8,11 @@ import {
 } from '../events/messageCreate.event.js';
 import { logger } from '../../winston/winston.js';
 import { hikeConversation } from '../commands/texts/conversations.js';
+import { handleInput } from '../chat/commandHandler.js';
 
 export const client = new Client({
   intents: ['Guilds', 'GuildMessages', 'DirectMessages', 'MessageContent'],
+  partials: [1],
 });
 
 client.once('ready', async () => {
@@ -78,10 +80,15 @@ async function answerBotConversation(
   }
 }
 
+
+
 client.on('messageCreate', async (message) => {
   try {
     // if (message.author.bot) return;
     if (message.flags.has('Ephemeral')) return; // tegyunk minden bot uzenetet Ephemeral-ra, amit nem szeretnenk logolni
+    if (message.channel.type === ChannelType.DM && !message.author.bot){
+      message.channel.send(handleInput(message.content).execute());
+    };
     await createMessage(message);
     await answerBotMention(message);
     await answerBotConversation(message);

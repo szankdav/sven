@@ -73,5 +73,4 @@ loginButton?.addEventListener('click', async (event) => {
     validateInputForLogin(usernameInput, usernameErrorMessage!);
     validateInputForLogin(passwordInput, passwordErrorMessage!);
     showLoginError(usernameInput, loginError!);
-
 });
