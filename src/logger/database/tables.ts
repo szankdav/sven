@@ -51,12 +51,27 @@ export const createLettersTable = async (db: Database): Promise<void> => {
   }
 };
 
-export const createTables = async (db: Database): Promise<void> => {
+export const createAdminsTable = async (db: Database): Promise<void> => {
+  try {
+    await execute(
+      db,
+      `CREATE TABLE IF NOT EXISTS Admins (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT NOT NULL UNIQUE,
+        password TEXT NOT NULL)`,
+    );
+  } catch (error) {
+    logger.error('Error creating Admins table:', error);
+  }
+};
+
+export const createTables = async (db: Database, adminsDb: Database): Promise<void> => {
   try {
     await execute(db, 'PRAGMA foreign_keys = ON;');
     await createAuthorsTable(db);
     await createMessagesTable(db);
     await createLettersTable(db);
+    await createAdminsTable(adminsDb);
   } catch (error) {
     logger.error('Error creating tables:', error);
   }

@@ -2,7 +2,7 @@ import express from 'express';
 import path from 'path';
 import { startSven } from './bot/client/sven.js';
 import { createTables } from './logger/database/tables.js';
-import { db } from './logger/database/database.js';
+import { adminsDb, db } from './logger/database/database.js';
 import { errorHandler } from './logger/handlers/error.handler.js';
 import { homeHandler } from './logger/handlers/home.handler.js';
 import { authorsHandler } from './logger/handlers/authors.handler.js';
@@ -15,6 +15,7 @@ import { messageLoggerHandler } from './logger/handlers/messageLogger.handler.js
 import { logger } from './winston/winston.js';
 import { startFaendal } from './bot/client/faendal.js';
 import { loginAttempHandler, loginHandler } from './logger/handlers/login.handler.js';
+import { searchHandler } from './logger/handlers/search.handler.js';
 
 // Start bots
 startSven();
@@ -29,7 +30,7 @@ app.use(express.json());
 const port = Number(process.env.PORT) || 3000;
 
 try {
-  await createTables(db);
+  await createTables(db, adminsDb);
 } catch (error) {
   logger.error('Error creating tables:', error);
 }
@@ -42,6 +43,7 @@ app.get('/statistics/author/:id', statisticsByAuthorHandler);
 app.post('/logMessage', messageLoggerHandler);
 app.get('/login', loginHandler);
 app.post('/login', loginAttempHandler);
+app.post('/search', searchHandler);
 
 app.use(express.static(path.join(__dirname, './logger/public')));
 app.use(express.static(path.join(__dirname, 'dist')));
