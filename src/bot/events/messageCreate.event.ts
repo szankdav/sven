@@ -55,6 +55,9 @@ export async function answerBotMention(
     message.channel.send(
       "Az elérhető parancsaimat a '/' jellel tudod előhozni! :)",
     );
+    message.channel.send(
+      'Közvetlen üzenetben cseveghetsz is velem!',
+    );
     logger.info(`SvenDevBot mentioned by: ${message.author}`);
   }
 }
