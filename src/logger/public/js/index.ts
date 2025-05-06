@@ -10,6 +10,7 @@ searchButton?.addEventListener('click', async (event) => {
     });
     const page = await result.json();
     if (page === 0) {
+        // eslint-disable-next-line no-alert
         alert('No match!');
     } else {
         window.location.href = `/authors/${page}`;

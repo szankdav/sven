@@ -18,6 +18,7 @@ export class EndState implements State {
     }
 
     async next(): Promise<void | null> {
+        // eslint-disable-next-line no-console
         console.log('END');
     }
     

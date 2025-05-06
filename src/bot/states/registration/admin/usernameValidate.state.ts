@@ -1,7 +1,6 @@
-import { CommandInteraction, Message } from 'discord.js';
+import { CommandInteraction } from 'discord.js';
 import { State } from '../../../interfaces/state.js';
 import { Context } from './core/context.js';
-import { admin } from './core/admin.js';
 import { EndState } from './end.state.js';
 import { UsernameState } from './username.state.js';
 

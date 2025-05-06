@@ -8,12 +8,8 @@ import {
 } from '../events/messageCreate.event.js';
 import { logger } from '../../winston/winston.js';
 import { hikeConversation } from '../commands/texts/conversations.js';
-import { handleInput } from '../chat/commandHandler.js';
-import { State } from '../interfaces/state.js';
 import { context } from '../commands/utility/adminRegister.js';
-import { UsernameState } from '../states/registration/admin/username.state.js';
 import { admin } from '../states/registration/admin/core/admin.js';
-import { UsernameValidateState } from '../states/registration/admin/usernameValidate.state.js';
 
 export const client = new Client({
   intents: ['Guilds', 'GuildMessages', 'DirectMessages', 'MessageContent'],
