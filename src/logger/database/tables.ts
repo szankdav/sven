@@ -58,7 +58,8 @@ export const createAdminsTable = async (db: Database): Promise<void> => {
       `CREATE TABLE IF NOT EXISTS Admins (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         username TEXT NOT NULL UNIQUE,
-        password TEXT NOT NULL)`,
+        password TEXT NOT NULL,
+        createdAt TEXT NOT NULL)`,
     );
   } catch (error) {
     logger.error('Error creating Admins table:', error);
