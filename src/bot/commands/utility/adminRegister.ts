@@ -17,6 +17,7 @@ export const data = new SlashCommandBuilder()
 export async function execute(interaction: CommandInteraction) {
     const startState = new StartState(context, interaction);
     context.setState(startState);
+    await interaction.user.send('Szia! Segítek, hogy létrehozz egy admin fiókot a svenbot.cloud oldal használatához!');
     await context.next();
     await interaction.reply({
         content: 'Küldtem privát üzenetet, melyben a segítségemmel tudsz regisztrálni!',

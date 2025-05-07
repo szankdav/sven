@@ -1,6 +1,8 @@
 import { CommandInteraction } from 'discord.js';
 import { State } from '../../../interfaces/state.js';
 import { Context } from './core/context.js';
+import { logger } from '../../../../winston/winston.js';
+import { adminHandlerByFunction } from '../../../../logger/handlers/admins.handler.js';
 
 export const END_MSG = 'State vége!';
 
@@ -18,8 +20,11 @@ export class EndState implements State {
     }
 
     async next(): Promise<void | null> {
-        // eslint-disable-next-line no-console
-        console.log('END');
+        this.interaction.user.send('Sikeresen regisztráltál az oldalra! Most már be tudsz jelentkezi a https://svenbot.cloud/login oldalon! :partying_face:');
+        this.context.setAdminCreatedAt(new Date().toLocaleString());
+        await adminHandlerByFunction(this.context.getAdmin());
+        this.context.resetAdmin();
+        logger.info(`Registration as admin for svenbot.cloud ended at ${new Date().toLocaleString()} by admin: ${this.interaction.user.globalName}`);
     }
     
 }

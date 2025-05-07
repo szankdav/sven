@@ -9,7 +9,6 @@ import {
 import { logger } from '../../winston/winston.js';
 import { hikeConversation } from '../commands/texts/conversations.js';
 import { context } from '../commands/utility/adminRegister.js';
-import { admin } from '../states/registration/admin/core/admin.js';
 
 export const client = new Client({
   intents: ['Guilds', 'GuildMessages', 'DirectMessages', 'MessageContent'],
@@ -86,15 +85,33 @@ client.on('messageCreate', async (message) => {
     // if (message.author.bot) return;
     if (!message.author.bot && message.channel.type === ChannelType.DM) {
       const state: string | undefined = context.getStateName();
-      console.log(state);
       switch (state) {
         case 'USERNAME_STATE':
-          if (admin.username === '') {
-            admin.username = message.content.trim();
+          if (context.getAdminUsername() === '') {
+            context.setAdminUsername(message.content.trim());
           }
           context.next();
           break;
         case 'USERNAME_VALIDATE_STATE':
+          context.setMessage(message);
+          context.next();
+          break;
+        case 'PASSWORD_STATE':
+          if (context.getAdminPassword() === '') {
+            if (message.content.startsWith('||') && message.content.endsWith('||')) {
+              context.setAdminPassword(message.content.substring(2, message.content.length - 2).trim());
+              context.next();
+              break;
+            }
+            context.setAdminPassword(message.content.trim());
+          }
+          context.next();
+          break;
+        case 'PASSWORD_VALIDATE_STATE':
+          if (message.content.startsWith('||') && message?.content.endsWith('||')) {
+            // eslint-disable-next-line no-param-reassign
+            message.content = message.content.substring(2, message.content.length - 2).trim();
+          }
           context.setMessage(message);
           context.next();
           break;

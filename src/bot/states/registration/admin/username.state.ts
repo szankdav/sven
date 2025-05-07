@@ -2,7 +2,6 @@ import { CommandInteraction } from 'discord.js';
 import { State } from '../../../interfaces/state.js';
 import { Context } from './core/context.js';
 import { UsernameValidateState } from './usernameValidate.state.js';
-import { admin } from './core/admin.js';
 
 
 export class UsernameState implements State {
@@ -19,7 +18,7 @@ export class UsernameState implements State {
     }
 
     async next(): Promise<void | null> {
-        await this.interaction.user.send(`A megadott felhasználónév: ${admin.username}. Jól írtad be, mentsük el? (Kérlek igen vagy nem szóval válaszolj!)`);
+        await this.interaction.user.send(`A megadott felhasználónév: ${this.context.getAdminUsername()}. Jól írtad be, mentsük el? (Kérlek igen vagy nem szóval válaszolj!)`);
         this.context.setState(new UsernameValidateState(this.context, this.interaction));
     };
 }
