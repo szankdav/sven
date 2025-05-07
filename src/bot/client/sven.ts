@@ -8,8 +8,6 @@ import {
 } from '../events/messageCreate.event.js';
 import { logger } from '../../winston/winston.js';
 import { hikeConversation } from '../commands/texts/conversations.js';
-import { context } from '../commands/utility/adminRegister.js';
-import { admin } from '../states/registration/admin/core/admin.js';
 
 export const client = new Client({
   intents: ['Guilds', 'GuildMessages', 'DirectMessages', 'MessageContent'],
