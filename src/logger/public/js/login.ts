@@ -34,43 +34,28 @@ function updatePosition() {
 
 updatePosition();
 
-const login = async (username: string): Promise<number> => {
-    const response = await fetch('/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: username })
-    });
 
-    return response.status;
-};
+window.onload = () => {
+    const fragment = new URLSearchParams(window.location.hash.slice(1));
+    console.log(fragment);
+    const [accessToken, tokenType] = [fragment.get('access_token'), fragment.get('token_type')];
 
-const loginButton = document.getElementById('loginButton');
-
-const validateInputForLogin = (input: string, message: HTMLElement): void => {
-    if (input.length === 0) {
-        message?.classList.remove('d-none');
-    } else {
-        message?.classList.add('d-none');
+    if (!accessToken) {
+        (document.getElementById('error') as HTMLElement).style.display = 'unset';
+        return;
     }
+
+    fetch('https://discord.com/api/users/@me', {
+        headers: {
+            authorization: `${tokenType} ${accessToken}`,
+        },
+    })
+        .then(result => result.json())
+        .then(response => {
+            const { username, discriminator } = response;
+            console.log(response);
+            (document.getElementById('username') as HTMLElement).innerText = username;
+            (document.getElementById('login') as HTMLElement).style.display = 'unset';
+        })
+        .catch(console.error);
 };
-
-const showLoginError = async (input: string, message: HTMLElement): Promise<void> => {
-    if (await login(input) === 403) {
-        message?.classList.remove('d-none');
-    } else {
-        message?.classList.add('d-none');
-    };
-};
-
-loginButton?.addEventListener('click', async (event) => {
-    event.preventDefault();
-    const loginError = document.getElementById('loginError');
-    const usernameErrorMessage = document.getElementById('usernameError');
-    const passwordErrorMessage = document.getElementById('passwordError');
-    const usernameInput = (document.getElementById('username') as HTMLInputElement).value;
-    const passwordInput = (document.getElementById('password') as HTMLInputElement).value;
-
-    validateInputForLogin(usernameInput, usernameErrorMessage!);
-    validateInputForLogin(passwordInput, passwordErrorMessage!);
-    showLoginError(usernameInput, loginError!);
-});

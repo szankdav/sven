@@ -2,7 +2,7 @@ body {
     background-color: #012f6d;
 }
 
-#loginForm {
+#login {
     color: white;
     position: absolute;
     left: 50%;
@@ -14,17 +14,25 @@ body {
     padding: 1em;
     margin: 0.5em;
     width: 20em;
+    display: none;
+}
+
+#error {
+    color: red;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border: 0.2em solid white;
+    border-radius: 0.5em;
+    box-shadow: 0.5em 0.5em 2em red;
+    padding: 1em;
+    margin: 0.5em;
+    width: 20em;
+    display: none;
 }
 
 .discordLogo {
     position: absolute;
     width: 10em;
-}
-
-#usernameHelp, #passwordHelp {
-    color: white;
-}
-
-#passwordError, #usernameError, #loginError {
-    color: red;
 }

@@ -4,7 +4,7 @@ import * as echo from './echo.js';
 import * as server from './server.js';
 import * as talk from './talk.js';
 import * as deletemessages from './deleteMessages.js';
-import * as login from './logintostatistics.js';
+import * as logintostatisticspage from './logintostatistics.js';
 
 export const svenCommands = {
   user,
@@ -13,5 +13,5 @@ export const svenCommands = {
   server,
   talk,
   deletemessages,
-  login
+  logintostatisticspage
 };
