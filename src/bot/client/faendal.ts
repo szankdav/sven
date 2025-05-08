@@ -1,4 +1,4 @@
-import { Client, Message, OmitPartialGroupDMChannel } from 'discord.js';
+import { Client } from 'discord.js';
 import { config } from '../../config.js';
 import { cooldownForInteraction } from '../interactions/cooldown.interaction.js';
 import { logger } from '../../winston/winston.js';
@@ -22,53 +22,18 @@ client.on('interactionCreate', async (interaction) => {
   }
 });
 
-let sentenceIndex = 0;
-async function answerBotConversation(
-  message: OmitPartialGroupDMChannel<Message<boolean>>,
-) {
-  const user = message.mentions.users.first();
-  if (user === undefined) {
-    return;
-  }
-  if (user.username === 'Faendal' && message.author.displayName === 'SvenBot') {
-    if (sentenceIndex < hikeConversation.faendal.length) {
-      if (sentenceIndex === 2) {
-        message.channel.send(`${hikeConversation.faendal[sentenceIndex]}`);
-        message.channel.send(`${hikeConversation.faendal[sentenceIndex+1]}`);
-        sentenceIndex+=1;
-      } else if (sentenceIndex === 6) {
-        message.channel.send(`${hikeConversation.faendal[sentenceIndex]}`);
-        message.channel.send(`${hikeConversation.faendal[sentenceIndex+1]}`);
-        message.channel.send(`${hikeConversation.faendal[sentenceIndex+2]}`);
-        message.channel.send(`${hikeConversation.faendal[sentenceIndex+3]}`);
-        sentenceIndex+=3;
-      } else if (sentenceIndex === 10) {
-        message.channel.send(`${hikeConversation.faendal[sentenceIndex]}`);
-        message.channel.send(`${hikeConversation.faendal[sentenceIndex+1]}`);
-        sentenceIndex+=1;
-      } else if (sentenceIndex === 12) {
-        message.channel.send(`${hikeConversation.faendal[sentenceIndex]}`);
-        message.channel.send(`${hikeConversation.faendal[sentenceIndex+1]}`);
-        message.channel.send(`${hikeConversation.faendal[sentenceIndex+2]}`);
-        sentenceIndex+=2;
-      } else if (sentenceIndex === 15) {
-        message.channel.send(`${hikeConversation.faendal[sentenceIndex]}`);
-        message.channel.send(`${hikeConversation.faendal[sentenceIndex+1]}`);
-        sentenceIndex+=1;
-      } else {
-        message.channel.send(`${hikeConversation.faendal[sentenceIndex]}`);
-      }
-      sentenceIndex++;
-      logger.info(`FaendalDevBot mentioned by: ${message.author}`);
-    }
-  }
-}
-
+let index = 0;
 client.on('messageCreate', async (message) => {
   try {
     // if (message.author.bot) return;
-    // await createMessage(message);
-    await answerBotConversation(message);
+    if (message.author.bot && message.author.displayName === 'SvenBot' && message.content.includes('<@1364591874404257903>') && index < hikeConversation.faendal.length) {
+      do {
+        // eslint-disable-next-line no-await-in-loop, no-promise-executor-return
+        await new Promise(r => setTimeout(r, Math.random() * (5000 - 1500 + 1) + 1500));
+        message.channel.send(hikeConversation.faendal[index]);
+        index++;
+      } while (!hikeConversation.faendal[index - 1].includes('<@1352271959232086026>'));
+    }
   } catch (error) {
     logger.error('Error while receiving message from discord: ', { message: error });
   }
@@ -77,4 +42,3 @@ client.on('messageCreate', async (message) => {
 export function startFaendal() {
   client.login(config.DISCORD_TOKEN_FAENDAL);
 }
-

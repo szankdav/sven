@@ -3,7 +3,7 @@ import { logger } from '../../../winston/winston.js';
 
 export const data = new SlashCommandBuilder()
   .setName('user')
-  .setDescription('Provides information about the user.');
+  .setDescription('Információk a felhasználóról');
 
 export async function execute(interaction: CommandInteraction) {
   // interaction.user egy User object, aki futtatta a parancsot
@@ -11,5 +11,5 @@ export async function execute(interaction: CommandInteraction) {
   logger.info(
     `Interaction: ${interaction.commandName} used by user: ${interaction.user.globalName}`,
   );
-  return interaction.reply(`This command was run by ${interaction.user}`);
+  return interaction.reply(`Felhasználóneved: ${interaction.user}.`);
 }

@@ -7,6 +7,8 @@ import { config } from '../../config.js';
 const __dirname = import.meta.dirname;
 const dbFilePath =
   config.DB_PATH || path.join(__dirname, 'db/DiscordMessages.db');
+const adminsDbFilePath =
+  config.ADMINS_DB_PATH || path.join(__dirname, 'db/Admins.db');
 
 export const db = new sqlite3.Database(dbFilePath, (err) => {
   if (err) {
@@ -14,6 +16,16 @@ export const db = new sqlite3.Database(dbFilePath, (err) => {
   } else {
     logger.info(
       `Connected to SQLite database successfully at path: ${dbFilePath}`,
+    );
+  }
+});
+
+export const adminsDb = new sqlite3.Database(adminsDbFilePath, (err) => {
+  if (err) {
+    logger.error('Failed to connect to database:', err);
+  } else {
+    logger.info(
+      `Connected to SQLite database successfully at path: ${adminsDbFilePath}`,
     );
   }
 });

@@ -2,7 +2,7 @@ import express from 'express';
 import path from 'path';
 import { startSven } from './bot/client/sven.js';
 import { createTables } from './logger/database/tables.js';
-import { db } from './logger/database/database.js';
+import { adminsDb, db } from './logger/database/database.js';
 import { errorHandler } from './logger/handlers/error.handler.js';
 import { homeHandler } from './logger/handlers/home.handler.js';
 import { authorsHandler } from './logger/handlers/authors.handler.js';
@@ -13,6 +13,9 @@ import {
 import { statisticsByAuthorHandler } from './logger/handlers/statistics.handler.js';
 import { messageLoggerHandler } from './logger/handlers/messageLogger.handler.js';
 import { startFaendal } from './bot/client/faendal.js';
+import { loginAttempHandler, loginHandler } from './logger/handlers/login.handler.js';
+import { searchHandler } from './logger/handlers/search.handler.js';
+import { logger } from './winston/winston.js';
 
 // Start bots
 startSven();
@@ -26,7 +29,11 @@ app.set('views', path.join(__dirname, 'logger/view'));
 app.use(express.json());
 const port = Number(process.env.PORT) || 3000;
 
-await createTables(db);
+try {
+  await createTables(db, adminsDb);
+} catch (error) {
+  logger.error('Error creating tables:', error);
+}
 
 app.get('/', homeHandler);
 app.get('/authors/:page', authorsHandler);
@@ -34,6 +41,9 @@ app.get('/messages/:page', messagesHandler);
 app.get('/messages/author/:id', messagesByAuthorsHandler);
 app.get('/statistics/author/:id', statisticsByAuthorHandler);
 app.post('/logMessage', messageLoggerHandler);
+app.get('/login', loginHandler);
+app.post('/login', loginAttempHandler);
+app.post('/search', searchHandler);
 
 app.use(express.static(path.join(__dirname, './logger/public')));
 app.use(express.static(path.join(__dirname, 'dist')));
