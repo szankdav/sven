@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const logos = [...document.getElementsByClassName('discordLogo')];
 
 // Elmentünk kezdőpozíciókat minden képhez egy új tömbbe
@@ -52,6 +53,7 @@ window.onload = () => {
     })
         .then(result => result.json())
         .then(response => {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { username, discriminator } = response;
             console.log(response);
             (document.getElementById('username') as HTMLElement).innerText = username;
