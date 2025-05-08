@@ -11,11 +11,8 @@ export const data = new SlashCommandBuilder()
   .setDefaultMemberPermissions(0);
 
 export async function execute(interaction: CommandInteraction) {
-  await interaction.reply({
-    content: hikeConversation.sven[0]
-  });
-  
+  await interaction.reply(hikeConversation.sven[0]);
   logger.info(
     `Interaction: ${interaction.commandName} used by user: ${interaction.user.globalName}`,
   );
-}
+};

@@ -1,4 +1,4 @@
-import { ChannelType, Client, Message, OmitPartialGroupDMChannel } from 'discord.js';
+import { ChannelType, Client, CommandInteraction, TextChannel } from 'discord.js';
 import { config } from '../../config.js';
 import { deployCommandsForSven } from './deploy-commands.js';
 import { cooldownForInteraction } from '../interactions/cooldown.interaction.js';
@@ -34,64 +34,34 @@ client.on('interactionCreate', async (interaction) => {
   }
 });
 
-let sentenceIndex = 1;
-async function answerBotConversation(
-  message: OmitPartialGroupDMChannel<Message<boolean>>,
-) {
-  const user = message.mentions.users.first();
-  if (user === undefined) {
-    return;
-  }
-  if (user.username === 'SvenDevBot' && message.author.displayName === 'FaendalDevBot') {
-    if (sentenceIndex <= hikeConversation.faendal.length) {
-      if (sentenceIndex === 2) {
-        message.channel.send(`${hikeConversation.sven[sentenceIndex]}`);
-        message.channel.send(`${hikeConversation.sven[sentenceIndex + 1]}`);
-        sentenceIndex += 1;
-      } else if (sentenceIndex === 6) {
-        message.channel.send(`${hikeConversation.sven[sentenceIndex]}`);
-        message.channel.send(`${hikeConversation.sven[sentenceIndex + 1]}`);
-        message.channel.send(`${hikeConversation.sven[sentenceIndex + 2]}`);
-        message.channel.send(`${hikeConversation.sven[sentenceIndex + 3]}`);
-        sentenceIndex += 3;
-      } else if (sentenceIndex === 10) {
-        message.channel.send(`${hikeConversation.sven[sentenceIndex]}`);
-        message.channel.send(`${hikeConversation.sven[sentenceIndex + 1]}`);
-        message.channel.send(`${hikeConversation.sven[sentenceIndex + 2]}`);
-        sentenceIndex += 2;
-      } else if (sentenceIndex === 13) {
-        message.channel.send(`${hikeConversation.sven[sentenceIndex]}`);
-        message.channel.send(`${hikeConversation.sven[sentenceIndex + 1]}`);
-        sentenceIndex += 1;
-      } else if (sentenceIndex === 15) {
-        message.channel.send(`${hikeConversation.sven[sentenceIndex]}`);
-        message.channel.send(`${hikeConversation.sven[sentenceIndex + 1]}`);
-        sentenceIndex += 1;
-      } else if (sentenceIndex === 17) {
-        message.channel.send(`${hikeConversation.sven[sentenceIndex]}`);
-        message.channel.send(`${hikeConversation.sven[sentenceIndex + 1]}`);
-        sentenceIndex += 1;
-      } else {
-        message.channel.send(`${hikeConversation.sven[sentenceIndex]}`);
-      }
-      sentenceIndex++;
-      logger.info(`SvenDevBot mentioned by: ${message.author}`);
-    }
-  }
-}
+export const sendSvenSentence = async (interaction: CommandInteraction, index: number) => {
+  await (interaction.channel as TextChannel).send(hikeConversation.sven[index]);
+};
 
+let index = 1;
 client.on('messageCreate', async (message) => {
   try {
     // if (message.author.bot) return;
     if (message.flags.has('Ephemeral')) return; // tegyunk minden bot uzenetet Ephemeral-ra, amit nem szeretnenk logolni
+
     if (message.channel.type === ChannelType.DM && !message.author.bot) {
       message.channel.send(handleInput(message.content).execute());
     };
+
     if (message.channel.type !== ChannelType.DM) {
       await createMessage(message);
     };
+
     await answerBotMention(message);
-    await answerBotConversation(message);
+
+    if (message.author.bot && message.author.displayName === 'FaendalDevBot' && message.content.includes('<@1352273717623001209>') && index < hikeConversation.sven.length) {
+      do {
+        // eslint-disable-next-line no-await-in-loop, no-promise-executor-return
+        await new Promise(r => setTimeout(r, Math.random() * (5000 - 1500 + 1) + 1500));
+        message.channel.send(hikeConversation.sven[index]);
+        index++;
+      } while (!hikeConversation.sven[index - 1].includes('<@1363775791904718920>'));
+    }
   } catch (error) {
     logger.error('Error while receiving message from discord: ', error);
   }
