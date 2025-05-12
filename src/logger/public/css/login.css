@@ -2,18 +2,18 @@ body {
     background-color: #012f6d;
 }
 
-#login {
-    color: white;
+#loggedIn {
+    color: green;
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    border: 0.2em solid white;
+    border: 0.2em solid green;
     border-radius: 0.5em;
-    box-shadow: 0.5em 0.5em 2em white;
+    box-shadow: 0.5em 0.5em 2em green;
     padding: 1em;
     margin: 0.5em;
-    width: 20em;
+    width: 40em;
     display: none;
 }
 
@@ -23,9 +23,24 @@ body {
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    border: 0.2em solid white;
+    border: 0.2em solid red;
     border-radius: 0.5em;
     box-shadow: 0.5em 0.5em 2em red;
+    padding: 1em;
+    margin: 0.5em;
+    width: 20em;
+    display: none;
+}
+
+#alreadyLoggedIn {
+    color: green;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border: 0.2em solid green;
+    border-radius: 0.5em;
+    box-shadow: 0.5em 0.5em 2em green;
     padding: 1em;
     margin: 0.5em;
     width: 20em;

@@ -35,29 +35,61 @@ function updatePosition() {
 
 updatePosition();
 
+const errorMessage = document.getElementById('error') as HTMLElement;
+const loggedIn = document.getElementById('loggedIn') as HTMLElement;
+const usernameSpan = document.getElementById('username') as HTMLElement;
+const servernameSpan = document.getElementById('server') as HTMLElement;
+const alreadyLoggedIn = document.getElementById('alreadyLoggedIn') as HTMLElement;
+const loggedInUserNameSpan = document.getElementById('loggedInUserName') as HTMLElement;
+const loggedInUserServerSpan = document.getElementById('loggedInUserServer') as HTMLElement;
 
-window.onload = () => {
-    const fragment = new URLSearchParams(window.location.hash.slice(1));
-    console.log(fragment);
-    const [accessToken, tokenType] = [fragment.get('access_token'), fragment.get('token_type')];
+const login = async () => {
+    const params = new URLSearchParams(document.location.search);
+    const codeFromURL = params.get('code');
+    try {
+        if (!codeFromURL) {
+            console.log('No code');
+        }
+        const result = await fetch('/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ code: codeFromURL }),
+            credentials: 'include',
+        });
 
-    if (!accessToken) {
-        (document.getElementById('error') as HTMLElement).style.display = 'unset';
-        return;
+        if (result.status === 401) {
+            errorMessage.style.display = 'unset';
+            return;
+        }
+
+        const { username, server } = await result.json();
+        console.log(username);
+        console.log(server);
+        usernameSpan.innerText = username;
+        servernameSpan.innerText = server.name;
+        loggedIn.style.display = 'unset';
+    } catch (error) {
+        console.log(error);
     }
-
-    fetch('https://discord.com/api/users/@me', {
-        headers: {
-            authorization: `${tokenType} ${accessToken}`,
-        },
-    })
-        .then(result => result.json())
-        .then(response => {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const { username, discriminator } = response;
-            console.log(response);
-            (document.getElementById('username') as HTMLElement).innerText = username;
-            (document.getElementById('login') as HTMLElement).style.display = 'unset';
-        })
-        .catch(console.error);
 };
+
+const checkStatus = async () => {
+    const result = await fetch('/status', {
+        headers: { 'Content-Type': 'application/json' },
+    });
+
+    if (result.status === 200) {
+        const { username, server } = await result.json();
+        console.log(username);
+        console.log(server);
+        loggedInUserNameSpan.innerText = username;
+        loggedInUserServerSpan.innerText = server.name;
+        alreadyLoggedIn.style.display = 'unset';
+    } else if (result.status === 404) {
+        await login();
+    } else {
+        console.log(result.status);
+    }
+};
+
+checkStatus();

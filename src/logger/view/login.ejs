@@ -15,14 +15,21 @@
     <img class="discordLogo" src="/asserts/discord_logo.png" alt="">
     <img class="discordLogo" src="/asserts/discord_logo.png" alt="">
     <img class="discordLogo" src="/asserts/discord_logo.png" alt="">
-    <div id="login">
-        <h2>Welcome <span id="username"></span></h2>
-        <button id="loginButton" type="submit" class="btn btn-primary">Go to home page</button>
-    </div>
     <div id="error">
-        <h2>Something went wrong! Please try again!</h2>
+        <h1>
+            Something went wrong, please try again with the help of Sven! If the problem persists, please let Sven know!
+        </h1>
     </div>
-
+    <div id="loggedIn">
+        <h1>Welcome, <span id="username"></span> to the <span id="server"></span> server's statistics page!</h1>
+        <p>Take a look at how your server is being used!</p>
+        <button id="enter" class="btn btn-success">Let's go</button>
+    </div>
+    <div id="alreadyLoggedIn">
+        <h1>
+            You are already logged in as <span id="loggedInUserName"></span> from <span id="loggedInUserServer"></span> server!
+        </h1>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
