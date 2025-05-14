@@ -8,6 +8,7 @@ export const statustHandler = async (req: Request,
         const user = req.cookies.user_info;
 
         if (!user) {
+            logger.info('User cookie not found, new login process started.');
             res.sendStatus(404);
             return;
         }

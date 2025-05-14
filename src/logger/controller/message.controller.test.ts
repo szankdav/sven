@@ -123,7 +123,7 @@ describe('message.controller tests', () => {
         NaN,
       );
       expect(result.viewName).toBe('error');
-      expect(result.options).toStrictEqual({ err: 'Page not found!' });
+      expect(result.options).toStrictEqual({ routeError: 'Page not found!', missingTokenError: '', expiredTokenError: '' });
     });
 
     it('should return with a valid renderObject if data is not valid', async () => {

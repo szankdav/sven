@@ -1,13 +1,22 @@
+for (let i = 0; i < 4; i++) {
+    const logoImg = document.createElement('img');
+    logoImg.src = '/asserts/discord_logo.png';
+    logoImg.alt = 'Discord Logo';
+    logoImg.classList.add('discordLogo');
+    logoImg.style.zIndex = '-1';
+    document.body.append(logoImg);
+}
+
 /* eslint-disable no-console */
 const logos = [...document.getElementsByClassName('discordLogo')];
 
-// Elmentünk kezdőpozíciókat minden képhez egy új tömbbe
+// Save the start positions for the pngs
 const positions = logos.map((logo) => ({
     posX: Math.random() * (window.innerWidth - (logo as HTMLImageElement).width),
     posY: Math.random() * (window.innerHeight - (logo as HTMLImageElement).height),
-    // Két random szám, amit a pozíciókhoz fogunk hozzáadni folyamatosan, így fog változni a pozíció
-    dirX: (Math.random() - 0.5) * 6, // sebesség x irányban
-    dirY: (Math.random() - 0.5) * 6, // sebesség y irányban
+    // Two random number to increase the position
+    dirX: (Math.random() - 0.5) * 6, // speed on x axis
+    dirY: (Math.random() - 0.5) * 6, // speed on y axis
     angle: 0
 }));
 
@@ -16,20 +25,18 @@ function updatePosition() {
         const position = positions[index];
         position.posX += position.dirX;
         position.posY += position.dirY;
-        // Folyamatosan növeljük az értéket, emiatt fog forogni
+        // Contanstly increase the amounts for rotating
         position.angle += 2;
 
-        // Ablak szélén pattanj vissza - ha a pozíció értéke túllógna a kijelző szélességén, megszorozzuk -1-el a dir értéket,
-        // így a a pozíció értékünk elkezd csökkenni, hiszen egy negatív számot fogunk folyamatosan hozzáadni. +/- pedig ugyebár - 
+        // If we reach the view edge, the png have to bounce back. If the position value bigger, than the innerWidth, multiply it with -1 
         if (position.posX <= 0 || position.posX >= window.innerWidth - (logo as HTMLImageElement).width) position.dirX *= -1;
         if (position.posY <= 0 || position.posY >= window.innerHeight - (logo as HTMLImageElement).height) position.dirY *= -1;
 
-        // transform értékeit módosítjuk
         // eslint-disable-next-line no-param-reassign
         (logo as HTMLImageElement).style.transform = `translate(${position.posX}px, ${position.posY}px) rotate(${position.angle}deg)`;
     });
-    // A requestAnimationFrame() egy JavaScript alapú animációs ciklus, ami másodpercenként kb. 60-szor fut,
-    // és minden egyes híváskor közvetlenül frissítjük az elemet 
+    // requestAnimationFrame() is a JavaScript-based animation loop that runs about 60 times per second,
+    // and each time it is called, we update the element directly
     requestAnimationFrame(updatePosition);
 }
 
@@ -43,36 +50,6 @@ const alreadyLoggedIn = document.getElementById('alreadyLoggedIn') as HTMLElemen
 const loggedInUserNameSpan = document.getElementById('loggedInUserName') as HTMLElement;
 const loggedInUserServerSpan = document.getElementById('loggedInUserServer') as HTMLElement;
 
-const login = async () => {
-    const params = new URLSearchParams(document.location.search);
-    const codeFromURL = params.get('code');
-    try {
-        if (!codeFromURL) {
-            console.log('No code');
-        }
-        const result = await fetch('/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ code: codeFromURL }),
-            credentials: 'include',
-        });
-
-        if (result.status === 401) {
-            errorMessage.style.display = 'unset';
-            return;
-        }
-
-        const { username, server } = await result.json();
-        console.log(username);
-        console.log(server);
-        usernameSpan.innerText = username;
-        servernameSpan.innerText = server.name;
-        loggedIn.style.display = 'unset';
-    } catch (error) {
-        console.log(error);
-    }
-};
-
 const checkStatus = async () => {
     const result = await fetch('/status', {
         headers: { 'Content-Type': 'application/json' },
@@ -80,16 +57,39 @@ const checkStatus = async () => {
 
     if (result.status === 200) {
         const { username, server } = await result.json();
-        console.log(username);
-        console.log(server);
         loggedInUserNameSpan.innerText = username;
         loggedInUserServerSpan.innerText = server.name;
         alreadyLoggedIn.style.display = 'unset';
-    } else if (result.status === 404) {
-        await login();
-    } else {
-        console.log(result.status);
     }
+
+    return result;
 };
 
-checkStatus();
+const login = async () => {
+    const loginStatus = await checkStatus();
+    if (loginStatus.status === 200) {
+        return;
+    }
+
+    const params = new URLSearchParams(document.location.search);
+    const codeFromURL = params.get('code');
+
+    const result = await fetch('/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: codeFromURL }),
+        credentials: 'include',
+    });
+
+    if (result.status === 401) {
+        errorMessage.style.display = 'unset';
+        return;
+    }
+
+    const { username, server } = await result.json();
+    usernameSpan.innerText = username;
+    servernameSpan.innerText = server.name;
+    loggedIn.style.display = 'unset';
+};
+
+login();

@@ -3,7 +3,7 @@ import path from 'path';
 import cookieParser from 'cookie-parser';
 import { startSven } from './bot/client/sven.js';
 import { createTables } from './logger/database/tables.js';
-import { adminsDb, db } from './logger/database/database.js';
+import { db } from './logger/database/database.js';
 import { errorHandler } from './logger/handlers/error.handler.js';
 import { homeHandler } from './logger/handlers/home.handler.js';
 import { authorsHandler } from './logger/handlers/authors.handler.js';
@@ -34,12 +34,14 @@ app.set('views', path.join(__dirname, 'logger/view'));
 app.use(express.json());
 const port = Number(process.env.PORT) || 3000;
 
+// Create the database
 try {
-  await createTables(db, adminsDb);
+  await createTables(db);
 } catch (error) {
   logger.error('Error creating tables:', error);
 }
 
+// Protected routes
 app.get('/', discordAuthHandler, homeHandler);
 app.get('/authors/:page', discordAuthHandler, authorsHandler);
 app.get('/messages/:page', discordAuthHandler, messagesHandler);
@@ -47,6 +49,7 @@ app.get('/messages/author/:id', discordAuthHandler, messagesByAuthorsHandler);
 app.get('/statistics/author/:id', discordAuthHandler, statisticsByAuthorHandler);
 app.post('/search', discordAuthHandler, searchHandler);
 
+// Public routes
 app.post('/logMessage', messageLoggerHandler);
 app.get('/login', loginHandler);
 app.post('/login', loginAttemptHandler);
@@ -54,7 +57,6 @@ app.get('/status', statustHandler);
 
 app.use(express.static(path.join(__dirname, './logger/public')));
 app.use(express.static(path.join(__dirname, 'dist')));
-
 
 app.use(errorHandler);
 

@@ -18,7 +18,7 @@ export const authorsController = async (
     if (Number.isNaN(page) || page <= 0) {
       const renderObject: RenderObject = {
         viewName: 'error',
-        options: { err: 'Page not found!' },
+        options: { routeError: 'Page not found!', missingTokenError: '', expiredTokenError: '' },
       };
       return renderObject;
     }

@@ -23,7 +23,7 @@ export const messagesController = async (
     if (Number.isNaN(page)) {
       const renderObject: RenderObject = {
         viewName: 'error',
-        options: { err: 'Page not found!' },
+        options: { routeError: 'Page not found!', missingTokenError: '', expiredTokenError: '' },
       };
       return renderObject;
     }

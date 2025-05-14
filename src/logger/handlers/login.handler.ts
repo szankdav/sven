@@ -7,7 +7,7 @@ export const loginHandler = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    res.render('login', { err: '' });
+    res.render('login');
   } catch (error) {
     logger.error('Login view error:', error);
     next(error);
