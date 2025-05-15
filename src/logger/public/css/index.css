@@ -1,6 +1,6 @@
 body {
-    background-color: #012f6d;
-    color: white;
+  background-color: #012f6d;
+  color: white;
 }
 
 a,
@@ -19,31 +19,34 @@ a:active {
   cursor: pointer;
 }
 
-.discordLogo {
-    position: absolute;
-    width: 5em;
-}
-
 .navbar {
-    background-color: #5865F2;
+  background-color: #5865F2;
 }
 
 .btn-primary {
-    --bs-btn-bg: rgb(1, 47, 109);
-    --bs-btn-border-color: white;
-    --bs-btn-hover-bg: rgb(1, 47, 109, .5);
-    --bs-btn-hover-border-color: white;
+  --bs-btn-bg: rgb(1, 47, 109);
+  --bs-btn-border-color: white;
+  --bs-btn-hover-bg: rgb(1, 47, 109, .5);
+  --bs-btn-hover-border-color: white;
 }
 
 .btn-success {
-    --bs-btn-bg: rgb(88, 101, 242);
-    --bs-btn-border-color: white;
-    --bs-btn-hover-bg: rgb(88, 101, 242, .5);
-    --bs-btn-hover-border-color: white;
+  --bs-btn-bg: rgb(88, 101, 242);
+  --bs-btn-border-color: white;
+  --bs-btn-hover-bg: rgb(88, 101, 242, .5);
+  --bs-btn-hover-border-color: white;
+}
+
+.btn.disabled {
+  color: white;
+  pointer-events: none;
+  background-color: rgb(88, 101, 242);
+  border-color: white;
+  opacity: var(--bs-btn-disabled-opacity);
 }
 
 .table {
-    --bs-table-bg: #5865F2;
-    --bs-table-color: white;
-    --bs-table-striped-color: rgb(250, 229, 229);
+  --bs-table-bg: #5865F2;
+  --bs-table-color: white;
+  --bs-table-striped-color: rgb(250, 229, 229);
 }

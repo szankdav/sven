@@ -3,6 +3,8 @@ for (let i = 0; i < 4; i++) {
     logoImg.src = '/asserts/discord_logo.png';
     logoImg.alt = 'Discord Logo';
     logoImg.classList.add('discordLogo');
+    logoImg.style.width = '5em';
+    logoImg.style.position = 'absolute';
     logoImg.style.zIndex = '-1';
     document.body.append(logoImg);
 }
@@ -43,6 +45,7 @@ function updatePosition() {
 updatePosition();
 
 const errorMessage = document.getElementById('error') as HTMLElement;
+const loginPageMessage = document.getElementById('loginPageMessage') as HTMLElement;
 const loggedIn = document.getElementById('loggedIn') as HTMLElement;
 const usernameSpan = document.getElementById('username') as HTMLElement;
 const servernameSpan = document.getElementById('server') as HTMLElement;
@@ -82,6 +85,10 @@ const login = async () => {
     });
 
     if (result.status === 401) {
+        loginPageMessage.style.color = 'orangered';
+        loginPageMessage.style.border = '0.2em solid orangered';
+        loginPageMessage.style.borderRadius = '0.5em';
+        loginPageMessage.style.boxShadow = '0.5em 0.5em 2em orangered';
         errorMessage.style.display = 'unset';
         return;
     }

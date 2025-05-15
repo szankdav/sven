@@ -1,4 +1,4 @@
-import { ChannelType, Client, CommandInteraction, TextChannel } from 'discord.js';
+import { ChannelType, Client } from 'discord.js';
 import { config } from '../../config.js';
 import { deployCommandsForSven } from './deploy-commands.js';
 import { cooldownForInteraction } from '../interactions/cooldown.interaction.js';
@@ -33,10 +33,6 @@ client.on('interactionCreate', async (interaction) => {
     logger.error('Error during set of interactions cooldown: ', error);
   }
 });
-
-export const sendSvenSentence = async (interaction: CommandInteraction, index: number) => {
-  await (interaction.channel as TextChannel).send(hikeConversation.sven[index]);
-};
 
 let index = 1;
 client.on('messageCreate', async (message) => {

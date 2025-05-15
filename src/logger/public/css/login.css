@@ -1,44 +1,23 @@
-#loggedIn {
-    color: white;
+#loginPageMessage {
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
+    color: white;
     border: 0.2em solid white;
     border-radius: 0.5em;
     box-shadow: 0.5em 0.5em 2em white;
     padding: 1em;
     margin: 0.5em;
-    width: 40em;
-    display: none;
+    width: 90dvw;
+
+    p {
+        margin: 0;
+    }
 }
 
-#error {
-    color: orangered;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    border: 0.2em solid orangered;
-    border-radius: 0.5em;
-    box-shadow: 0.5em 0.5em 2em orangered;
-    padding: 1em;
-    margin: 0.5em;
-    width: 40em;
-    display: none;
-}
-
+#error,
+#loggedIn,
 #alreadyLoggedIn {
-    color: white;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    border: 0.2em solid white;
-    border-radius: 0.5em;
-    box-shadow: 0.5em 0.5em 2em white;
-    padding: 1em;
-    margin: 0.5em;
-    width: 40em;
     display: none;
 }

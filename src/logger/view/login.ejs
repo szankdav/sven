@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Discord logger statisztika - Belépés</title>
+    <title>Discord Server Monitoring</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="/css/index.css">
@@ -12,21 +12,45 @@
 </head>
 
 <body>
-    <div id="error">
-        <h1>
-            Something went wrong, please try again with the help of Sven! If the problem persists, please let Sven know!
-        </h1>
-    </div>
-    <div id="loggedIn">
-        <h1>Welcome, <span id="username"></span> to the <span id="server"></span> server's statistics page!</h1>
-        <p>Take a look at how your server is being used!</p>
-        <button id="enter" class="btn btn-success">Let's go</button>
-    </div>
-    <div id="alreadyLoggedIn">
-        <h1>
-            You are already logged in as: <span id="loggedInUserName"></span> from server: <span
-                id="loggedInUserServer"></span>!
-        </h1>
+    <div class="container">
+        <div class="row">
+            <div id="loginPageMessage" class="col-12">
+                <div id="error">
+                    <div class="text-center">
+                        <h1 data-testid="errorH1">Discord Server Monitoring website says:</h1>
+                    </div>
+                    <h3 data-testid="errorH3">
+                        Something went wrong during login, please try again with the help of Sven! If the problem persists, please
+                        let Sven know!
+                    </h3>
+                </div>
+                <div id="loggedIn">
+                    <div class="text-center">
+                        <h1>Welcome to Discord Server Monitoring website!</h1>
+                    </div>
+                    <h3>Login was successful as: <span id="username"></span> from server: <span
+                            id="server"></span>!
+                    </h3>
+                    <div class="d-flex justify-content-between align-items-center px-3 py-3">
+                        <p>Take a look at how your server is being used!</p>
+                        <a href="/" id="enter" class="btn btn-success">Let's go</a>
+                    </div>
+                </div>
+                <div id="alreadyLoggedIn">
+                    <div class="text-center">
+                        <h1>Discord Server Monitoring</h1>
+                    </div>
+                    <h3>
+                        You are already logged in as: <span id="loggedInUserName"></span> from server: <span
+                            id="loggedInUserServer"></span>!
+                    </h3>
+                    <div class="d-flex justify-content-between align-items-center px-3 py-3">
+                        <p>Take a look at how your server is being used!</p>
+                        <a href="/" id="enter" class="btn btn-success">Let's go</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
