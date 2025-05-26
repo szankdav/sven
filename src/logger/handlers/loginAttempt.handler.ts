@@ -18,7 +18,7 @@ const oauthRequest = async (codeFromBody: string) => {
                 client_secret: config.DISCORD_CLIENT_SVEN_DEV_SECRET,
                 code: codeFromBody,
                 grant_type: 'authorization_code',
-                redirect_uri: 'http://localhost:3000/login',
+                redirect_uri: 'http://localhost:3000/',
                 scope: 'identify',
             }).toString(),
         });
@@ -27,7 +27,6 @@ const oauthRequest = async (codeFromBody: string) => {
             logger.error('Discord OAuth2 login denied!');
             return tokenResponseData.statusCode;
         }
-
         return tokenResponseData.body.json();
     } catch (error) {
         throw new Error(`Error during Discord OAuth2 token request: ${error}`);

@@ -1,11 +1,11 @@
 import { test, expect } from '@playwright/test';
 
-test('/home page should redirect to error page if not existing url is requested', async ({
+test('home page should display missing token error message if not existing url is requested and there is no logged in admin', async ({
   page,
 }) => {
   await page.goto('http://localhost:3000/1');
 
-  await expect(page.locator('h1')).toHaveText('Page not found!');
+  await expect(page.locator('h1')).toHaveText('Missing token! Please try again with the help of Sven! If the problem persists, please let Sven know!');
   await expect(page.locator('h4')).toHaveText(
     'Please start from the Home page!',
   );

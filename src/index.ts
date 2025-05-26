@@ -18,7 +18,7 @@ import { startFaendal } from './bot/client/faendal.js';
 import { loginAttemptHandler } from './logger/handlers/loginAttempt.handler.js';
 import { searchHandler } from './logger/handlers/search.handler.js';
 import { loginHandler } from './logger/handlers/login.handler.js';
-import { discordAuthHandler } from './logger/handlers/discordAuth.handler.js';
+import { discordAuthGuardHandler } from './logger/handlers/discordAuth.handler.js';
 import { statustHandler } from './logger/handlers/status.handler.js';
 
 // Start bots
@@ -28,6 +28,8 @@ startFaendal();
 // Set filepaths
 const __dirname = import.meta.dirname;
 const app = express();
+const authRouter = express.Router({ mergeParams: true });
+const openRouter = express.Router({ mergeParams: true });
 app.use(cookieParser());
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'logger/view'));
@@ -41,23 +43,26 @@ try {
   logger.error('Error creating tables:', error);
 }
 
-// Protected routes
-app.get('/', discordAuthHandler, homeHandler);
-app.get('/authors/:page', discordAuthHandler, authorsHandler);
-app.get('/messages/:page', discordAuthHandler, messagesHandler);
-app.get('/messages/author/:id', discordAuthHandler, messagesByAuthorsHandler);
-app.get('/statistics/author/:id', discordAuthHandler, statisticsByAuthorHandler);
-app.post('/search', discordAuthHandler, searchHandler);
-
 // Public routes
-app.post('/logMessage', messageLoggerHandler);
-app.get('/login', loginHandler);
-app.post('/login', loginAttemptHandler);
-app.get('/status', statustHandler);
+openRouter.post('/logMessage', messageLoggerHandler);
+openRouter.get('/', loginHandler);
+openRouter.post('/', loginAttemptHandler);
+openRouter.get('/status', statustHandler);
+
+authRouter.use(discordAuthGuardHandler);
+// Protected routes
+authRouter.get('/home', homeHandler);
+authRouter.get('/authors/:page', authorsHandler);
+authRouter.get('/messages/:page', messagesHandler);
+authRouter.get('/messages/author/:id', messagesByAuthorsHandler);
+authRouter.get('/statistics/author/:id', statisticsByAuthorHandler);
+authRouter.post('/search', searchHandler);
 
 app.use(express.static(path.join(__dirname, './logger/public')));
 app.use(express.static(path.join(__dirname, 'dist')));
 
+app.use(openRouter);
+app.use(authRouter);
 app.use(errorHandler);
 
 app.listen(port, () => {

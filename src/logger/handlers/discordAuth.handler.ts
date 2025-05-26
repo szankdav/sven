@@ -2,7 +2,10 @@ import { request } from 'undici';
 import { Request, Response, NextFunction } from 'express';
 import { logger } from '../../winston/winston.js';
 
-export const discordAuthHandler = async (req: Request, res: Response, next: NextFunction) => {
+export const discordAuthGuardHandler = async (req: Request, res: Response, next: NextFunction) => {
+  if (process.env.NODE_ENV === 'playwrightTest') {
+    return next();
+  }
   const token = req.cookies?.access_token;
 
   if (!token) {

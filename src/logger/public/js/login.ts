@@ -53,6 +53,14 @@ const alreadyLoggedIn = document.getElementById('alreadyLoggedIn') as HTMLElemen
 const loggedInUserNameSpan = document.getElementById('loggedInUserName') as HTMLElement;
 const loggedInUserServerSpan = document.getElementById('loggedInUserServer') as HTMLElement;
 
+const displayErrorMessage = () => {
+    loginPageMessage.style.color = 'orangered';
+    loginPageMessage.style.border = '0.2em solid orangered';
+    loginPageMessage.style.borderRadius = '0.5em';
+    loginPageMessage.style.boxShadow = '0.5em 0.5em 2em orangered';
+    errorMessage.style.display = 'unset';
+};
+
 const checkStatus = async () => {
     const result = await fetch('/status', {
         headers: { 'Content-Type': 'application/json' },
@@ -77,7 +85,12 @@ const login = async () => {
     const params = new URLSearchParams(document.location.search);
     const codeFromURL = params.get('code');
 
-    const result = await fetch('/login', {
+    if (!codeFromURL) {
+        displayErrorMessage();
+        return;
+    }
+
+    const result = await fetch('/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ code: codeFromURL }),
@@ -85,11 +98,7 @@ const login = async () => {
     });
 
     if (result.status === 401) {
-        loginPageMessage.style.color = 'orangered';
-        loginPageMessage.style.border = '0.2em solid orangered';
-        loginPageMessage.style.borderRadius = '0.5em';
-        loginPageMessage.style.boxShadow = '0.5em 0.5em 2em orangered';
-        errorMessage.style.display = 'unset';
+        displayErrorMessage();
         return;
     }
 

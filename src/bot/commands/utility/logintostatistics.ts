@@ -15,7 +15,7 @@ export const data = new SlashCommandBuilder()
 export async function execute(interaction: CommandInteraction) {
     server.name = interaction.guild?.name as string;
     await interaction.user.send('Szia! Ezen a linken be tudsz jelentkezni, hogy lásd a szervered statisztikai adatait:');
-    await interaction.user.send('https://discord.com/oauth2/authorize?client_id=1352273717623001209&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Flogin&scope=identify');
+    await interaction.user.send('https://discord.com/oauth2/authorize?client_id=1352273717623001209&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2F&scope=identify');
     await interaction.reply({
         content: 'Küldtem privát üzenetet!',
         flags: MessageFlags.Ephemeral,

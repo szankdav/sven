@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "docker-test:build": "docker build -t sven-test-local -f Dockerfile.test .",
-    "docker-test:start": "docker run -d --name sven-test -p 3000:3000 --env-file .env -e DISABLE_LOKI=true sven-test-local",
+    "docker-test:start": "docker run -d --name sven-test -p 3000:3000 --env-file .env -e NODE_ENV=playwrightTest sven-test-local",
     "docker-dev:build": "docker build -t sven-local -f Dockerfile.dev .",
     "docker-dev:start": "docker run -d --name sven-local -p 3000:3000 --env-file .env sven-local",
     "wait": "npx wait-on http://localhost:3000/",
@@ -19,7 +19,7 @@
     "build": "tsup --external express && npm run copy-css-files && npm run copy-view-files && npm run copy-asserts && npm run make-db-folder",
     "test": "npx vitest",
     "coverage": "vitest run --coverage",
-    "playwright-prod": "npm run generateFakeDatabaseData && npx playwright test",
+    "playwright": "npm run generateFakeDatabaseData && npx playwright test",
     "playwright:docker": "npm run docker-test:build && npm run docker-test:start",
     "start": "node dist/index.js",
     "start-dev-container": "npm run docker-dev:build && npm run docker-dev:start",

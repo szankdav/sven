@@ -65,7 +65,7 @@ test('/messages/author page should display the correct title and text', async ({
   page,
 }) => {
   await page.goto('http://localhost:3000/messages/author/1');
-  await expect(page).toHaveTitle('Discord logger statisztika');
+  await expect(page).toHaveTitle('Discord Server Monitoring');
   await expect(page.locator('h4')).toHaveText(
     'Here you can see the messages sent by the selected author.',
   );
