@@ -12,62 +12,66 @@
 
 <body>
     <%- include('core/navbar'); %>
-    <div class="container mt-3">
-        <%if(error === ""){%>
-        <div class="row">
-            <div class="col-12">
-                <h4>Here you can see the who sent a message on your server. If you want to see the messages for an author, click on an author!</h4>
-            </div>
+        <div class="container mt-3">
+            <%if(error==="" ){%>
+                <div class="row">
+                    <div class="col-12">
+                        <%- include('core/search'); %>
+                    </div>
+                    <div class="col-12">
+                        <h4>Here you can see the who sent a message on your server. If you want to see the messages for
+                            an author, click on an author!</h4>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12 d-grid gap-2 d-md-block">
+                        <a id="previousButton" class="btn btn-success">Previous</a>
+                        <a id="firstPageNumberButton" class="btn btn-success"></a>
+                        <a id="secondPageNumberButton" class="btn btn-success"></a>
+                        <a id="thirdPageNumberButton" class="btn btn-success"></a>
+                        <a id="nextButton" data-maxpages="<%= authorsPageNumber %>" class="btn btn-success">Next</a>
+                    </div>
+                    <div class="col-12 mt-3">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Created</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% authorsSlicedByTen.forEach(row=> { %>
+                                    <tr class="authorRow" data-id="<%= row.id %>">
+                                        <td>
+                                            <%= row.id %>
+                                        </td>
+                                        <td>
+                                            <%= row.name %>
+                                        </td>
+                                        <td>
+                                            <%= row.createdAt %>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <%}else{%>
+                    <h4>
+                        <%= error %>
+                    </h4>
+                    <a data-testid="goBack" class="btn btn-success" href="/home">Go back to
+                        home page</a>
+                    <%}%>
         </div>
-        <div class="row mt-3">
-            <div class="col-12 d-grid gap-2 d-md-block">
-                <a id="previousButton" class="btn btn-success">Previous</a>
-                <a id="firstPageNumberButton" class="btn btn-success"></a>
-                <a id="secondPageNumberButton" class="btn btn-success"></a>
-                <a id="thirdPageNumberButton" class="btn btn-success"></a>
-                <a id="nextButton" data-maxpages="<%= authorsPageNumber %>" class="btn btn-success">Next</a>
-            </div>
-            <div class="col-12 mt-3">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Created</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% authorsSlicedByTen.forEach(row=> { %>
-                            <tr class="authorRow" data-id="<%= row.id %>">
-                                <td>
-                                    <%= row.id %>
-                                </td>
-                                <td>
-                                    <%= row.name %>
-                                </td>
-                                <td>
-                                    <%= row.createdAt %>
-                                </td>
-                            </tr>
-                            <% }) %>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <%}else{%>
-            <h4>
-                <%= error %>
-            </h4>
-            <a data-testid="goBack" class="btn btn-success" href="/">Go back to
-                home page</a>
-            <%}%>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
-    <script src="/js/pagination.js"></script>
-    <script src="/js/authors.js"></script>
-    <script src="/js/index.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"></script>
+        <script src="/js/pagination.js"></script>
+        <script src="/js/authors.js"></script>
+        <script src="/js/index.js"></script>
 </body>
 
 </html>

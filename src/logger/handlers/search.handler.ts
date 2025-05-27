@@ -9,9 +9,10 @@ export const searchHandler = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const authorName = [req.body.authorName];
-    const pageNumber = await authorController(db, authorName);
-    res.send(pageNumber.toString());
+    const { authorName } = req.body;
+    // const pageNumber = await authorController(db, authorName);
+    const matchingAuthors = await authorController(db, authorName);
+    res.send(matchingAuthors);
   } catch (error) {
     logger.error('Search handler error:', error);
     next(error);

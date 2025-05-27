@@ -3,12 +3,10 @@ import { AuthorsError } from '../utils/customErrorClasses/authorsError.class.js'
 import {
   AuthorModel,
   getAllAuthors,
-  getAuthorByName,
   getTenAuthors,
 } from '../model/author.model.js';
 import { RenderObject } from '../types/renderObject.type.js';
 import { logger } from '../../winston/winston.js';
-import { SqlParams } from '../types/sqlparams.type.js';
 
 export const authorsController = async (
   db: Database,
@@ -45,18 +43,13 @@ export const authorsController = async (
   }
 };
 
-export const authorController = async (db: Database, authorName: SqlParams): Promise<number> => {
+export const authorController = async (db: Database, authorName: string): Promise<AuthorModel[]> => {
   try {
-    const result = await getAuthorByName(db, authorName);
-    if (result) {
-      const allAuthors = await getAllAuthors(db);
-      const authorIndex = allAuthors.findIndex((author) => author.name === result.name);
-      const authorPageNumber: number = Math.ceil((authorIndex + 1) / 10);
-      return authorPageNumber;
-    }
-    return 0;
+    const allAuthors = await getAllAuthors(db);
+    const matchingAuthors = allAuthors.filter((author) => author.name.toLowerCase().includes(authorName.toLowerCase()));
+    return matchingAuthors;
   } catch (error) {
-    logger.error('Error fetching author:', error);
-    throw new AuthorsError('Error fetching author!', 500);
+    logger.error('Error fetching matching authors from search:', error);
+    throw new AuthorsError('Error fetching matching authors from search!', 500);
   }
 };

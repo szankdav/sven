@@ -16,6 +16,9 @@
             <%if(error==="" ){%>
                 <div class="row">
                     <div class="col-12">
+                        <%- include('core/search'); %>
+                    </div>
+                    <div class="col-12">
                         <h4>Here you can see all the messages sent on your server! If you want to see an author's
                             messages, click on the author's name!</h4>
                     </div>
@@ -68,7 +71,7 @@
                     <h4>
                         <%= error %>
                     </h4>
-                    <a data-testid="goBack" class="btn btn-success" href="/">Go back to
+                    <a data-testid="goBack" class="btn btn-success" href="/home">Go back to
                         home page</a>
                     <%}%>
         </div>

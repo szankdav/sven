@@ -20,15 +20,14 @@
                         <h1 data-testid="errorH1">Discord Server Monitoring website says:</h1>
                     </div>
                     <h3 data-testid="errorH3">
-                        Something went wrong during login, please try again with the help of Sven! If the problem persists, please
-                        let Sven know!
+                        Something went wrong during login, please try again with the help of Sven!
                     </h3>
                 </div>
                 <div id="loggedIn">
                     <div class="text-center">
-                        <h1>Welcome to Discord Server Monitoring website!</h1>
+                        <h1 data-testid="welcomeH1">Welcome to Discord Server Monitoring website!</h1>
                     </div>
-                    <h3>Login was successful as: <span id="username"></span> from server: <span
+                    <h3 data-testid="welcomeH3">Login was successful as: <span id="username"></span> from server: <span
                             id="server"></span>!
                     </h3>
                     <div class="d-flex justify-content-between align-items-center px-3 py-3">
@@ -38,9 +37,9 @@
                 </div>
                 <div id="alreadyLoggedIn">
                     <div class="text-center">
-                        <h1>Discord Server Monitoring</h1>
+                        <h1 data-testid="loggedInH1">Discord Server Monitoring</h1>
                     </div>
-                    <h3>
+                    <h3 data-testid="loggedInH3">
                         You are already logged in as: <span id="loggedInUserName"></span> from server: <span
                             id="loggedInUserServer"></span>!
                     </h3>
@@ -56,7 +55,6 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
     <script src="/js/login.js"></script>
-    <script src="/js/index.js"></script>
 </body>
 
 </html>

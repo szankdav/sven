@@ -11,7 +11,7 @@ import { hikeConversation } from '../commands/texts/conversations.js';
 import { handleInput } from '../chat/commandHandler.js';
 
 export const client = new Client({
-  intents: ['Guilds', 'GuildMessages', 'DirectMessages', 'MessageContent'],
+  intents: ['Guilds', 'GuildMessages', 'DirectMessages', 'MessageContent', 'GuildMembers', 'GuildPresences'],
   partials: [1],
 });
 

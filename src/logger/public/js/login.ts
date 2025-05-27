@@ -1,5 +1,6 @@
 for (let i = 0; i < 4; i++) {
     const logoImg = document.createElement('img');
+    logoImg.dataset.testid = 'discordImg';
     logoImg.src = '/asserts/discord_logo.png';
     logoImg.alt = 'Discord Logo';
     logoImg.classList.add('discordLogo');
@@ -69,7 +70,7 @@ const checkStatus = async () => {
     if (result.status === 200) {
         const { username, server } = await result.json();
         loggedInUserNameSpan.innerText = username;
-        loggedInUserServerSpan.innerText = server.name;
+        loggedInUserServerSpan.innerText = server;
         alreadyLoggedIn.style.display = 'unset';
     }
 
@@ -87,7 +88,6 @@ const login = async () => {
 
     if (!codeFromURL) {
         displayErrorMessage();
-        return;
     }
 
     const result = await fetch('/', {
@@ -97,14 +97,14 @@ const login = async () => {
         credentials: 'include',
     });
 
-    if (result.status === 401) {
+    if (result.status !== 200) {
         displayErrorMessage();
         return;
     }
 
     const { username, server } = await result.json();
     usernameSpan.innerText = username;
-    servernameSpan.innerText = server.name;
+    servernameSpan.innerText = server;
     loggedIn.style.display = 'unset';
 };
 

@@ -14,10 +14,15 @@
     <%- include('core/navbar'); %>
         <div class="container mt-3">
             <div class="row">
+                <div class="col-12">
+                    <%- include('core/search'); %>
+                </div>
                 <div class="col-12 d-grid gap-2 d-md-block">
-                    <a data-testid="previousAuthorStatistics" href="/statistics/author/<%if(author.id>authors[0].id){%><%=author.id-1%><%}else{%><%=authors[0].id%><%}%>"
+                    <a data-testid="previousAuthorStatistics"
+                        href="/statistics/author/<%if(author.id>authors[0].id){%><%=author.id-1%><%}else{%><%=authors[0].id%><%}%>"
                         class="btn btn-success">Previous author</a>
-                    <a data-testid="nextAuthorStatistics" href="/statistics/author/<%if(author.id<authors[authors.length - 1].id){%><%=author.id+1%><%}else{%><%=authors[authors.length - 1].id%><%}%>"
+                    <a data-testid="nextAuthorStatistics"
+                        href="/statistics/author/<%if(author.id<authors[authors.length - 1].id){%><%=author.id+1%><%}else{%><%=authors[authors.length - 1].id%><%}%>"
                         class="btn btn-success">Next author</a>
                 </div>
                 <div class="col-12 mt-3">
@@ -34,10 +39,12 @@
                     </p>
                 </div>
                 <div class="col-12 d-grid gap-2 d-md-block">
-                    <%if(author.id){%><a class="btn btn-success" data-testid="goBackToAuthor" href="/messages/author/<%= author.id%>">Go back to
+                    <%if(author.id){%><a class="btn btn-success" data-testid="goBackToAuthor"
+                            href="/messages/author/<%= author.id%>">Go back to
                             author</a>
                         <%}%>
-                            <%if(author.id){%><button id="seeStatistics" data-testid="seeStatistics" class="btn btn-success">Show
+                            <%if(author.id){%><button id="seeStatistics" data-testid="seeStatistics"
+                                    class="btn btn-success">Show
                                     statistics</button>
                                 <%}%>
                 </div>
