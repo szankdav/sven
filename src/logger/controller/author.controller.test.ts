@@ -154,4 +154,112 @@ describe('author.controller tests', () => {
       expect(loggerError).toHaveBeenCalled();
     });
   });
+
+  describe('authorController tests', () => {
+    it('should return with an empty AuthorModel array if incoming authorName is empty', async () => {
+      const testAuthor1: AuthorModel = {
+        id: 1,
+        name: 'Teszt Elek',
+        createdAt: createdAtTime,
+      };
+      const testAuthor2: AuthorModel = {
+        id: 2,
+        name: 'Teszt Elekné',
+        createdAt: createdAtTime,
+      };
+      vi.spyOn(authorModel, 'getAllAuthors').mockResolvedValue([
+        testAuthor1,
+        testAuthor2,
+      ]);
+      vi.spyOn(authorsController, 'authorController');
+      const result: AuthorModel[] = await authorsController.authorController(
+        db,
+        '',
+      );
+      expect(result).toStrictEqual([]);
+    });
+
+    it('should return with an AuthorModel array if incoming authorName is found', async () => {
+      const testAuthor1: AuthorModel = {
+        id: 1,
+        name: 'Teszt Elek',
+        createdAt: createdAtTime,
+      };
+      const testAuthor2: AuthorModel = {
+        id: 2,
+        name: 'Teszt Elekné',
+        createdAt: createdAtTime,
+      };
+      vi.spyOn(authorModel, 'getAllAuthors').mockResolvedValue([
+        testAuthor1,
+        testAuthor2,
+      ]);
+      vi.spyOn(authorsController, 'authorController');
+      const result: AuthorModel[] = await authorsController.authorController(
+        db,
+        'Teszt',
+      );
+      expect(result).toStrictEqual([testAuthor1, testAuthor2]);
+    });
+
+
+    it('should return with a valid renderObject if data is not valid', async () => {
+      const testAuthor1: AuthorModel = {
+        id: 1,
+        name: 'Teszt Elek',
+        createdAt: createdAtTime,
+      };
+      const testAuthor2: AuthorModel = {
+        id: 2,
+        name: 'Teszt Elekné',
+        createdAt: createdAtTime,
+      };
+      vi.spyOn(authorModel, 'getAllAuthors').mockResolvedValue([
+        testAuthor1,
+        testAuthor2,
+      ]);
+      vi.spyOn(authorModel, 'getTenAuthors').mockResolvedValue([
+        testAuthor1,
+        testAuthor2,
+      ]);
+      const authorsPageNumber = 1;
+      const authorsSlicedByTen: AuthorModel[] = [testAuthor1, testAuthor2];
+      const error =
+        'No authors to show... Are you sure you are at the right URL?';
+      const result: RenderObject = await authorsController.authorsController(
+        db,
+        2,
+      );
+      expect(result.options).toStrictEqual({
+        authorsPageNumber,
+        authorsSlicedByTen,
+        error,
+      });
+    });
+
+    it('should throw an error with the correct message', async () => {
+      vi.spyOn(authorsController, 'authorsController').mockRejectedValue(
+        new AuthorsError('Error fetching authors!', 500),
+      );
+
+      await expect(authorsController.authorsController(db, 1)).rejects.toThrow(
+        AuthorsError,
+      );
+      await expect(authorsController.authorsController(db, 1)).rejects.toThrow(
+        'Error fetching authors!',
+      );
+    });
+
+    it('should log an error with the correct message', async () => {
+      vi.spyOn(authorsController, 'authorsController');
+      vi.spyOn(authorModel, 'getTenAuthors').mockRejectedValue(
+        new Error('Error fetching authors!'),
+      );
+
+      await expect(authorsController.authorsController(db, 1)).rejects.toThrow(
+        'Error fetching authors!',
+      );
+      expect(loggerError).toHaveBeenCalled();
+    });
+  });
 });
