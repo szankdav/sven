@@ -4,10 +4,13 @@ const servernameInNavBar = document.getElementById('server') as HTMLElement;
 const searchInput = (document.getElementById('searchInput') as HTMLInputElement);
 const searchResults = document.getElementById('searchResults') as HTMLUListElement;
 
+searchInput.addEventListener('focusout', () => {
+    searchResults.classList.remove('show');
+});
+
 if (searchInput) {
     searchInput.addEventListener('keyup', async () => {
         const searchInputValue = (document.getElementById('searchInput') as HTMLInputElement).value;
-        const searchNotFound = document.getElementById('searchNotFound') as HTMLElement;
         const result = await fetch('/search', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -17,11 +20,13 @@ if (searchInput) {
         const matchingAuthors = await result.json();
 
         if (matchingAuthors.length === 0) {
-            searchResults.classList.remove('show');
+            searchResults.innerHTML = '';
+            const li = document.createElement('li');
+            li.innerText = 'No author found!';
+            searchResults.append(li);
         } else {
             searchResults.innerHTML = '';
             for (let i = 0; i < matchingAuthors.length; i++) {
-                searchNotFound.classList.add('d-none');
                 const li = document.createElement('li');
                 const a = document.createElement('a');
                 a.innerText = matchingAuthors[i].name;
