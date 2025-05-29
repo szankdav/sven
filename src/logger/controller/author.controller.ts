@@ -46,7 +46,11 @@ export const authorsController = async (
 export const authorController = async (db: Database, authorName: string): Promise<AuthorModel[]> => {
   try {
     const allAuthors = await getAllAuthors(db);
-    const matchingAuthors = allAuthors.filter((author) => author.name.toLowerCase().includes(authorName.toLowerCase()));
+    let matchingAuthors: AuthorModel[] = [];
+    if (authorName === '') {
+      return matchingAuthors;
+    }
+    matchingAuthors = allAuthors.filter((author) => author.name.toLowerCase().includes(authorName.toLowerCase()));
     return matchingAuthors;
   } catch (error) {
     logger.error('Error fetching matching authors from search:', error);

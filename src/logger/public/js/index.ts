@@ -1,4 +1,3 @@
-const searchButton = document.getElementById('searchButton');
 const usernameInNavbar = document.getElementById('username') as HTMLElement;
 const servernameInNavBar = document.getElementById('server') as HTMLElement;
 
@@ -6,51 +5,34 @@ const searchInput = (document.getElementById('searchInput') as HTMLInputElement)
 const searchResults = document.getElementById('searchResults') as HTMLUListElement;
 
 if (searchInput) {
-    searchInput.addEventListener('input', () => {
-        if (searchInput.value.trim().length > 0) {
-            searchButton?.classList.remove('disabled');
+    searchInput.addEventListener('keyup', async () => {
+        const searchInputValue = (document.getElementById('searchInput') as HTMLInputElement).value;
+        const searchNotFound = document.getElementById('searchNotFound') as HTMLElement;
+        const result = await fetch('/search', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ authorName: searchInputValue })
+        });
+
+        const matchingAuthors = await result.json();
+
+        if (matchingAuthors.length === 0) {
+            searchResults.classList.remove('show');
         } else {
-            searchButton?.classList.add('disabled');
+            searchResults.innerHTML = '';
+            for (let i = 0; i < matchingAuthors.length; i++) {
+                searchNotFound.classList.add('d-none');
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                a.innerText = matchingAuthors[i].name;
+                a.href = `/messages/author/${matchingAuthors[i].id}`;
+                li.append(a);
+                searchResults.append(li);
+            }
+            searchResults.classList.add('show');
         }
     });
 }
-
-searchButton?.addEventListener('click', async (event) => {
-    event.preventDefault();
-    const searchInputValue = (document.getElementById('searchInput') as HTMLInputElement).value;
-    const searchNotFound = document.getElementById('searchNotFound') as HTMLElement;
-    const searchedName = document.getElementById('searchedName') as HTMLElement;
-    const result = await fetch('/search', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ authorName: searchInputValue })
-    });
-
-    const matchingAuthors = await result.json();
-
-    if (matchingAuthors.length === 0) {
-        searchNotFound.classList.remove('d-none');
-        searchedName.innerText = searchInputValue;
-    } else {
-        for (let i = 0; i < matchingAuthors.length; i++) {
-            searchNotFound.classList.add('d-none');
-            const li = document.createElement('li');
-            const a = document.createElement('a');
-            a.innerText = matchingAuthors[i].name;
-            a.href = `/messages/author/${matchingAuthors[i].id}`;
-            li.append(a);
-            searchResults.append(li);
-        }
-        searchResults.style.width = searchInput.style.width;
-        searchResults.classList.add('show');
-    }
-});
-
-// document.addEventListener('click', (event) => {
-//     if(event.target !== searchInput){
-//         searchResults.classList.remove('show');
-//     }
-// });
 
 // const navbarToggleButton = document.getElementsByClassName('navbar-toggler');
 
