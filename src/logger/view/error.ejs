@@ -22,11 +22,11 @@
                     </h1>
                     <h4>Please start from the <a href="/home">Home</a> page!</h4>
                     <%}else if (missingTokenError !=='' ){%>
-                        <h1>
+                        <h1 class="tokenError">
                             <%= missingTokenError %>
                         </h1>
                         <%}else if (expiredTokenError !=='' ){%>
-                            <h1>
+                            <h1 class="tokenError">
                                 <%= expiredTokenError %>
                             </h1>
                             <%}%>

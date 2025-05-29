@@ -50,3 +50,17 @@ a:active {
   --bs-table-color: white;
   --bs-table-striped-color: rgb(250, 229, 229);
 }
+
+.tokenError {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: orangered;
+  border: 0.2em solid orangered;
+  border-radius: 0.5em;
+  box-shadow: 0.5em 0.5em 2em orangered;
+  padding: 1em;
+  margin: 0.5em;
+  width: 90dvw;
+}

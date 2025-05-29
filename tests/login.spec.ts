@@ -9,7 +9,7 @@ test('/ page should display the correct text when there is no cookie or no code 
         'Discord Server Monitoring website says:',
     );
     await expect(page.getByTestId('errorH3')).toHaveText(
-        'Something went wrong during login, please try again with the help of Sven! If the problem persists, please let Sven know!',
+        'Something went wrong during login, please try again with the help of Sven!',
     );
 });
 

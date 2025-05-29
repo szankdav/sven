@@ -13,7 +13,7 @@ export const authorsController = async (
   page: number,
 ): Promise<RenderObject> => {
   try {
-    if (Number.isNaN(page) || page <= 0) {
+    if (Number.isNaN(page) || page <= 0 || !page) {
       const renderObject: RenderObject = {
         viewName: 'error',
         options: { routeError: 'Page not found!', missingTokenError: '', expiredTokenError: '' },
