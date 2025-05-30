@@ -64,3 +64,8 @@ a:active {
   margin: 0.5em;
   width: 90dvw;
 }
+
+.errorHomePageAnchor {
+  font-weight: bold;
+  text-decoration: underline;
+}

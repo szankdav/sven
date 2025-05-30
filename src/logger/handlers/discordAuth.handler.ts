@@ -13,13 +13,13 @@ export const discordAuthGuardHandler = async (req: Request, res: Response, next:
   }
 
   try {
-    const discordRes = await request('https://discord.com/api/users/@me', {
+    const userResponse = await request('https://discord.com/api/users/@me', {
       headers: {
-        Authorization: `Bearer ${token}`,
+        authorization: `Bearer ${token}`,
       },
     });
 
-    if (discordRes.statusCode !== 200) {
+    if (userResponse.statusCode !== 200) {
       return res.render('error', { routeError: '', missingTokenError: '', expiredTokenError: 'Invalid or expired Discord token, please start a new login with the help of Sven!' });
     }
 

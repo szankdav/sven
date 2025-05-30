@@ -48,3 +48,23 @@ test('/statistics/author page navigation buttons should work correctly', async (
     `http://localhost:3000/messages/author/${dataId}`,
   );
 });
+
+test('/statistics/author page search bar should display results in the dropdown menu if a letter is written in it', async ({ page }) => {
+  await page.goto('http://localhost:3000/statistics/author/1');
+  const searchInput = page.getByTestId('searchInput');
+  await searchInput.click();
+  await searchInput.press('a');
+  const searchDropdown = page.getByTestId('searchDropdown');
+  await expect(searchDropdown).toBeVisible();
+  expect(await searchDropdown.locator('li').count()).toBeGreaterThanOrEqual(1);
+});
+
+test('/statistics/author page search bar should display the proper message in the dropdown menu if there is no result', async ({ page }) => {
+  await page.goto('http://localhost:3000/statistics/author/1');
+  const searchInput = page.getByTestId('searchInput');
+  await searchInput.click();
+  await searchInput.pressSequentially('aaaaaa');
+  const searchDropdown = page.getByTestId('searchDropdown');
+  await expect(searchDropdown).toBeVisible();
+  expect(await searchDropdown.locator('li').textContent()).toBe('No author found!');
+});

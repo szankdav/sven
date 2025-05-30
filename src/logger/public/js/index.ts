@@ -4,11 +4,12 @@ const servernameInNavBar = document.getElementById('server') as HTMLElement;
 const searchInput = (document.getElementById('searchInput') as HTMLInputElement);
 const searchResults = document.getElementById('searchResults') as HTMLUListElement;
 
-searchInput.addEventListener('focusout', () => {
-    searchResults.classList.remove('show');
-});
-
 if (searchInput) {
+    searchInput.addEventListener('focusout', () => {
+        searchResults.classList.remove('show');
+    });
+
+
     searchInput.addEventListener('keyup', async () => {
         const searchInputValue = (document.getElementById('searchInput') as HTMLInputElement).value;
         const result = await fetch('/search', {
