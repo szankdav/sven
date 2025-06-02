@@ -12,29 +12,25 @@
 
 <body>
     <%if(routeError !=="" ){%>
-    <%- include('core/navbar'); %>
-    <%}%>
-        <div class="container mt-3">
-            <div class="row">
-                <%if(routeError !=="" ){%>
-                    <h1>
-                        <%= routeError %>
-                    </h1>
-                    <h4>Please start from the <a class="errorHomePageAnchor" href="/home">Home</a> page!</h4>
-                    <%}else if (missingTokenError !=='' ){%>
-                        <h1 class="tokenError">
-                            <%= missingTokenError %>
-                        </h1>
-                        <%}else if (expiredTokenError !=='' ){%>
-                            <h1 class="tokenError">
-                                <%= expiredTokenError %>
+        <%- include('core/navbar'); %>
+            <%}%>
+                <div class="container mt-3">
+                    <div class="row">
+                        <%if(routeError !=="" ){%>
+                            <h1>
+                                <%= routeError %>
                             </h1>
-                            <%}%>
-            </div>
-        </div>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-            crossorigin="anonymous"></script>
+                            <h4>Please start from the <a class="errorHomePageAnchor" href="/home">Home</a> page!</h4>
+                            <%}else if (loginError !=='' ){%>
+                                <h1 class="loginError">
+                                    <%= loginError %>
+                                </h1>
+                                <%}%>
+                    </div>
+                </div>
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+                    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+                    crossorigin="anonymous"></script>
 </body>
 
 </html>

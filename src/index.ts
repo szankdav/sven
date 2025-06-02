@@ -19,7 +19,9 @@ import { loginAttemptHandler } from './logger/handlers/loginAttempt.handler.js';
 import { searchHandler } from './logger/handlers/search.handler.js';
 import { loginHandler } from './logger/handlers/login.handler.js';
 import { discordAuthGuardHandler } from './logger/handlers/discordAuth.handler.js';
-import { statustHandler } from './logger/handlers/status.handler.js';
+import { isLoggedIn } from './logger/handlers/isLoggedIn.handler.js';
+import { whoAmI } from './logger/handlers/whoAmI.handler.js';
+import { loginErrorHandler } from './logger/handlers/loginError.handler.js';
 
 // Start bots
 startSven();
@@ -47,7 +49,8 @@ try {
 openRouter.post('/logMessage', messageLoggerHandler);
 openRouter.get('/', loginHandler);
 openRouter.post('/', loginAttemptHandler);
-openRouter.get('/status', statustHandler);
+openRouter.get('/isloggedin', isLoggedIn);
+openRouter.get('/error', loginErrorHandler);
 
 authRouter.use(discordAuthGuardHandler);
 // Protected routes
@@ -57,6 +60,7 @@ authRouter.get('/messages/:page', messagesHandler);
 authRouter.get('/messages/author/:id', messagesByAuthorsHandler);
 authRouter.get('/statistics/author/:id', statisticsByAuthorHandler);
 authRouter.post('/search', searchHandler);
+authRouter.get('/whoami', whoAmI);
 
 app.use(express.static(path.join(__dirname, './logger/public')));
 app.use(express.static(path.join(__dirname, 'dist')));

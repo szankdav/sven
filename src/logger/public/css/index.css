@@ -51,7 +51,7 @@ a:active {
   --bs-table-striped-color: rgb(250, 229, 229);
 }
 
-.tokenError {
+.loginError {
   position: absolute;
   left: 50%;
   top: 50%;

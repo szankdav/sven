@@ -1,5 +1,4 @@
 const usernameInNavbar = document.getElementById('username') as HTMLElement;
-const servernameInNavBar = document.getElementById('server') as HTMLElement;
 
 const searchInput = (document.getElementById('searchInput') as HTMLInputElement);
 const searchResults = document.getElementById('searchResults') as HTMLUListElement;
@@ -50,20 +49,17 @@ if (searchInput) {
 //     }
 // });
 
-const authMe = async () => {
-    const result = await fetch('/status', {
+const whoAmI = async () => {
+    const result = await fetch('/whoami', {
         headers: { 'Content-Type': 'application/json' },
     });
 
     if (result.status === 200) {
-        const { username, server } = await result.json();
+        const { username } = await result.json();
         usernameInNavbar.innerText = username;
         usernameInNavbar.style.fontStyle = 'italic';
         usernameInNavbar.style.fontWeight = 'bold';
-        servernameInNavBar.innerText = server;
-        servernameInNavBar.style.fontStyle = 'italic';
-        servernameInNavBar.style.fontWeight = 'bold';
     }
 };
 
-authMe();
+whoAmI();

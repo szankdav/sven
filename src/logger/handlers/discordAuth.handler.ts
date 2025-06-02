@@ -9,7 +9,7 @@ export const discordAuthGuardHandler = async (req: Request, res: Response, next:
   const token = req.cookies?.access_token;
 
   if (!token) {
-    return res.render('error', { routeError: '', missingTokenError: 'Missing token! Please try again with the help of Sven! If the problem persists, please let Sven know!', expiredTokenError: '' });
+    return res.render('error', { routeError: '', loginError: "You are on a page that requires authentication. If you came here by accident, please close the window. If you are here on purpose, but don't understand what is happening, ask the site operator for help, or try logging in with Sven!" });
   }
 
   try {
@@ -20,7 +20,7 @@ export const discordAuthGuardHandler = async (req: Request, res: Response, next:
     });
 
     if (userResponse.statusCode !== 200) {
-      return res.render('error', { routeError: '', missingTokenError: '', expiredTokenError: 'Invalid or expired Discord token, please start a new login with the help of Sven!' });
+      return res.render('error', { routeError: '', loginError: 'Invalid or expired Discord token, please start a new login with the help of Sven!' });
     }
 
     return next();

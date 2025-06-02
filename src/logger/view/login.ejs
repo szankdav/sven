@@ -14,42 +14,12 @@
 <body>
     <div class="container">
         <div class="row">
-            <div id="loginPageMessage" class="col-12">
-                <div id="error">
-                    <div class="text-center">
-                        <h1 data-testid="errorH1">Discord Server Monitoring website says:</h1>
-                    </div>
-                    <h3 data-testid="errorH3">
-                        Something went wrong during login, please try again with the help of Sven!
-                    </h3>
-                </div>
-                <div id="loggedIn">
-                    <div class="text-center">
-                        <h1 data-testid="welcomeH1">Welcome to Discord Server Monitoring website!</h1>
-                    </div>
-                    <h3 data-testid="welcomeH3">Login was successful as: <span id="username"></span> from server: <span
-                            id="server"></span>!
-                    </h3>
-                    <div class="d-flex justify-content-between align-items-center px-3 py-3">
-                        <p>Take a look at how your server is being used!</p>
-                        <a href="/home" id="enter" class="btn btn-success">Let's go</a>
-                    </div>
-                </div>
-                <div id="alreadyLoggedIn">
-                    <div class="text-center">
-                        <h1 data-testid="loggedInH1">Discord Server Monitoring</h1>
-                    </div>
-                    <h3 data-testid="loggedInH3">
-                        You are already logged in as: <span id="loggedInUserName"></span> from server: <span
-                            id="loggedInUserServer"></span>!
-                    </h3>
-                    <div class="d-flex justify-content-between align-items-center px-3 py-3">
-                        <p>Take a look at how your server is being used!</p>
-                        <a href="/home" id="enter" class="btn btn-success">Let's go</a>
-                    </div>
-                </div>
+            <div class="col-12 imgDiv text-center">
+                <img data-testid="loadingImg" src="/asserts/discord_logo.png" alt="Discord Logo">
+                <p data-testid="loadingText" class="mt-5"><span class="loading">Loading<span class="dots"></span></span></p>
             </div>
         </div>
+    </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"

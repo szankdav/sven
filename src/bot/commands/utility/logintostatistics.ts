@@ -5,16 +5,12 @@ import {
 } from 'discord.js';
 import { logger } from '../../../winston/winston.js';
 
-// Store hasznalat?
-export const interactionData = { interaction: {} as CommandInteraction };
-
 export const data = new SlashCommandBuilder()
     .setName('logintostatisticspage')
     .setDescription('Bejelentkezés a statisztikai adatok oldalára.')
     .setDefaultMemberPermissions(0);
 
 export async function execute(interaction: CommandInteraction) {
-    interactionData.interaction = interaction;
     // interactionData.serverName = interaction.guild?.name as string;
     // interactionData.userName = interaction.user.globalName!;
     await interaction.user.send('Szia! Ezen a linken be tudsz jelentkezni, hogy lásd a szervered statisztikai adatait:');
