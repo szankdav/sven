@@ -22,7 +22,7 @@
                             </h1>
                             <h4>Please start from the <a class="errorHomePageAnchor" href="/home">Home</a> page!</h4>
                             <%}else if (loginError !=='' ){%>
-                                <h1 class="loginError">
+                                <h1 data-testid="loginError" class="loginError">
                                     <%= loginError %>
                                 </h1>
                                 <%}%>

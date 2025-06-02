@@ -26,7 +26,7 @@ test('/home page text navigation links should work correctly', async ({
   await expect(page).toHaveURL(/.*messages/);
 });
 
-test('/home page search bar should display results in the dropdown menu if a letter is written in it', async ({page}) => {
+test('/home page search bar should display results in the dropdown menu if a letter is written in it', async ({ page }) => {
   await page.goto('http://localhost:3000/home');
   const searchInput = page.getByTestId('searchInput');
   await searchInput.click();
@@ -36,7 +36,7 @@ test('/home page search bar should display results in the dropdown menu if a let
   expect(await searchDropdown.locator('li').count()).toBeGreaterThanOrEqual(1);
 });
 
-test('/home page search bar should display the proper message in the dropdown menu if there is no result', async ({page}) => {
+test('/home page search bar should display the proper message in the dropdown menu if there is no result', async ({ page }) => {
   await page.goto('http://localhost:3000/home');
   const searchInput = page.getByTestId('searchInput');
   await searchInput.click();

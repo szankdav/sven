@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test('/authors page should display the correct text for an unauthorized guest', async ({
+test('/home page should display the correct text for an unauthorized guest', async ({
   page,
 }) => {
   await page.goto('http://localhost:3000/home/');
@@ -10,7 +10,7 @@ test('/authors page should display the correct text for an unauthorized guest', 
   );
 });
 
-test('/authors/**** page should display the correct text for an unauthorized guest', async ({
+test('/home/**** page should display the correct text for an unauthorized guest', async ({
   page,
 }) => {
   await page.goto('http://localhost:3000/home/alma');

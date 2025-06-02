@@ -1,13 +1,5 @@
 import { test, expect } from '@playwright/test';
 
-// test('home page should display missing token error message if not existing url is requested and there is no logged in admin', async ({
-//   page,
-// }) => {
-//   await page.goto('http://localhost:3000/1');
-
-//   await expect(page.locator('h1')).toHaveText("You are on a page that requires authentication. If you came here by accident, please close the window. If you are here on purpose, but don't understand what is happening, ask the site operator for help, or try logging in again with Sven!");
-// });
-
 test('/messages page should redirect to error page if not existing url is requested', async ({
   page,
 }) => {
