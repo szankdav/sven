@@ -1,5 +1,3 @@
-const usernameInNavbar = document.getElementById('username') as HTMLElement;
-
 const searchInput = (document.getElementById('searchInput') as HTMLInputElement);
 const searchResults = document.getElementById('searchResults') as HTMLUListElement;
 
@@ -48,18 +46,3 @@ if (searchInput) {
 //         (navbarToggleButton[0] as HTMLButtonElement).click();
 //     }
 // });
-
-const whoAmI = async () => {
-    const result = await fetch('/whoami', {
-        headers: { 'Content-Type': 'application/json' },
-    });
-
-    if (result.status === 200) {
-        const { username } = await result.json();
-        usernameInNavbar.innerText = username;
-        usernameInNavbar.style.fontStyle = 'italic';
-        usernameInNavbar.style.fontWeight = 'bold';
-    }
-};
-
-whoAmI();
