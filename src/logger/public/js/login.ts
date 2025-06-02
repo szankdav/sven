@@ -1,9 +1,13 @@
 const isLoggedIn = async () => {
-    const result = await fetch('/isloggedin', {
+    const response = await fetch('/isloggedin', {
         headers: { 'Content-Type': 'application/json' },
     });
 
-    return result.json();
+    if (response.redirected) {
+        window.location.href = response.url;
+    }
+
+    return response.json();
 };
 
 const login = async () => {

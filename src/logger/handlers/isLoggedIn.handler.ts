@@ -13,8 +13,7 @@ export const isLoggedIn = async (req: Request,
             return;
         }
 
-        res.send({ result: true });
-        
+        res.redirect('/home');
     } catch (error) {
         logger.error(error);
         next(error);
