@@ -1,19 +1,18 @@
 import { NextFunction, Request, Response } from 'express';
 import { logger } from '../../winston/winston.js';
+import { authUserService } from '../services/auth.service.js';
 
-export const isLoggedIn = async (req: Request,
+export const authUser = async (req: Request,
     res: Response,
     next: NextFunction,): Promise<void> => {
     try {
-        const cookie = req.cookies.access_token;
-
-        if (!cookie) {
-            logger.info('Cookie not found, new login process started.');
+        const isLoggedInResult = await authUserService(req);
+        if (!isLoggedInResult) {
             res.send({ result: false });
             return;
         }
 
-        res.redirect('/home');
+        res.send({ result: true });
     } catch (error) {
         logger.error(error);
         next(error);

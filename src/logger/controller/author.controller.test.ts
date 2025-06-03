@@ -82,6 +82,7 @@ describe('author.controller tests', () => {
         authorsPageNumber,
         authorsSlicedByTen,
         error,
+        isLoggedIn: true
       });
     });
 
@@ -92,7 +93,7 @@ describe('author.controller tests', () => {
         NaN,
       );
       expect(result.viewName).toBe('error');
-      expect(result.options).toStrictEqual({ routeError: 'Page not found!', missingTokenError: '', expiredTokenError: '' });
+      expect(result.options).toStrictEqual({ routeError: 'Page not found!', loginError: '', isLoggedIn: true });
     });
 
     it('should return with a valid renderObject if data is not valid', async () => {
@@ -126,6 +127,7 @@ describe('author.controller tests', () => {
         authorsPageNumber,
         authorsSlicedByTen,
         error,
+        isLoggedIn: true
       });
     });
 

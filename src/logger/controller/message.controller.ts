@@ -23,7 +23,7 @@ export const messagesController = async (
     if (Number.isNaN(page) || page <=0 || !page) {
       const renderObject: RenderObject = {
         viewName: 'error',
-        options: { routeError: 'Page not found!', missingTokenError: '', expiredTokenError: '' },
+        options: { routeError: 'Page not found!', loginError: '', isLoggedIn: true },
       };
       return renderObject;
     }
@@ -41,7 +41,7 @@ export const messagesController = async (
 
     const renderObject: RenderObject = {
       viewName: 'messages',
-      options: { messagesPageNumber, authors, messagesSlicedByTen, error },
+      options: { messagesPageNumber, authors, messagesSlicedByTen, error, isLoggedIn: true },
     };
 
     return renderObject;
@@ -65,7 +65,7 @@ export const messagesByAuthorsController = async (
 
     const renderObject: RenderObject = {
       viewName: 'author',
-      options: { author, messages },
+      options: { author, messages, isLoggedIn: true },
     };
 
     return renderObject;

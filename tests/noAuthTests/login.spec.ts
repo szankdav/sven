@@ -7,7 +7,7 @@ test('/ page should display the correct text when there is no cookie or no code 
         route.abort();
     });
 
-    await page.goto('http://localhost:3000/');
+    await page.goto('http://localhost:3000/login');
     await expect(page).toHaveTitle('Discord Server Monitoring');
     await expect(page.getByTestId('loadingImg')).toBeVisible();
     await expect(page.getByTestId('loadingText')).toHaveText('Loading');

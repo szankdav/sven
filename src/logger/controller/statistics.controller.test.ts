@@ -115,6 +115,7 @@ describe('statisticController tests', () => {
         authors,
         letterCounters,
         letterStatistics,
+        isLoggedIn: true
       });
     });
 
@@ -138,6 +139,7 @@ describe('statisticController tests', () => {
         authors,
         letterCounters,
         letterStatistics,
+        isLoggedIn: true
       });
     });
 

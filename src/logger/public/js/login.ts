@@ -1,13 +1,15 @@
 const isLoggedIn = async () => {
-    const response = await fetch('/isloggedin', {
+    const response = await fetch('/api/authUser', {
         headers: { 'Content-Type': 'application/json' },
     });
 
-    if (response.redirected) {
-        window.location.href = response.url;
+    const result = await response.json();
+
+    if (result.result) {
+        window.location.href = '/home';
     }
 
-    return response.json();
+    return result;
 };
 
 const login = async () => {
@@ -16,7 +18,7 @@ const login = async () => {
         const params = new URLSearchParams(document.location.search);
         const codeFromURL = params.get('code');
 
-        const response = await fetch('/', {
+        const response = await fetch('/api/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ code: codeFromURL }),

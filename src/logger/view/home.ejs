@@ -14,19 +14,15 @@
     <%- include('core/navbar'); %>
         <div class="container mt-3">
             <div class="row">
-                <%if(isLoggedIn!==true ){%>
-                    <div class="col-12">
-                        <h1 data-testid="welcomeH1">Welcome to your Discord Server Monitoring site! Please log in with
-                            your Discord account to see your server's statistics!</h1>
-                        <a class="btn btn-primary"
-                            href="https://discord.com/oauth2/authorize?client_id=1352273717623001209&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Flogin&scope=guilds+identify">Click
-                            here!</a>
-                    </div>
-                    <%}else{%>
-                        <div class="col-12">
-                            <h1>Welcome to your Discord Server Monitoring site!</h1>
-                        </div>
-                        <%}%>
+                <div class="col-12">
+                    <%- include('core/search'); %>
+                </div>
+                <div class="col-12">
+                    <h1 data-testid="welcomeH1">Welcome to Discord Logger! (Watched by Watchtower!) </h1>
+                    <h3 data-testid="welcomeH3">Here you can find all of the users that ever sent a message on your server.</h3>
+                    <p data-testid="welcomeP">If you want to see the users, go to <a href="/authors/1">Authors</a> page. If you want to see all
+                        the messages, go to <a href="/messages/">Messages</a> page.</p>
+                </div>
             </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

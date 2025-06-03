@@ -16,7 +16,7 @@ export const authorsController = async (
     if (Number.isNaN(page) || page <= 0 || !page) {
       const renderObject: RenderObject = {
         viewName: 'error',
-        options: { routeError: 'Page not found!', missingTokenError: '', expiredTokenError: '' },
+        options: { routeError: 'Page not found!', loginError: '', isLoggedIn: true },
       };
       return renderObject;
     }
@@ -33,7 +33,7 @@ export const authorsController = async (
 
     const renderObject: RenderObject = {
       viewName: 'authors',
-      options: { authorsPageNumber, authorsSlicedByTen, error },
+      options: { authorsPageNumber, authorsSlicedByTen, error, isLoggedIn: true },
     };
 
     return renderObject;

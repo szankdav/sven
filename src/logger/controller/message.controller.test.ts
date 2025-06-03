@@ -113,6 +113,7 @@ describe('message.controller tests', () => {
         authors,
         messagesSlicedByTen,
         error,
+        isLoggedIn: true
       });
     });
 
@@ -123,7 +124,7 @@ describe('message.controller tests', () => {
         NaN,
       );
       expect(result.viewName).toBe('error');
-      expect(result.options).toStrictEqual({ routeError: 'Page not found!', missingTokenError: '', expiredTokenError: '' });
+      expect(result.options).toStrictEqual({ routeError: 'Page not found!', loginError: '', isLoggedIn: true });
     });
 
     it('should return with a valid renderObject if data is not valid', async () => {
@@ -190,6 +191,7 @@ describe('message.controller tests', () => {
         authors,
         messagesSlicedByTen,
         error,
+        isLoggedIn: true
       });
     });
 
@@ -253,7 +255,7 @@ describe('message.controller tests', () => {
       const result: RenderObject =
         await messagesController.messagesByAuthorsController(db, [1]);
       expect(result.viewName).toBe('author');
-      expect(result.options).toStrictEqual({ author, messages });
+      expect(result.options).toStrictEqual({ author, messages, isLoggedIn: true });
     });
 
     it('should return with a valid renderObject if data is not valid', async () => {
@@ -267,7 +269,7 @@ describe('message.controller tests', () => {
       const result: RenderObject =
         await messagesController.messagesByAuthorsController(db, [10]);
       expect(result.viewName).toBe('author');
-      expect(result.options).toStrictEqual({ author, messages });
+      expect(result.options).toStrictEqual({ author, messages, isLoggedIn: true });
     });
 
     it('should throw an error with the correct message', async () => {

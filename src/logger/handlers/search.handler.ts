@@ -10,7 +10,6 @@ export const searchHandler = async (
 ): Promise<void> => {
   try {
     const { authorName } = req.body;
-    // const pageNumber = await authorController(db, authorName);
     const matchingAuthors = await authorController(db, authorName);
     res.send(matchingAuthors);
   } catch (error) {

@@ -1,7 +1,7 @@
 const usernameInNavbar = document.getElementById('username') as HTMLElement;
 
-const whoAmI = async () => {
-    const result = await fetch('/whoami', {
+const getLoggedInUserName = async () => {
+    const result = await fetch('/api/username', {
         headers: { 'Content-Type': 'application/json' },
     });
 
@@ -13,4 +13,6 @@ const whoAmI = async () => {
     }
 };
 
-whoAmI();
+if (usernameInNavbar) {
+    getLoggedInUserName();
+};

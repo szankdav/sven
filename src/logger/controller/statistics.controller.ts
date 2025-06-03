@@ -75,7 +75,7 @@ export const statisticsByAuthorController = async (
 
     const renderObject: RenderObject = {
       viewName: 'statistics',
-      options: { author, authors, letterCounters, letterStatistics },
+      options: { author, authors, letterCounters, letterStatistics, isLoggedIn: true },
     };
 
     return renderObject;

@@ -19,9 +19,10 @@ import { loginAttemptHandler } from './logger/handlers/loginAttempt.handler.js';
 import { searchHandler } from './logger/handlers/search.handler.js';
 import { loginHandler } from './logger/handlers/login.handler.js';
 import { discordAuthGuardHandler } from './logger/handlers/discordAuth.handler.js';
-import { isLoggedIn } from './logger/handlers/isLoggedIn.handler.js';
-import { whoAmI } from './logger/handlers/whoAmI.handler.js';
+import { authUser } from './logger/handlers/authUser.handler.js';
+import { usernameHandler } from './logger/handlers/username.handler.js';
 import { loginErrorHandler } from './logger/handlers/loginError.handler.js';
+import { indexHandler } from './logger/handlers/index.handler.js';
 
 // Start bots
 startSven();
@@ -46,10 +47,11 @@ try {
 }
 
 // Public routes
-openRouter.post('/logMessage', messageLoggerHandler);
-openRouter.get('/', loginHandler);
-openRouter.post('/', loginAttemptHandler);
-openRouter.get('/isloggedin', isLoggedIn);
+openRouter.get('/', indexHandler);
+openRouter.post('/api/logMessage', messageLoggerHandler);
+openRouter.get('/login', loginHandler);
+openRouter.post('/api/login', loginAttemptHandler);
+openRouter.get('/api/authUser', authUser);
 openRouter.get('/error', loginErrorHandler);
 
 authRouter.use(discordAuthGuardHandler);
@@ -60,7 +62,7 @@ authRouter.get('/messages/:page', messagesHandler);
 authRouter.get('/messages/author/:id', messagesByAuthorsHandler);
 authRouter.get('/statistics/author/:id', statisticsByAuthorHandler);
 authRouter.post('/search', searchHandler);
-authRouter.get('/whoami', whoAmI);
+authRouter.get('/api/username', usernameHandler);
 
 app.use(express.static(path.join(__dirname, './logger/public')));
 app.use(express.static(path.join(__dirname, 'dist')));
