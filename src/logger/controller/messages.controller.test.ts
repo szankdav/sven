@@ -11,7 +11,7 @@ import sqlite3, { Database } from 'sqlite3';
 import * as authorModel from '../model/author.model';
 import * as messageModel from '../model/message.model';
 import { MessagesError } from '../utils/customErrorClasses/messagesError.class';
-import * as messagesController from './message.controller';
+import * as messagesController from './messages.controller';
 import { AuthorModel } from '../model/author.model';
 import { MessageModel } from '../model/message.model';
 import { RenderObject } from '../types/renderObject.type';
@@ -104,11 +104,11 @@ describe('message.controller tests', () => {
         testAuthor1,
         testAuthor2,
       ]);
-      const result: RenderObject = await messagesController.messagesController(
+      const result: RenderObject | null = await messagesController.messagesController(
         db,
-        1,
+        [1],
       );
-      expect(result.options).toStrictEqual({
+      expect(result!.options).toStrictEqual({
         messagesPageNumber,
         authors,
         messagesSlicedByTen,
@@ -117,14 +117,22 @@ describe('message.controller tests', () => {
       });
     });
 
-    it('should return with an error renderObject if data is invalid', async () => {
+    it('should return null if route not containing a valid number', async () => {
       vi.spyOn(messagesController, 'messagesController');
-      const result: RenderObject = await messagesController.messagesController(
+      const result: RenderObject | null = await messagesController.messagesController(
         db,
-        NaN,
+        ['alma'],
       );
-      expect(result.viewName).toBe('error');
-      expect(result.options).toStrictEqual({ routeError: 'Page not found!', loginError: '', isLoggedIn: true });
+      expect(result).toBe(null);
+    });
+
+        it('should return null if route not containing a positive number', async () => {
+      vi.spyOn(messagesController, 'messagesController');
+      const result: RenderObject | null = await messagesController.messagesController(
+        db,
+        [-1],
+      );
+      expect(result).toBe(null);
     });
 
     it('should return with a valid renderObject if data is not valid', async () => {
@@ -181,12 +189,12 @@ describe('message.controller tests', () => {
       const error =
         'No messages to show... Are you sure you are at the right URL?';
 
-      const result: RenderObject = await messagesController.messagesController(
+      const result: RenderObject | null = await messagesController.messagesController(
         db,
-        2,
+        [2],
       );
-      expect(result.viewName).toBe('messages');
-      expect(result.options).toStrictEqual({
+      expect(result!.viewName).toBe('messages');
+      expect(result!.options).toStrictEqual({
         messagesPageNumber,
         authors,
         messagesSlicedByTen,
@@ -201,10 +209,10 @@ describe('message.controller tests', () => {
       );
 
       await expect(
-        messagesController.messagesController(db, 1),
+        messagesController.messagesController(db, [1]),
       ).rejects.toThrow(MessagesError);
       await expect(
-        messagesController.messagesController(db, 1),
+        messagesController.messagesController(db, [1]),
       ).rejects.toThrow('Error fetching messages!');
     });
 
@@ -215,7 +223,7 @@ describe('message.controller tests', () => {
       );
 
       await expect(
-        messagesController.messagesController(db, 1),
+        messagesController.messagesController(db, [1]),
       ).rejects.toThrow('Error fetching messages!');
       expect(loggerError).toHaveBeenCalled();
     });
@@ -252,24 +260,22 @@ describe('message.controller tests', () => {
         testMessage2,
       ]);
       vi.spyOn(messagesController, 'messagesByAuthorsController');
-      const result: RenderObject =
+      const result: RenderObject | null=
         await messagesController.messagesByAuthorsController(db, [1]);
-      expect(result.viewName).toBe('author');
-      expect(result.options).toStrictEqual({ author, messages, isLoggedIn: true });
+      expect(result!.viewName).toBe('author');
+      expect(result!.options).toStrictEqual({ authorFound: true, author, messages, isLoggedIn: true });
     });
 
     it('should return with a valid renderObject if data is not valid', async () => {
       const messages: MessageModel[] = [];
-      const author = { id: 0, name: '-', createdAt: '-' };
-
       vi.spyOn(authorModel, 'getAuthorById').mockResolvedValue(undefined);
       vi.spyOn(messageModel, 'getMessagesByAuthorId').mockResolvedValue([]);
       vi.spyOn(messagesController, 'messagesByAuthorsController');
 
-      const result: RenderObject =
+      const result: RenderObject | null =
         await messagesController.messagesByAuthorsController(db, [10]);
-      expect(result.viewName).toBe('author');
-      expect(result.options).toStrictEqual({ author, messages, isLoggedIn: true });
+      expect(result!.viewName).toBe('author');
+      expect(result!.options).toStrictEqual({ authorFound: false, author: undefined, messages, isLoggedIn: true });
     });
 
     it('should throw an error with the correct message', async () => {

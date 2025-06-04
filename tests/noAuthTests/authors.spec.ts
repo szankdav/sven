@@ -89,3 +89,13 @@ test('/authors page search bar should display the proper message in the dropdown
   await expect(searchDropdown).toBeVisible();
   expect(await searchDropdown.locator('li').textContent()).toBe('No author found!');
 });
+
+test('/authors page should redirect to /home if page number parameter is not a valid number', async ({page}) => {
+  await page.goto('http://localhost:3000/authors/alma');
+  await expect(page).toHaveURL(/.*home/);
+});
+
+test('/authors page should redirect to /home if page number parameter is a negative number', async ({page}) => {
+  await page.goto('http://localhost:3000/authors/-1');
+  await expect(page).toHaveURL(/.*home/);
+});

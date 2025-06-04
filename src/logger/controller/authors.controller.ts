@@ -7,27 +7,25 @@ import {
 } from '../model/author.model.js';
 import { RenderObject } from '../types/renderObject.type.js';
 import { logger } from '../../winston/winston.js';
+import { SqlParams } from '../types/sqlparams.type.js';
 
 export const authorsController = async (
   db: Database,
-  page: number,
-): Promise<RenderObject> => {
+  page: SqlParams,
+): Promise<RenderObject | null> => {
   try {
-    if (Number.isNaN(page) || page <= 0 || !page) {
-      const renderObject: RenderObject = {
-        viewName: 'error',
-        options: { routeError: 'Page not found!', loginError: '', isLoggedIn: true },
-      };
-      return renderObject;
+    const pageNumber = Number(page[0]);
+    if (!Number.isInteger(pageNumber) || pageNumber <= 0) {
+      return null;
     }
     const authorsPageNumber: number = Math.ceil(
       (await getAllAuthors(db)).length / 10,
     );
     const authorsSlicedByTen: AuthorModel[] = await getTenAuthors(db, [
-      page === 1 ? 0 : (page - 1) * 10,
+      pageNumber === 1 ? 0 : (pageNumber - 1) * 10,
     ]);
     let error = '';
-    if (page > authorsPageNumber) {
+    if (pageNumber > authorsPageNumber) {
       error = 'No authors to show... Are you sure you are at the right URL?';
     }
 

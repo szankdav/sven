@@ -102,3 +102,13 @@ test('/messages page search bar should display the proper message in the dropdow
   await expect(searchDropdown).toBeVisible();
   expect(await searchDropdown.locator('li').textContent()).toBe('No author found!');
 });
+
+test('/messages page should redirect to /home if page number parameter is not a valid number', async ({page}) => {
+  await page.goto('http://localhost:3000/messages/alma');
+  await expect(page).toHaveURL(/.*home/);
+});
+
+test('/messages page should redirect to /home if page number parameter is a negative number', async ({page}) => {
+  await page.goto('http://localhost:3000/messages/-1');
+  await expect(page).toHaveURL(/.*home/);
+});

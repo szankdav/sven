@@ -14,17 +14,22 @@ test('/ page should display the correct title and text', async ({ page }) => {
   );
 });
 
-test('/home page text navigation links should work correctly', async ({
+test('/home page Authors navigation link should work correctly', async ({
   page,
 }) => {
   await page.goto('http://localhost:3000/home');
   await page.click('text=Author');
   await expect(page).toHaveURL(/.*authors/);
+});
 
-  await page.goBack();
+test('/home page Messages navigation link should work correctly', async ({
+  page,
+}) => {
+  await page.goto('http://localhost:3000/home');
   await page.click('text=Messages');
   await expect(page).toHaveURL(/.*messages/);
 });
+
 
 test('/home page search bar should display results in the dropdown menu if a letter is written in it', async ({ page }) => {
   await page.goto('http://localhost:3000/home');

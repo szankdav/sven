@@ -6,7 +6,6 @@ if (searchInput) {
         searchResults.classList.remove('show');
     });
 
-
     searchInput.addEventListener('keyup', async () => {
         const searchInputValue = (document.getElementById('searchInput') as HTMLInputElement).value;
         const result = await fetch('/search', {

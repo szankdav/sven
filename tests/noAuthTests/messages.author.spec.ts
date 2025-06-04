@@ -75,3 +75,18 @@ test('/messages/author page search bar should display the proper message in the 
   await expect(searchDropdown).toBeVisible();
   expect(await searchDropdown.locator('li').textContent()).toBe('No author found!');
 });
+
+test('/messages/author page should redirect to /home if page number parameter is not a valid number', async ({page}) => {
+  await page.goto('http://localhost:3000/messages/author/alma');
+  await expect(page).toHaveURL(/.*home/);
+});
+
+test('/messages/author page should redirect to /home if page number parameter is a negative number', async ({page}) => {
+  await page.goto('http://localhost:3000/messages/author/-1');
+  await expect(page).toHaveURL(/.*home/);
+});
+
+test('/messages/author page should show the correct message if author is not found with the given id', async ({page}) => {
+  await page.goto('http://localhost:3000/messages/author/1000000000000');
+  await expect(page.locator('h1')).toHaveText('No author found with this ID!');
+});

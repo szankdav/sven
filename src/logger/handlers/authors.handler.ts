@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { authorsController } from '../controller/author.controller.js';
+import { authorsController } from '../controller/authors.controller.js';
 import { db } from '../database/database.js';
 import { logger } from '../../winston/winston.js';
 
@@ -9,9 +9,13 @@ export const authorsHandler = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const page = parseInt(req.params.page, 10);
-    const renderObject = await authorsController(db, page);
-    res.render(renderObject.viewName, renderObject.options);
+    const { page } = req.params;
+    const renderObject = await authorsController(db, [page]);
+    if (renderObject) {
+      res.render(renderObject.viewName, renderObject.options);
+    } else {
+      next();
+    }
   } catch (error) {
     logger.error('Author handler error:', error);
     next(error);

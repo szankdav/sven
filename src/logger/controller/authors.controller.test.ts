@@ -10,7 +10,7 @@ import {
 import sqlite3, { Database } from 'sqlite3';
 import { AuthorModel } from '../model/author.model';
 import * as authorModel from '../model/author.model';
-import * as authorsController from './author.controller';
+import * as authorsController from './authors.controller';
 import { RenderObject } from '../types/renderObject.type';
 import { AuthorsError } from '../utils/customErrorClasses/authorsError.class';
 import { logger } from '../../winston/winston';
@@ -73,12 +73,12 @@ describe('author.controller tests', () => {
         testAuthor2,
       ]);
       vi.spyOn(authorsController, 'authorsController');
-      const result: RenderObject = await authorsController.authorsController(
+      const result: RenderObject | null = await authorsController.authorsController(
         db,
-        1,
+        [1],
       );
-      expect(result.viewName).toBe('authors');
-      expect(result.options).toStrictEqual({
+      expect(result!.viewName).toBe('authors');
+      expect(result!.options).toStrictEqual({
         authorsPageNumber,
         authorsSlicedByTen,
         error,
@@ -86,14 +86,22 @@ describe('author.controller tests', () => {
       });
     });
 
-    it('should return with an error renderObject if data is invalid', async () => {
+    it('should return null if route not containing a valid number', async () => {
       vi.spyOn(authorsController, 'authorsController');
-      const result: RenderObject = await authorsController.authorsController(
+      const result: RenderObject | null = await authorsController.authorsController(
         db,
-        NaN,
+        ['alma'],
       );
-      expect(result.viewName).toBe('error');
-      expect(result.options).toStrictEqual({ routeError: 'Page not found!', loginError: '', isLoggedIn: true });
+      expect(result).toBe(null);
+    });
+
+        it('should return null if route not containing a positive number', async () => {
+      vi.spyOn(authorsController, 'authorsController');
+      const result: RenderObject | null = await authorsController.authorsController(
+        db,
+        [-1],
+      );
+      expect(result).toBe(null);
     });
 
     it('should return with a valid renderObject if data is not valid', async () => {
@@ -119,11 +127,11 @@ describe('author.controller tests', () => {
       const authorsSlicedByTen: AuthorModel[] = [testAuthor1, testAuthor2];
       const error =
         'No authors to show... Are you sure you are at the right URL?';
-      const result: RenderObject = await authorsController.authorsController(
+      const result: RenderObject | null = await authorsController.authorsController(
         db,
-        2,
+        [2],
       );
-      expect(result.options).toStrictEqual({
+      expect(result!.options).toStrictEqual({
         authorsPageNumber,
         authorsSlicedByTen,
         error,
@@ -136,10 +144,10 @@ describe('author.controller tests', () => {
         new AuthorsError('Error fetching authors!', 500),
       );
 
-      await expect(authorsController.authorsController(db, 1)).rejects.toThrow(
+      await expect(authorsController.authorsController(db, [1])).rejects.toThrow(
         AuthorsError,
       );
-      await expect(authorsController.authorsController(db, 1)).rejects.toThrow(
+      await expect(authorsController.authorsController(db, [1])).rejects.toThrow(
         'Error fetching authors!',
       );
     });
@@ -150,7 +158,7 @@ describe('author.controller tests', () => {
         new Error('Error fetching authors!'),
       );
 
-      await expect(authorsController.authorsController(db, 1)).rejects.toThrow(
+      await expect(authorsController.authorsController(db, [1])).rejects.toThrow(
         'Error fetching authors!',
       );
       expect(loggerError).toHaveBeenCalled();

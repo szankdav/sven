@@ -17,25 +17,22 @@ import { logger } from '../../winston/winston.js';
 
 export const messagesController = async (
   db: Database,
-  page: number,
-): Promise<RenderObject> => {
+  page: SqlParams,
+): Promise<RenderObject | null> => {
   try {
-    if (Number.isNaN(page) || page <=0 || !page) {
-      const renderObject: RenderObject = {
-        viewName: 'error',
-        options: { routeError: 'Page not found!', loginError: '', isLoggedIn: true },
-      };
-      return renderObject;
+    const pageNumber = Number(page[0]);
+    if (!Number.isInteger(pageNumber) || pageNumber <= 0) {
+      return null;
     }
     const messagesPageNumber: number = Math.ceil(
       (await getAllMessages(db)).length / 10,
     );
     const messagesSlicedByTen: MessageModel[] = await getTenMessages(db, [
-      page === 1 ? 0 : (page - 1) * 10,
+      pageNumber === 1 ? 0 : (pageNumber - 1) * 10,
     ]);
     const authors: AuthorModel[] = await getAllAuthors(db);
     let error = '';
-    if (page > messagesPageNumber) {
+    if (pageNumber > messagesPageNumber) {
       error = 'No messages to show... Are you sure you are at the right URL?';
     }
 
@@ -54,18 +51,28 @@ export const messagesController = async (
 export const messagesByAuthorsController = async (
   db: Database,
   params: SqlParams,
-): Promise<RenderObject> => {
+): Promise<RenderObject | null> => {
   try {
-    let author: AuthorModel | undefined = await getAuthorById(db, params);
-    let messages: MessageModel[] = await getMessagesByAuthorId(db, params);
+    const authorId = Number(params[0]);
+    if (!Number.isInteger(authorId) || authorId <= 0) {
+      return null;
+    };
+
+    const author: AuthorModel | undefined = await getAuthorById(db, [authorId]);
+    const messages: MessageModel[] = await getMessagesByAuthorId(db, [authorId]);
+
+
     if (!author) {
-      author = { id: 0, name: '-', createdAt: '-' };
-      messages = [];
+      const renderObject: RenderObject = {
+        viewName: 'author',
+        options: { authorFound: false, author, messages, isLoggedIn: true },
+      };
+      return renderObject;
     }
 
     const renderObject: RenderObject = {
       viewName: 'author',
-      options: { author, messages, isLoggedIn: true },
+      options: { authorFound: true, author, messages, isLoggedIn: true },
     };
 
     return renderObject;

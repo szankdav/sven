@@ -108,9 +108,10 @@ describe('statisticController tests', () => {
         letterCounterModel,
         'getLetterCountersByAuthorId',
       ).mockResolvedValue(letterCounters);
-      const result: RenderObject =
+      const result: RenderObject | null =
         await statisticController.statisticsByAuthorController(db, [1]);
-      expect(result.options).toStrictEqual({
+      expect(result!.options).toStrictEqual({
+        authorFound: true,
         author,
         authors,
         letterCounters,
@@ -121,9 +122,6 @@ describe('statisticController tests', () => {
 
     it('should return with a valid renderObject if data is not valid', async () => {
       const author: AuthorModel = { id: 0, name: '-', createdAt: '-' };
-      const authors: AuthorModel[] = [{ id: 0, name: '-', createdAt: '-' }];
-      const letterCounters: LetterModel[] = [];
-      const letterStatistics: LetterStatistic[] = [];
       vi.spyOn(authorModel, 'getAuthorById').mockResolvedValue(undefined);
       vi.spyOn(authorModel, 'getAllAuthors').mockResolvedValue([author]);
       vi.spyOn(
@@ -131,16 +129,35 @@ describe('statisticController tests', () => {
         'getLetterCountersByAuthorId',
       ).mockResolvedValue([]);
       vi.spyOn(statisticController, 'statisticsByAuthorController');
-      const result: RenderObject =
+      const result: RenderObject | null =
         await statisticController.statisticsByAuthorController(db, [1]);
-      expect(result.viewName).toBe('statistics');
-      expect(result.options).toStrictEqual({
-        author,
-        authors,
-        letterCounters,
-        letterStatistics,
+      expect(result!.viewName).toBe('statistics');
+      expect(result!.options).toStrictEqual({
+        authorFound: false,
+        author: null,
+        authors: null,
+        letterCounters: null,
+        letterStatistics: null,
         isLoggedIn: true
       });
+    });
+
+    it('should return null if route not containing a valid number', async () => {
+      vi.spyOn(statisticController, 'statisticsByAuthorController');
+      const result: RenderObject | null = await statisticController.statisticsByAuthorController(
+        db,
+        ['alma'],
+      );
+      expect(result).toBe(null);
+    });
+
+    it('should return null if route not containing a positive number', async () => {
+      vi.spyOn(statisticController, 'statisticsByAuthorController');
+      const result: RenderObject | null = await statisticController.statisticsByAuthorController(
+        db,
+        [-1],
+      );
+      expect(result).toBe(null);
     });
 
     it('should throw an error with the correct message', async () => {

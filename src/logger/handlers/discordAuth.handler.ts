@@ -9,7 +9,8 @@ export const discordAuthGuardHandler = async (req: Request, res: Response, next:
   const token = req.cookies?.access_token;
 
   if (!token) {
-    return res.render('error', { routeError: '', loginError: "You are on a page that requires authentication. If you came here by accident, please close the window. If you are here on purpose, but don't understand what is happening, ask the site operator for help, or try logging in with Sven!", isLoggedIn: false });
+    // return res.render('error', { routeError: '', loginError: "You are on a page that requires authentication. If you came here by accident, please close the window. If you are here on purpose, but don't understand what is happening, ask the site operator for help, or try logging in with Sven!", isLoggedIn: false });
+    return res.redirect('/');
   }
 
   try {
