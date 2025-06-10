@@ -1,0 +1,13 @@
+<nav aria-label="Pagination">
+    <ul class="uk-pgn uk-pgn-default">
+        <li> <a id="previousButton">
+                <span class="mr-2" data-uk-pgn-previous></span>
+            </a></li>
+        <li><a id="firstPageNumberButton"></a></li>
+        <li><a id="secondPageNumberButton"></a></li>
+        <li><a id="thirdPageNumberButton"></a></li>
+        <li><a id="nextButton"
+                data-maxpages="<%= typeof authorsPageNumber !== 'undefined' ? authorsPageNumber : (typeof messagesPageNumber !== 'undefined' ? messagesPageNumber : 0) %>"><span
+                    class="ml-2" data-uk-pgn-next></span></a></li>
+    </ul>
+</nav>

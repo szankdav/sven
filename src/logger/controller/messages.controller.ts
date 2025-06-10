@@ -38,7 +38,7 @@ export const messagesController = async (
 
     const renderObject: RenderObject = {
       viewName: 'messages',
-      options: { messagesPageNumber, authors, messagesSlicedByTen, error, isLoggedIn: true },
+      options: { messagesPageNumber, authors, messagesSlicedByTen, error, isLoggedIn: true, title: 'Discord Server Monitoring', layout: 'layout', styles: ['/css/index.css'], scripts: ['/js/pagination.js', '/js/messages.js', '/js/searchbar.js', '/js/navbar.js'] },
     };
 
     return renderObject;
@@ -65,14 +65,32 @@ export const messagesByAuthorsController = async (
     if (!author) {
       const renderObject: RenderObject = {
         viewName: 'author',
-        options: { authorFound: false, author, messages, isLoggedIn: true },
+        options: {
+          authorFound: false,
+          author,
+          messages,
+          isLoggedIn: true,
+          title: 'Discord Server Monitoring',
+          layout: 'layout',
+          styles: ['/css/index.css'],
+          scripts: ['/js/searchbar.js', '/js/navbar.js']
+        },
       };
       return renderObject;
     }
 
     const renderObject: RenderObject = {
       viewName: 'author',
-      options: { authorFound: true, author, messages, isLoggedIn: true },
+      options: {
+        authorFound: true,
+        author,
+        messages,
+        isLoggedIn: true,
+        title: 'Discord Server Monitoring',
+        layout: 'layout',
+        styles: ['/css/index.css'],
+        scripts: ['/js/searchbar.js', '/js/navbar.js']
+      },
     };
 
     return renderObject;

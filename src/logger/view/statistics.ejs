@@ -1,121 +1,104 @@
-<!doctype html>
-<html lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Discord Server Monitoring</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="/css/index.css">
-</head>
-
-<body>
-    <%- include('core/navbar'); %>
-        <div class="container mt-3">
-            <div class="row">
-                <div class="col-12">
-                    <%- include('core/search'); %>
-                </div>
-                <%if(authorFound){%>
-                    <div class="col-12 d-grid gap-2 d-md-block">
-                        <a data-testid="previousAuthorStatistics"
-                            href="/statistics/author/<%if(author.id>authors[0].id){%><%=author.id-1%><%}else{%><%=authors[0].id%><%}%>"
-                            class="btn btn-success">Previous author</a>
-                        <a data-testid="nextAuthorStatistics"
-                            href="/statistics/author/<%if(author.id<authors[authors.length - 1].id){%><%=author.id+1%><%}else{%><%=authors[authors.length - 1].id%><%}%>"
-                            class="btn btn-success">Next author</a>
-                    </div>
-                    <div class="col-12 mt-3">
-                        <h4>Author:</h4>
-                        <p data-testid="id">ID: <%if(author.id){%>
-                                <%= author.id %>
-                                    <%}else{%>
-                                        <%= "-" %>
-                                            <%}%>
-                        </p>
-                        <p data-testid="name">Name: <%= author.name %>
-                        </p>
-                        <p data-testid="created">Created: <%= author.createdAt %>
-                        </p>
-                    </div>
-                    <div class="col-12 d-grid gap-2 d-md-block">
-                        <%if(author.id){%><a class="btn btn-success" data-testid="goBackToAuthor"
-                                href="/messages/author/<%= author.id%>">Go back to
-                                author</a>
-                            <%}%>
-                                <%if(author.id){%><button id="seeStatistics" data-testid="seeStatistics"
-                                        class="btn btn-success">Show
-                                        statistics</button>
-                                    <%}%>
-                    </div>
-                    <div id="statistics" class="col-12 mt-3 d-none">
-                        <h4>
-                            <%if(author.id){%>
-                                <%= "Here you can see the usage rate of each letter out of all the letters typed by the author:"
-                                    %>
-                                    <%}else{%>
-                                        <%= "-" %>
-                                            <%}%>
-                        </h4>
-                        <% letterStatistics.forEach(stat=> { %>
-                            <% Object.entries(stat).forEach(([letter, percent])=> { %>
-                                <p class="mt-2">
-                                    <%= letter %>: <%= percent %>%
-                                </p>
-                                <div class="progress" role="progressbar" aria-label="Basic example"
-                                    aria-valuenow="<%= percent %>" aria-valuemin="0" aria-valuemax="100">
-                                    <div <% /* eslint-disable css-propertyvalueexpected */ %> class="progress-bar"
-                                        style="width: <%= percent %>%"></div>
-                                </div>
-                                <% }); %>
-                                    <% }); %>
-                    </div>
-                    <div class="col-12 mt-3">
-                        <table class="table table-striped">
-                            <thead>
-                                <th>ID</th>
-                                <th>Letter</th>
-                                <th>Count</th>
-                                <th>Created</th>
-                                <th>Updated</th>
-                            </thead>
-                            <tbody data-testid="statisticsTable">
-                                <% letterCounters.forEach(row=> { %>
-                                    <tr>
-                                        <td>
-                                            <%= row.id %>
-                                        </td>
-                                        <td>
-                                            <%= row.letter %>
-                                        </td>
-                                        <td>
-                                            <%= row.count %>
-                                        </td>
-                                        <td>
-                                            <%= row.createdAt %>
-                                        </td>
-                                        <td>
-                                            <%= row.updatedAt %>
-                                        </td>
-                                    </tr>
-                                    <% }) %>
-                            </tbody>
-                        </table>
-                    </div>
-                    <% }else{%>
-                        <div class="col-12">
-                            <h1>No author found with this ID!</h1>
-                            <a href="/home" class="btn btn-primary">Go back to home page</a>
-                        </div>
-                        <%}%>
+<div class="container mx-auto">
+    <div>
+        <%- include('partials/search'); %>
+    </div>
+    <%if(authorFound){%>
+        <div class="flex flex-row">
+            <div class="basis-1/4">
+                <a data-testid="previousAuthorStatistics"
+                    href="/statistics/author/<%if(author.id>authors[0].id){%><%=author.id-1%><%}else{%><%=authors[0].id%><%}%>"
+                    class="uk-btn uk-btn-default">Previous author</a>
             </div>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-            crossorigin="anonymous"></script>
-        <script defer src="/js/statistics.js"></script>
-        <script defer src="/js/searchbar.js"></script>
-        <script defer src="/js/navbar.js"></script>
-</body>
-
-</html>
+            <div class="basis-1/4">
+                <a data-testid="nextAuthorStatistics"
+                    href="/statistics/author/<%if(author.id<authors[authors.length - 1].id){%><%=author.id+1%><%}else{%><%=authors[authors.length - 1].id%><%}%>"
+                    class="uk-btn uk-btn-default">Next author</a>
+            </div>
+        </div>
+        <div>
+            <h4>Author:</h4>
+            <p data-testid="id">ID: <%if(author.id){%>
+                    <%= author.id %>
+                        <%}else{%>
+                            <%= "-" %>
+                                <%}%>
+            </p>
+            <p data-testid="name">Name: <%= author.name %>
+            </p>
+            <p data-testid="created">Created: <%= author.createdAt %>
+            </p>
+        </div>
+        <%if(author.id){%>
+            <div class="flex flex-row">
+                <div>
+                    <a class="uk-btn uk-btn-default" data-testid="goBackToAuthor"
+                        href="/messages/author/<%= author.id%>">Go
+                        back to
+                        author</a>
+                </div>
+                <div>
+                    <button id="seeStatistics" data-testid="seeStatistics" class="uk-btn uk-btn-default">Show
+                        statistics</button>
+                </div>
+            </div>
+            <%}%>
+                <div id="statistics" class="hidden">
+                    <h4>
+                        <%if(author.id){%>
+                            <%= "Here you can see the usage rate of each letter out of all the letters typed by the author:"
+                                %>
+                                <%}else{%>
+                                    <%= "-" %>
+                                        <%}%>
+                    </h4>
+                    <% letterStatistics.forEach(stat=> { %>
+                        <% Object.entries(stat).forEach(([letter, percent])=> { %>
+                            <p class="mt-2">
+                                <%= letter %>: <%= percent %>%
+                            </p>
+                            <progress class="uk-progress" value="<%= percent %>" max="100">
+                                <!-- <div <% /* eslint-disable css-propertyvalueexpected */ %> class="uk-progress"
+                                    style="width: <%= percent %>%"></div> -->
+                            </progress>
+                            <% }); %>
+                                <% }); %>
+                </div>
+                <div>
+                    <table class="uk-table uk-table-striped">
+                        <thead>
+                            <th>ID</th>
+                            <th>Letter</th>
+                            <th>Count</th>
+                            <th>Created</th>
+                            <th>Updated</th>
+                        </thead>
+                        <tbody data-testid="statisticsTable">
+                            <% letterCounters.forEach(row=> { %>
+                                <tr>
+                                    <td>
+                                        <%= row.id %>
+                                    </td>
+                                    <td>
+                                        <%= row.letter %>
+                                    </td>
+                                    <td>
+                                        <%= row.count %>
+                                    </td>
+                                    <td>
+                                        <%= row.createdAt %>
+                                    </td>
+                                    <td>
+                                        <%= row.updatedAt %>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+                <% }else{%>
+                    <div>
+                        <h1>No author found with this ID!</h1>
+                        <a href="/home" class="uk-btn uk-btn-default">Go back to home page</a>
+                    </div>
+                    <%}%>
+</div>

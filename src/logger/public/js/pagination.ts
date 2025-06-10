@@ -10,10 +10,10 @@ const setNavLinkActive = (): void => {
     if (
       activePage.includes((navLink as HTMLElement).textContent!.toLowerCase())
     ) {
-      (navLink as HTMLElement).classList.add('active');
+      (navLink as HTMLElement).classList.add('uk-active');
       pageURL = `/${(navLink as HTMLElement).textContent!.toLowerCase()}`;
     } else {
-      (navLink as HTMLElement).classList.remove('active');
+      (navLink as HTMLElement).classList.remove('uk-active');
     }
   });
 
@@ -57,11 +57,11 @@ const getCurrentPage = (): number => {
 };
 
 const hidePagination = (): void => {
-  previousButton?.classList.add('d-none');
-  firstPageNumberButton?.classList.add('d-none');
-  secondPageNumberButton?.classList.add('d-none');
-  thirdPageNumberButton?.classList.add('d-none');
-  nextButton?.classList.add('d-none');
+  previousButton?.classList.add('hidden');
+  firstPageNumberButton?.classList.add('hidden');
+  secondPageNumberButton?.classList.add('hidden');
+  thirdPageNumberButton?.classList.add('hidden');
+  nextButton?.classList.add('hidden');
 };
 
 const updatePagination = (pageNumber: number): void => {
@@ -75,7 +75,7 @@ const updatePagination = (pageNumber: number): void => {
     updatedPageNumber > 1 ? (updatedPageNumber - 1).toString() : '1';
     secondPageNumberButton!.innerText =
     updatedPageNumber === 1 ? (updatedPageNumber + 1).toString() : updatedPageNumber.toString();
-    thirdPageNumberButton?.classList.add('d-none');
+    thirdPageNumberButton?.classList.add('hidden');
     firstPageNumberButton!.href = `${pageURL}/${firstPageNumberButton?.innerText}`;
     secondPageNumberButton!.href = `${pageURL}/${secondPageNumberButton?.innerText}`;
     previousButton!.href =
@@ -83,8 +83,8 @@ const updatePagination = (pageNumber: number): void => {
     nextButton!.href =
     updatedPageNumber < maxPageNumber ? `${pageURL}/${updatedPageNumber + 1}` : '#';
 
-    previousButton?.classList.toggle('disabled', updatedPageNumber === 1);
-    nextButton?.classList.toggle('disabled', updatedPageNumber === maxPageNumber);
+    previousButton?.classList.toggle('disabled:opacity-75', updatedPageNumber === 1);
+    nextButton?.classList.toggle('disabled:opacity-75', updatedPageNumber === maxPageNumber);
   } else {
     const updatedPageNumber = Math.max(1, Math.min(pageNumber, maxPageNumber));
 
@@ -109,7 +109,7 @@ const updatePagination = (pageNumber: number): void => {
     thirdPageNumberButton!.innerText = thirdPageText;
 
     if (updatedPageNumber === maxPageNumber) {
-      thirdPageNumberButton?.classList.add('d-none');
+      thirdPageNumberButton?.classList.add('hidden');
     }
     firstPageNumberButton!.href = `${pageURL}/${firstPageNumberButton?.innerText}`;
     secondPageNumberButton!.href = `${pageURL}/${secondPageNumberButton?.innerText}`;
@@ -120,8 +120,8 @@ const updatePagination = (pageNumber: number): void => {
     nextButton!.href =
     updatedPageNumber < maxPageNumber ? `${pageURL}/${updatedPageNumber + 1}` : '#';
 
-    previousButton?.classList.toggle('disabled', updatedPageNumber === 1);
-    nextButton?.classList.toggle('disabled', updatedPageNumber === maxPageNumber);
+    previousButton?.classList.toggle('disabled:opacity-75', updatedPageNumber === 1);
+    nextButton?.classList.toggle('disabled:opacity-75', updatedPageNumber === maxPageNumber);
   }
 };
 

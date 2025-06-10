@@ -31,7 +31,7 @@ export const authorsController = async (
 
     const renderObject: RenderObject = {
       viewName: 'authors',
-      options: { authorsPageNumber, authorsSlicedByTen, error, isLoggedIn: true },
+      options: { authorsPageNumber, authorsSlicedByTen, error, isLoggedIn: true, title: 'Discord Server Monitoring', layout: 'layout', styles: ['/css/index.css'], scripts: ['/js/pagination.js', '/js/authors.js', '/js/searchbar.js', '/js/navbar.js'] },
     };
 
     return renderObject;

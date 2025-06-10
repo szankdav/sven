@@ -116,7 +116,10 @@ describe('statisticController tests', () => {
         authors,
         letterCounters,
         letterStatistics,
-        isLoggedIn: true
+        isLoggedIn: true, title: 'Discord Server Monitoring',
+        layout: 'layout',
+        styles: ['/css/index.css'],
+        scripts: ['/js/statistics.js', '/js/searchbar.js', '/js/navbar.js'],
       });
     });
 
@@ -138,7 +141,11 @@ describe('statisticController tests', () => {
         authors: null,
         letterCounters: null,
         letterStatistics: null,
-        isLoggedIn: true
+        isLoggedIn: true,
+        title: 'Discord Server Monitoring',
+        layout: 'layout',
+        styles: ['/css/index.css'],
+        scripts: ['/js/statistics.js', '/js/searchbar.js', '/js/navbar.js'],
       });
     });
 

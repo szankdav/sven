@@ -113,7 +113,11 @@ describe('message.controller tests', () => {
         authors,
         messagesSlicedByTen,
         error,
-        isLoggedIn: true
+        isLoggedIn: true,
+        title: 'Discord Server Monitoring',
+        layout: 'layout',
+        styles: ['/css/index.css'],
+        scripts: ['/js/pagination.js', '/js/messages.js', '/js/searchbar.js', '/js/navbar.js']
       });
     });
 
@@ -126,7 +130,7 @@ describe('message.controller tests', () => {
       expect(result).toBe(null);
     });
 
-        it('should return null if route not containing a positive number', async () => {
+    it('should return null if route not containing a positive number', async () => {
       vi.spyOn(messagesController, 'messagesController');
       const result: RenderObject | null = await messagesController.messagesController(
         db,
@@ -199,7 +203,11 @@ describe('message.controller tests', () => {
         authors,
         messagesSlicedByTen,
         error,
-        isLoggedIn: true
+        isLoggedIn: true,
+        title: 'Discord Server Monitoring',
+        layout: 'layout',
+        styles: ['/css/index.css'],
+        scripts: ['/js/pagination.js', '/js/messages.js', '/js/searchbar.js', '/js/navbar.js']
       });
     });
 
@@ -260,10 +268,15 @@ describe('message.controller tests', () => {
         testMessage2,
       ]);
       vi.spyOn(messagesController, 'messagesByAuthorsController');
-      const result: RenderObject | null=
+      const result: RenderObject | null =
         await messagesController.messagesByAuthorsController(db, [1]);
       expect(result!.viewName).toBe('author');
-      expect(result!.options).toStrictEqual({ authorFound: true, author, messages, isLoggedIn: true });
+      expect(result!.options).toStrictEqual({
+        authorFound: true, author, messages, isLoggedIn: true, title: 'Discord Server Monitoring',
+        layout: 'layout',
+        styles: ['/css/index.css'],
+        scripts: ['/js/searchbar.js', '/js/navbar.js']
+      });
     });
 
     it('should return with a valid renderObject if data is not valid', async () => {
@@ -275,7 +288,12 @@ describe('message.controller tests', () => {
       const result: RenderObject | null =
         await messagesController.messagesByAuthorsController(db, [10]);
       expect(result!.viewName).toBe('author');
-      expect(result!.options).toStrictEqual({ authorFound: false, author: undefined, messages, isLoggedIn: true });
+      expect(result!.options).toStrictEqual({
+        authorFound: false, author: undefined, messages, isLoggedIn: true, title: 'Discord Server Monitoring',
+        layout: 'layout',
+        styles: ['/css/index.css'],
+        scripts: ['/js/searchbar.js', '/js/navbar.js']
+      });
     });
 
     it('should throw an error with the correct message', async () => {

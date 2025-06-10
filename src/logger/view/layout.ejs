@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>
+        <%= title %>
+    </title>
+    <link rel="stylesheet" href="/css/style.css">
+    <% if (styles) { %>
+        <% styles.forEach(style=> { %>
+            <link rel="stylesheet" href="<%= style %>" />
+            <% }) %>
+                <% } %>
+                    <script src="https://cdn.jsdelivr.net/npm/franken-ui@2.0.0/dist/js/core.iife.js"
+                        type="module"></script>
+                    <script src="https://cdn.jsdelivr.net/npm/franken-ui@2.0.0/dist/js/icon.iife.js"
+                        type="module"></script>
+</head>
+
+<body class="flex flex-col md:flex-row min-h-screen bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100">
+    <%- include('partials/navbar') %>
+
+        <main class="flex-1 p-8 overflow-y-auto">
+            <%- body %>
+        </main>
+
+        <footer>
+
+        </footer>
+
+        <% if (scripts) { %>
+            <% scripts.forEach(script=> { %>
+                <script defer src="<%= script %>"></script>
+                <% }) %>
+                    <% } %>
+</body>
+
+</html>

@@ -3,4 +3,5 @@ export type DiscordUserResponse = {
     id: string,
     locale: string,
     username: string,
+    avatar: string
 }

@@ -82,7 +82,11 @@ describe('author.controller tests', () => {
         authorsPageNumber,
         authorsSlicedByTen,
         error,
-        isLoggedIn: true
+        isLoggedIn: true,
+        title: 'Discord Server Monitoring',
+        layout: 'layout',
+        styles: ['/css/index.css'],
+        scripts: ['/js/pagination.js', '/js/authors.js', '/js/searchbar.js', '/js/navbar.js']
       });
     });
 
@@ -95,7 +99,7 @@ describe('author.controller tests', () => {
       expect(result).toBe(null);
     });
 
-        it('should return null if route not containing a positive number', async () => {
+    it('should return null if route not containing a positive number', async () => {
       vi.spyOn(authorsController, 'authorsController');
       const result: RenderObject | null = await authorsController.authorsController(
         db,
@@ -135,7 +139,11 @@ describe('author.controller tests', () => {
         authorsPageNumber,
         authorsSlicedByTen,
         error,
-        isLoggedIn: true
+        isLoggedIn: true,
+        title: 'Discord Server Monitoring',
+        layout: 'layout',
+        styles: ['/css/index.css'],
+        scripts: ['/js/pagination.js', '/js/authors.js', '/js/searchbar.js', '/js/navbar.js']
       });
     });
 

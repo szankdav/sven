@@ -76,14 +76,36 @@ export const statisticsByAuthorController = async (
     if (!author) {
       const renderObject: RenderObject = {
         viewName: 'statistics',
-        options: { authorFound: false, author: null, authors: null, letterCounters: null, letterStatistics: null, isLoggedIn: true },
+        options: {
+          authorFound: false,
+          author: null,
+          authors: null,
+          letterCounters: null,
+          letterStatistics: null,
+          isLoggedIn: true,
+          title: 'Discord Server Monitoring',
+          layout: 'layout',
+          styles: ['/css/index.css'],
+          scripts: ['/js/statistics.js', '/js/searchbar.js', '/js/navbar.js'],
+        },
       };
       return renderObject;
     }
 
     const renderObject: RenderObject = {
       viewName: 'statistics',
-      options: { authorFound: true, author, authors, letterCounters, letterStatistics, isLoggedIn: true },
+      options: {
+        authorFound: true,
+        author,
+        authors,
+        letterCounters,
+        letterStatistics,
+        isLoggedIn: true,
+        title: 'Discord Server Monitoring',
+        layout: 'layout',
+        styles: ['/css/index.css'],
+        scripts: ['/js/statistics.js', '/js/searchbar.js', '/js/navbar.js']
+      },
     };
 
     return renderObject;

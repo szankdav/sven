@@ -1,6 +1,7 @@
 import express from 'express';
 import path from 'path';
 import cookieParser from 'cookie-parser';
+import expressLayouts from 'express-ejs-layouts';
 import { startSven } from './bot/client/sven.js';
 import { createTables } from './logger/database/tables.js';
 import { db } from './logger/database/database.js';
@@ -20,7 +21,7 @@ import { searchHandler } from './logger/handlers/search.handler.js';
 import { loginHandler } from './logger/handlers/login.handler.js';
 import { discordAuthGuardHandler } from './logger/handlers/discordAuth.handler.js';
 import { authUser } from './logger/handlers/authUser.handler.js';
-import { usernameHandler } from './logger/handlers/username.handler.js';
+import { userAvatarHandler, usernameHandler } from './logger/handlers/user.handler.js';
 import { loginErrorHandler } from './logger/handlers/loginError.handler.js';
 import { indexHandler } from './logger/handlers/index.handler.js';
 
@@ -35,6 +36,7 @@ const authRouter = express.Router({ mergeParams: true });
 const openRouter = express.Router({ mergeParams: true });
 app.use(cookieParser());
 app.set('view engine', 'ejs');
+app.use(expressLayouts);
 app.set('views', path.join(__dirname, 'logger/view'));
 app.use(express.json());
 const port = Number(process.env.PORT) || 3000;
@@ -63,6 +65,7 @@ authRouter.get('/messages/author/:id', messagesByAuthorsHandler);
 authRouter.get('/statistics/author/:id', statisticsByAuthorHandler);
 authRouter.post('/search', searchHandler);
 authRouter.get('/api/username', usernameHandler);
+authRouter.get('/api/useravatar', userAvatarHandler);
 
 app.use(express.static(path.join(__dirname, './logger/public')));
 app.use(express.static(path.join(__dirname, 'dist')));

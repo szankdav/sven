@@ -1,0 +1,15 @@
+<div class="container mx-auto">
+    <%if(routeError !=="" ){%>
+        <h1>
+            <%= routeError %>
+        </h1>
+        <h4>Please start from the <a class="errorHomePageAnchor" href="/home">Home</a> page!</h4>
+        <%}else if (loginError !=='' ){%>
+            <div class="loginError">
+                <h1 data-testid="loginError">
+                    <%= loginError %>
+                </h1>
+                <a class="uk-btn uk-btn-default" href="/">Go back</a>
+            </div>
+            <%}%>
+</div>

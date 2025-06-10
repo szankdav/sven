@@ -1,14 +1,9 @@
-body {
-  background-color: #012f6d;
-  color: white;
-}
-
-.imgDiv {
+/* .imgDiv {
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-}
+} */
 
 img {
     width: 15em;

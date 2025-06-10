@@ -1,0 +1,39 @@
+<header class="bg-gray-800 md:hidden">
+  <div class="container mx-auto px-4 flex items-center justify-between h-16">
+    <a href="<%= isLoggedIn ? '/home' : '/' %>" class="text-xl font-bold text-white">Server Logs</a>
+    <button id="mobile-menu-button" class="text-white hover:text-gray-100 focus:outline-none">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+    </button>
+  </div>
+  <%if(isLoggedIn===true ){%>
+    <div id="mobile-menu" class="hidden px-4 pb-4 bg-gray-800">
+      <a href="/home" class="block py-2 text-white hover:text-gray-100">Home</a>
+      <a href="/authors/1" class="block py-2 text-white hover:text-gray-100">Authors</a>
+      <a href="/messages/1" class="block py-2 text-white hover:text-gray-100">Messages</a>
+    </div>
+    <%}%>
+</header>
+
+<nav class="hidden md:flex md:w-64 bg-gray-900 text-white flex-col p-4 shadow-lg h-screen sticky top-0">
+  <div class="mb-8 text-2xl font-bold">Server Logs</div>
+  <%if(isLoggedIn===true ){%>
+    <ul class="space-y-4 flex-grow">
+      <li><a href="/home" class="block py-2 px-3 rounded hover:bg-gray-700">Home</a></li>
+      <li><a href="/authors/1" class="block py-2 px-3 rounded hover:bg-gray-700">Authors</a></li>
+      <li><a href="/messages/1" class="block py-2 px-3 rounded hover:bg-gray-700">Messages</a></li>
+    </ul>
+
+    <div class="mt-auto pt-4 border-t border-gray-700 flex flex-col items-center">
+      <img id="discordPic" alt="Discord Avatar" class="w-24 h-24 rounded-full object-cover mb-2">
+      <p id="discordName" class="text-white text-sm"></p>
+      <a href="#" class="block py-2 px-3 rounded hover:bg-gray-700 text-sm">Logout</a>
+    </div>
+    <%} else {%>
+      <div class="mt-auto pt-4 border-t border-gray-700">
+        <a href="#" class="block py-2 px-3 rounded hover:bg-gray-700 text-sm">Login</a>
+      </div>
+      <%}%>
+</nav>
