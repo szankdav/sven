@@ -21,9 +21,10 @@ import { searchHandler } from './logger/handlers/search.handler.js';
 import { loginHandler } from './logger/handlers/login.handler.js';
 import { discordAuthGuardHandler } from './logger/handlers/discordAuth.handler.js';
 import { authUser } from './logger/handlers/authUser.handler.js';
-import { userAvatarHandler, usernameHandler } from './logger/handlers/user.handler.js';
+import { userDataHandler } from './logger/handlers/user.handler.js';
 import { loginErrorHandler } from './logger/handlers/loginError.handler.js';
 import { indexHandler } from './logger/handlers/index.handler.js';
+import { logoutHandler } from './logger/handlers/logout.handler.js';
 
 // Start bots
 startSven();
@@ -64,8 +65,9 @@ authRouter.get('/messages/:page', messagesHandler);
 authRouter.get('/messages/author/:id', messagesByAuthorsHandler);
 authRouter.get('/statistics/author/:id', statisticsByAuthorHandler);
 authRouter.post('/search', searchHandler);
-authRouter.get('/api/username', usernameHandler);
-authRouter.get('/api/useravatar', userAvatarHandler);
+authRouter.get('/api/userdata', userDataHandler);
+authRouter.post('/logout', logoutHandler);
+// authRouter.get('/api/useravatar', userAvatarHandler);
 
 app.use(express.static(path.join(__dirname, './logger/public')));
 app.use(express.static(path.join(__dirname, 'dist')));

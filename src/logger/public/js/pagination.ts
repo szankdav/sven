@@ -1,33 +1,4 @@
-let pageURL: string;
-
-const setNavLinkActive = (): void => {
-  let activePage: string[] = window.location.href.split('/');
-  activePage = activePage.filter(Boolean);
-  const navLinks: HTMLCollectionOf<Element> =
-    document.getElementsByClassName('nav-link');
-
-  Array.from(navLinks).forEach((navLink: HTMLElement | unknown) => {
-    if (
-      activePage.includes((navLink as HTMLElement).textContent!.toLowerCase())
-    ) {
-      (navLink as HTMLElement).classList.add('uk-active');
-      pageURL = `/${(navLink as HTMLElement).textContent!.toLowerCase()}`;
-    } else {
-      (navLink as HTMLElement).classList.remove('uk-active');
-    }
-  });
-
-  // for (const navLink of navLinks) {
-  //   if (
-  //     activePage.includes((navLink as HTMLElement).textContent!.toLowerCase())
-  //   ) {
-  //     navLink.classList.add('active');
-  //     pageURL = `/${(navLink as HTMLElement).textContent!.toLowerCase()}`;
-  //   } else {
-  //     navLink.classList.remove('active');
-  //   }
-  // }
-};
+const paginationNav = document.querySelector('nav[aria-label="Pagination"]');
 
 const previousButton = document.getElementById(
   'previousButton',
@@ -48,7 +19,7 @@ const thirdPageNumberButton = document.getElementById(
 const maxNum: string | undefined = nextButton?.dataset.maxpages;
 const maxPageNumber: number = !Number.isNaN(Number(maxNum)) ? Number(maxNum) : 1;
 
-const getCurrentPage = (): number => {
+const getCurrentPageNumber = (): number => {
   const segments: string[] = window.location.pathname
     .split('/')
     .filter(Boolean);
@@ -57,90 +28,90 @@ const getCurrentPage = (): number => {
 };
 
 const hidePagination = (): void => {
-  previousButton?.classList.add('hidden');
-  firstPageNumberButton?.classList.add('hidden');
-  secondPageNumberButton?.classList.add('hidden');
-  thirdPageNumberButton?.classList.add('hidden');
-  nextButton?.classList.add('hidden');
+  paginationNav?.classList.add('hidden');
 };
 
-const updatePagination = (pageNumber: number): void => {
+const updatePagination = (currentPage: number): void => {
+  let firstPageInPagination: number | null = null;
+  let secondPageInPagination: number | null = null;
+  let thirdPageInPagination: number | null = null;
+
   if (maxPageNumber <= 1) {
     hidePagination();
-    
-  } else if (maxPageNumber === 2) {
-    const updatedPageNumber = Math.max(1, Math.min(pageNumber, maxPageNumber));
+    return;
+  }
 
-    firstPageNumberButton!.innerText =
-    updatedPageNumber > 1 ? (updatedPageNumber - 1).toString() : '1';
-    secondPageNumberButton!.innerText =
-    updatedPageNumber === 1 ? (updatedPageNumber + 1).toString() : updatedPageNumber.toString();
-    thirdPageNumberButton?.classList.add('hidden');
-    firstPageNumberButton!.href = `${pageURL}/${firstPageNumberButton?.innerText}`;
-    secondPageNumberButton!.href = `${pageURL}/${secondPageNumberButton?.innerText}`;
-    previousButton!.href =
-    updatedPageNumber > 1 ? `${pageURL}/${updatedPageNumber - 1}` : '#';
-    nextButton!.href =
-    updatedPageNumber < maxPageNumber ? `${pageURL}/${updatedPageNumber + 1}` : '#';
-
-    previousButton?.classList.toggle('disabled:opacity-75', updatedPageNumber === 1);
-    nextButton?.classList.toggle('disabled:opacity-75', updatedPageNumber === maxPageNumber);
-  } else {
-    const updatedPageNumber = Math.max(1, Math.min(pageNumber, maxPageNumber));
-
-    firstPageNumberButton!.innerText =
-    updatedPageNumber > 1 ? (updatedPageNumber - 1).toString() : '1';
-    secondPageNumberButton!.innerText =
-    updatedPageNumber === 1 ? (updatedPageNumber + 1).toString() : updatedPageNumber.toString();
-    // thirdPageNumberButton!.innerText =
-    // updatedPageNumber === 1
-    //     ? (updatedPageNumber + 2).toString()
-    //     : updatedPageNumber < maxPageNumber
-    //       ? (updatedPageNumber + 1).toString()
-    //       : '';
-
-    let thirdPageText = '';
-    if (updatedPageNumber === 1) {
-      thirdPageText = (updatedPageNumber + 2).toString();
-    } else if (updatedPageNumber < maxPageNumber) {
-      thirdPageText = (updatedPageNumber + 1).toString();
+  if (maxPageNumber === 2) {
+    firstPageInPagination = 1;
+    secondPageInPagination = 2;
+  } else if (maxPageNumber >= 3){
+    if (currentPage === 1) {
+      firstPageInPagination = 1;
+      secondPageInPagination = 2;
+      thirdPageInPagination = 3;
+    } else if (currentPage === maxPageNumber) {
+      firstPageInPagination = maxPageNumber - 2;
+      secondPageInPagination = maxPageNumber - 1;
+      thirdPageInPagination = maxPageNumber;
+    } else {
+      firstPageInPagination = currentPage - 1;
+      secondPageInPagination = currentPage;
+      thirdPageInPagination = currentPage + 1;
     }
+  }
 
-    thirdPageNumberButton!.innerText = thirdPageText;
+    const pageButtons = [
+    { button: firstPageNumberButton, pageNumber: firstPageInPagination },
+    { button: secondPageNumberButton, pageNumber: secondPageInPagination },
+    { button: thirdPageNumberButton, pageNumber: thirdPageInPagination },
+  ];
 
-    if (updatedPageNumber === maxPageNumber) {
-      thirdPageNumberButton?.classList.add('hidden');
-    }
-    firstPageNumberButton!.href = `${pageURL}/${firstPageNumberButton?.innerText}`;
-    secondPageNumberButton!.href = `${pageURL}/${secondPageNumberButton?.innerText}`;
-    thirdPageNumberButton!.href = `${pageURL}/${thirdPageNumberButton?.innerText}`;
+  pageButtons.forEach(({ button, pageNumber }) => {
+    if(button){
+      if(pageNumber !== null){
+        // eslint-disable-next-line no-param-reassign
+        button.innerText = pageNumber.toString();
+        // eslint-disable-next-line no-param-reassign
+        button.href = `${pageNumber}`;
+        button.classList.remove('hidden');
+      } else {
+        button.classList.add('hidden');
+      }
+    };
+  });
 
-    previousButton!.href =
-    updatedPageNumber > 1 ? `${pageURL}/${updatedPageNumber - 1}` : '#';
-    nextButton!.href =
-    updatedPageNumber < maxPageNumber ? `${pageURL}/${updatedPageNumber + 1}` : '#';
+  if (previousButton) {
+    previousButton.href = `${currentPage - 1}`;
+    previousButton.classList.toggle('disabled:opacity-50', currentPage <= 1);
+    previousButton.classList.toggle('pointer-events-none', currentPage <= 1); // Disable clicks too
+    previousButton.setAttribute('aria-disabled', (currentPage <= 1).toString());
+    previousButton.tabIndex = currentPage <= 1 ? -1 : 0; // Accessibility
+  }
 
-    previousButton?.classList.toggle('disabled:opacity-75', updatedPageNumber === 1);
-    nextButton?.classList.toggle('disabled:opacity-75', updatedPageNumber === maxPageNumber);
+  if (nextButton) {
+    nextButton.href = `${currentPage + 1}`;
+    nextButton.classList.toggle('disabled:opacity-50', currentPage >= maxPageNumber);
+    nextButton.classList.toggle('pointer-events-none', currentPage >= maxPageNumber); // Disable clicks too
+    nextButton.setAttribute('aria-disabled', (currentPage >= maxPageNumber).toString());
+    nextButton.tabIndex = currentPage >= maxPageNumber ? -1 : 0; // Accessibility
   }
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-  setNavLinkActive();
-  const pageNumber = getCurrentPage();
-  updatePagination(pageNumber);
+  const currentPage = getCurrentPageNumber();
+  updatePagination(currentPage);
 
   previousButton?.addEventListener('click', (event) => {
     event.preventDefault();
-    if (pageNumber > 1) {
-      window.location.href = `${pageURL}/${pageNumber - 1}`;
+    if (currentPage > 1) {
+      window.location.href = `${currentPage - 1}`;
     }
   });
 
   nextButton?.addEventListener('click', (event) => {
     event.preventDefault();
-    if (pageNumber < maxPageNumber) {
-      window.location.href = `${pageURL}/${pageNumber + 1}`;
+    if (currentPage < maxPageNumber) {
+      window.location.href = `${currentPage + 1}`;
     }
   });
 });

@@ -31,30 +31,24 @@ const displaySearchResult = async () => {
     const matchingAuthors = await searchForAuthors();
     if (matchingAuthors.length === 0) {
         searchResults.innerHTML = '';
-        const a = document.createElement('a');
-        a.classList.add('block');
-        a.classList.add('p-2');
-        a.classList.add('text-white');
-        a.classList.add('hover:bg-gray-700');
-        a.classList.add('rounded-md');
-        a.classList.add('cursor-pointer');
-        a.innerText = 'No author found!';
-        searchResults.append(a);
+        const li = document.createElement('li');
+        const classes = ['px-4', 'py-2', 'hover:bg-gray-700', 'cursor-pointer', 'text-gray-300', 'hover:text-white', 'transition-colors', 'duration-150'];
+        li.classList.add(...classes);
+        li.innerText = 'No author found!';
+        searchResults.append(li);
     } else {
         searchResults.innerHTML = '';
         for (let i = 0; i < matchingAuthors.length; i++) {
-            const a = document.createElement('a');
-            a.classList.add('block');
-            a.classList.add('p-2');
-            a.classList.add('text-white');
-            a.classList.add('hover:bg-gray-700');
-            a.classList.add('rounded-md');
-            a.classList.add('cursor-pointer');
-            a.innerText = matchingAuthors[i].name;
-            a.href = `/messages/author/${matchingAuthors[i].id}`;
-            searchResults.append(a);
+            const li = document.createElement('li');
+            const classes = ['px-4', 'py-2', 'hover:bg-gray-700', 'cursor-pointer', 'text-gray-300', 'hover:text-white', 'transition-colors', 'duration-150'];
+            li.classList.add(...classes);
+            li.innerText = matchingAuthors[i].name;
+            li.addEventListener('click', () => {
+                window.location.href = `/messages/author/${matchingAuthors[i].id}`;
+            });
+            searchResults.append(li);
         }
-        searchResults.classList.remove('hidden');
+        searchResults.setAttribute('data-show', 'true');
     }
 };
 
@@ -63,14 +57,18 @@ if (searchInput) {
 };
 
 document.addEventListener('click', (e: Event) => {
-    const targetElement = e.target as HTMLElement;
-    if (!searchInput.contains(targetElement) && !searchResults.contains(targetElement)) {
-        searchResults.classList.add('hidden');
+    if (searchInput) {
+        const targetElement = e.target as HTMLElement;
+        if (!searchInput.contains(targetElement) && !searchResults.contains(targetElement)) {
+            searchResults.setAttribute('data-show', 'false');
+        }
     }
 });
 
 document.addEventListener('keydown', (event: KeyboardEvent) => {
-    if (event.key === 'Escape') {
-        searchResults.classList.add('hidden');
+    if (searchInput) {
+        if (event.key === 'Escape') {
+            searchResults.setAttribute('data-show', 'false');
+        }
     }
 });

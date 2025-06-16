@@ -11,10 +11,10 @@ export const homeHandler = async (
     const isLoggedIn = await authUserService(req);
     res.render('home', {
             isLoggedIn,
-            title: 'Discord Server Monitoring',
+            title: 'Dashboard',
             layout: 'layout',
             styles: ['/css/index.css'],
-            scripts: ['/js/searchbar.js', '/js/navbar.js'],
+            scripts: ['/js/navbar.js'],
         });
   } catch (error) {
     logger.error('Home handler error:', error);

@@ -1,11 +1,6 @@
-<div class="container mx-auto h-screen grid place-items-center">
-    <div class="grid grid-flow-row auto-rows-min gap-12">
-        <div class="imgDiv">
-            <img data-testid="loadingImg" src="/asserts/discord_logo.png" alt="Discord Logo">
-        </div>
-        <div class="justify-self-center">
-            <p data-testid="loadingText"><span class="loading">Loading<span class="dots"></span></span></p>
-        </div>
+<div class="container mx-auto flex flex-col items-center justify-center min-h-screen">
+    <div class="text-center space-y-4">
+        <img id="loadingImg" data-testid="loadingImg" src="/asserts/discord_logo.png" alt="Discord Logo">
+        <p class="mt-15 font-bold" data-testid="loadingText"><span class="loading font-bold">Loading<span class="dots"></span></span></p>
     </div>
-</div>
 </div>

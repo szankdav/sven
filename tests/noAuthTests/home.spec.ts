@@ -1,52 +1,75 @@
 import { test, expect } from '@playwright/test';
 
-test('/ page should display the correct title and text', async ({ page }) => {
-  await page.goto('http://localhost:3000/home');
-  await expect(page).toHaveTitle('Discord Server Monitoring');
-  await expect(page.getByTestId('welcomeH1')).toHaveText(
-    'Welcome to Discord Logger! (Watched by Watchtower!)',
-  );
-  await expect(page.getByTestId('welcomeH3')).toHaveText(
-    'Here you can find all of the users that ever sent a message on your server.',
-  );
-  await expect(page.getByTestId('welcomeP')).toHaveText(
-    'If you want to see the users, go to Authors page. If you want to see all the messages, go to Messages page.',
-  );
-});
+const BASE_URL = 'http://localhost:3000';
 
-test('/home page Authors navigation link should work correctly', async ({
-  page,
-}) => {
-  await page.goto('http://localhost:3000/home');
-  await page.click('text=Author');
-  await expect(page).toHaveURL(/.*authors/);
-});
+test.describe('Dashboard Page', () => {
+    test.beforeEach(async ({ page }) => {
+        await page.goto(`${BASE_URL}/home`);
+    });
 
-test('/home page Messages navigation link should work correctly', async ({
-  page,
-}) => {
-  await page.goto('http://localhost:3000/home');
-  await page.click('text=Messages');
-  await expect(page).toHaveURL(/.*messages/);
-});
+    test('should display the main dashboard heading and cards correctly', async ({ page }) => {
+        await expect(page).toHaveTitle(/Dashboard/);
+
+        const dashboardHeader = page.getByRole('heading', { name: 'Dashboard', level: 1 });
+        await expect(dashboardHeader).toBeVisible();
+        await expect(dashboardHeader).toHaveClass(/text-4xl/);
+
+        const authorsCard = page.locator('a[href="/authors/1"]');
+        await expect(authorsCard).toBeVisible();
+        await expect(authorsCard).toHaveClass(/block/);
+
+        const authorsImage = authorsCard.locator('img[alt="Authors"]');
+        await expect(authorsImage).toBeVisible();
+        await expect(authorsImage).toHaveAttribute('src', '/asserts/authors.jpg');
+
+        const authorsHeading = authorsCard.getByRole('heading', { name: 'All Authors', level: 2 });
+        await expect(authorsHeading).toBeVisible();
+        await expect(authorsHeading).toHaveText('All Authors');
+
+        const authorsDescription = authorsCard.locator('p', { hasText: 'Explore the list of all contributing authors.' });
+        await expect(authorsDescription).toBeVisible();
+        await expect(authorsDescription).toHaveText('Explore the list of all contributing authors.');
 
 
-test('/home page search bar should display results in the dropdown menu if a letter is written in it', async ({ page }) => {
-  await page.goto('http://localhost:3000/home');
-  const searchInput = page.getByTestId('searchInput');
-  await searchInput.click();
-  await searchInput.press('a');
-  const searchDropdown = page.getByTestId('searchDropdown');
-  await expect(searchDropdown).toBeVisible();
-  expect(await searchDropdown.locator('li').count()).toBeGreaterThanOrEqual(1);
-});
+        const messagesCard = page.locator('a[href="/messages/1"]');
+        await expect(messagesCard).toBeVisible();
+        await expect(messagesCard).toHaveClass(/block/);
 
-test('/home page search bar should display the proper message in the dropdown menu if there is no result', async ({ page }) => {
-  await page.goto('http://localhost:3000/home');
-  const searchInput = page.getByTestId('searchInput');
-  await searchInput.click();
-  await searchInput.pressSequentially('aaaaaa');
-  const searchDropdown = page.getByTestId('searchDropdown');
-  await expect(searchDropdown).toBeVisible();
-  expect(await searchDropdown.locator('li').textContent()).toBe('No author found!');
+        const messagesImage = messagesCard.locator('img[alt="Messages"]');
+        await expect(messagesImage).toBeVisible();
+        await expect(messagesImage).toHaveAttribute('src', '/asserts/messages.jpg');
+
+        const messagesHeading = messagesCard.getByRole('heading', { name: 'All Messages', level: 2 });
+        await expect(messagesHeading).toBeVisible();
+        await expect(messagesHeading).toHaveText('All Messages');
+
+        const messagesDescription = messagesCard.locator('p', { hasText: 'View and manage all messages from your users.' });
+        await expect(messagesDescription).toBeVisible();
+        await expect(messagesDescription).toHaveText('View and manage all messages from your users.');
+    });
+
+    test('should navigate to authors page when "All Authors" card is clicked', async ({ page }) => {
+        const authorsCard = page.locator('a[href="/authors/1"]');
+        await expect(authorsCard).toBeVisible();
+
+        await authorsCard.click();
+
+        await expect(page).toHaveURL(`${BASE_URL}/authors/1`);
+        await expect(page.getByRole('heading', { name: 'Server Authors' })).toBeVisible();
+    });
+
+    test('should navigate to messages page when "All Messages" card is clicked', async ({ page }) => {
+        const messagesCard = page.locator('a[href="/messages/1"]');
+        await expect(messagesCard).toBeVisible();
+
+        await messagesCard.click();
+
+        await expect(page).toHaveURL(`${BASE_URL}/messages/1`);
+        await expect(page.getByRole('heading', { level: 1, name: 'Messages' })).toBeVisible();
+    });
+
+    test('should have correct styling on cards', async ({ page }) => {
+        const authorsCardDiv = page.locator('a[href="/authors/1"] > div');
+        await expect(authorsCardDiv).toHaveClass(/bg-gray-50 dark:bg-gray-800 rounded-lg shadow-lg/);
+    });
 });

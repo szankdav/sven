@@ -1,36 +1,23 @@
 const usernameInNavbar = document.getElementById('discordName') as HTMLElement;
 const userAvatarInNavbar = document.getElementById('discordPic') as HTMLImageElement;
+const logoutButton = document.getElementById('logoutButton') as HTMLButtonElement;
 
-const getLoggedInUserName = async () => {
-    const result = await fetch('/api/username', {
+const getLoggedInUserData = async () => {
+    const result = await fetch('/api/userdata', {
         headers: { 'Content-Type': 'application/json' },
     });
 
     if (result.status === 200) {
-        const { username, global_name } = await result.json();
+        const { username, global_name, userAvatar, userId } = await result.json();
         usernameInNavbar.innerText = `${global_name} (${username})`;
         usernameInNavbar.style.fontStyle = 'italic';
         usernameInNavbar.style.fontWeight = 'bold';
+        userAvatarInNavbar.src = `https://cdn.discordapp.com/avatars/${userId}/${userAvatar}.jpg`;
     }
 };
 
-const getLoggedInUserAvatar = async () => {
-    const result = await fetch('/api/useravatar', {
-        headers: { 'Content-Type': 'application/json' },
-    });
-
-    if (result.status === 200) {
-        const userData = await result.json();
-        userAvatarInNavbar.src = `https://cdn.discordapp.com/avatars/${userData.userId}/${userData.userAvatar}.jpg`;
-    }
-};
-
-if (usernameInNavbar) {
-    getLoggedInUserName();
-};
-
-if (userAvatarInNavbar) {
-    getLoggedInUserAvatar();
+if (usernameInNavbar && userAvatarInNavbar) {
+    getLoggedInUserData();
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -43,3 +30,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+if(logoutButton){
+    document.addEventListener('click', async () => {
+        const result = await fetch('/logout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username: usernameInNavbar.innerText }),
+        });
+
+        if(result.status === 200){
+            window.location.href = '/';
+        };
+    });
+};

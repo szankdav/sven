@@ -1,14 +1,33 @@
-<div class="container mx-auto">
-    <div class="grid grid-flow-row auto-rows-min">
-        <div>
-            <%- include('partials/search'); %>
-        </div>
-        <div>
-            <h1 data-testid="welcomeH1">Welcome to Discord Logger! (Watched by Watchtower!) </h1>
-            <h3 data-testid="welcomeH3">Here you can find all of the users that ever sent a message on your server.</h3>
-            <p data-testid="welcomeP">If you want to see the users, go to <a href="/authors/1">Authors</a> page. If you
-                want to see all
-                the messages, go to <a href="/messages/1">Messages</a> page.</p>
-        </div>
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-4xl md:text-5xl font-extrabold mb-10 text-center">Dashboard</h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 justify-content-center">
+        <a href="/authors/1" class="block">
+            <div
+                class="bg-gray-50 dark:bg-gray-800 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1 group">
+                <img src="/asserts/authors.jpg" alt="Authors"
+                    class="w-full h-48 object-cover rounded-t-lg">
+                <div class="p-6">
+                    <h2
+                        class="text-2xl dark:text-white font-bold mb-2 group-hover:text-purple-700 transition-colors duration-300">
+                        All Authors</h2>
+                    <p class="dark:text-white">Explore the list of all contributing authors.</p>
+                </div>
+            </div>
+        </a>
+
+        <a href="/messages/1" class="block">
+            <div
+                class="bg-gray-50 dark:bg-gray-800 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1 group">
+                <img src="/asserts/messages.jpg" alt="Messages"
+                    class="w-full h-48 object-cover rounded-t-lg">
+                <div class="p-6">
+                    <h2
+                        class="text-2xl dark:text-white font-bold mb-2 group-hover:text-purple-700 transition-colors duration-300">
+                        All Messages</h2>
+                    <p class="dark:text-white">View and manage all messages from your users.</p>
+                </div>
+            </div>
+        </a>
     </div>
 </div>

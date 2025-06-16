@@ -1,55 +1,84 @@
-<div class="container mx-auto">
-    <%if(error==="" ){%>
-        <div>
-            <%- include('partials/search'); %>
-        </div>
-        <div>
-            <%- include('partials/pagination'); %>
-        </div>
-        <div>
-            <h4>Here you can see all the messages sent on your server! If you want to see an author's
-                messages, click on the author's name!</h4>
-        </div>
-        <div>
-            <table class="uk-table uk-table-striped">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Author</th>
-                        <th>Content</th>
-                        <th>Created</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% messagesSlicedByTen.forEach(row=> { %>
-                        <tr class="messageRow" data-id="<%= row.id %>">
-                            <td>
-                                <%= row.id %>
-                            </td>
-                            <td class="authorName" data-authorid="<%= row.authorId %>">
-                                <% authors.forEach(authorRow=> { %>
-                                    <% if(row.authorId===authorRow.id) { %>
-                                        <%= authorRow.name %>
-                                            <% } %>
-
-                                                <% }) %>
-                            </td>
-                            <td>
-                                <%= row.content %>
-                            </td>
-                            <td>
-                                <%= row.messageCreatedAt %>
-                            </td>
-                        </tr>
-                        <% }) %>
-                </tbody>
-            </table>
-        </div>
-        <%}else{%>
-            <h4>
-                <%= error %>
+<div class="container mx-auto px-4 py-8">
+    <% if (error==="" ) { %>
+        <div class="rounded-lg shadow-lg p-6 mb-8">
+            <h1 class="text-3xl font-bold text-white mb-4">Messages</h1>
+            <h4 class="text-xl md:text-2xl font-semibold text-gray-200">
+                Here you can see all the messages sent on your server! If you want to see an author's messages, click on
+                the author's name!
             </h4>
-            <a data-testid="goBack" class="uk-btn uk-btn-default" href="/home">Go back to
-                home page</a>
-            <%}%>
-</div>
+
+            <div class="flex flex-col space-y-4 mb-6">
+                <div class="w-full">
+                    <%- include('partials/search'); %>
+                </div>
+                <div class="w-full">
+                    <%- include('partials/pagination'); %>
+                </div>
+            </div>
+
+            <div class="overflow-x-auto rounded-lg shadow-xl border border-gray-700 discord-card-bg">
+                <table class="min-w-full divide-y divide-gray-700">
+                    <thead class="bg-gray-800">
+                        <tr>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                ID
+                            </th>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                Author</th>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                Content</th>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                Created</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-700">
+                        <% messagesSlicedByTen.forEach(row=> { %>
+                            <tr class="messageRow hover:bg-gray-700 transition-colors duration-150 cursor-pointer"
+                                data-id="<%= row.id %>">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-300">
+                                    <%= row.id %>
+                                </td>
+                                <td class="authorName px-6 py-4 whitespace-nowrap text-sm text-discord-blurple font-medium hover:underline"
+                                    data-authorid="<%= row.authorId %>">
+                                    <% authors.forEach(authorRow=> { %>
+                                        <% if (row.authorId===authorRow.id) { %>
+                                            <%= authorRow.name %>
+                                                <% } %>
+                                                    <% }) %>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300 max-w-lg truncate">
+                                    <%= row.content %>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                                    <%= row.messageCreatedAt %>
+                                </td>
+                            </tr>
+                            <% }) %>
+                    </tbody>
+                </table>
+            </div>
+
+            <% } else { %>
+                <div
+                    class="text-red-900 font-bold px-4 py-3 rounded-lg text-center mb-6">
+                    <p class="text-lg">
+                        <%= error %>
+                    </p>
+                </div>
+                <div class="text-center">
+                    <a data-testid="goBack" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm
+                      text-white bg-gray-900 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors duration-200" href="/home">
+                        <svg class="-ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                            fill="currentColor" aria-hidden="true">
+                            <path
+                                d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                        </svg>
+                        Go back to home page
+                    </a>
+                </div>
+                <% } %>
+        </div>

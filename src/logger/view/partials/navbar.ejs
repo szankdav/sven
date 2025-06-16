@@ -10,14 +10,15 @@
   </div>
   <%if(isLoggedIn===true ){%>
     <div id="mobile-menu" class="hidden px-4 pb-4 bg-gray-800">
-      <a href="/home" class="block py-2 text-white hover:text-gray-100">Home</a>
+      <a href="/home" class="block py-2 text-white hover:text-gray-100">Dashboard</a>
       <a href="/authors/1" class="block py-2 text-white hover:text-gray-100">Authors</a>
       <a href="/messages/1" class="block py-2 text-white hover:text-gray-100">Messages</a>
     </div>
     <%}%>
 </header>
 
-<nav class="hidden md:flex md:w-64 bg-gray-900 text-white flex-col p-4 shadow-lg h-screen sticky top-0">
+<nav
+  class="hidden md:flex md:w-64 bg-gray-900 text-white flex-col p-4 shadow-lg h-screen sticky top-0 <%= typeof colSpanClass !== 'undefined' ? colSpanClass : '' %>">
   <div class="mb-8 text-2xl font-bold">Server Logs</div>
   <%if(isLoggedIn===true ){%>
     <ul class="space-y-4 flex-grow">
@@ -29,11 +30,12 @@
     <div class="mt-auto pt-4 border-t border-gray-700 flex flex-col items-center">
       <img id="discordPic" alt="Discord Avatar" class="w-24 h-24 rounded-full object-cover mb-2">
       <p id="discordName" class="text-white text-sm"></p>
-      <a href="#" class="block py-2 px-3 rounded hover:bg-gray-700 text-sm">Logout</a>
+      <button id="logoutButton" class="block py-2 px-3 rounded hover:bg-gray-700 text-sm cursor-pointer">Logout</button>
     </div>
     <%} else {%>
       <div class="mt-auto pt-4 border-t border-gray-700">
-        <a href="#" class="block py-2 px-3 rounded hover:bg-gray-700 text-sm">Login</a>
+        <a href="https://discord.com/oauth2/authorize?client_id=1352273717623001209&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Flogin&scope=guilds+identify"
+          class="block py-2 px-3 rounded hover:bg-gray-700 text-sm">Login</a>
       </div>
       <%}%>
 </nav>

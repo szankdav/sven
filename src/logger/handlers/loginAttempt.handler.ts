@@ -4,6 +4,8 @@ import { DiscordOAuthTokenResponse } from '../types/discordOAuthTokenResponse.js
 import { getDiscordUserService } from '../services/user.service.js';
 import { getUserServersService } from '../services/guilds.service.js';
 import { oauthService } from '../services/oauth.service.js';
+import { svenServers } from '../../bot/client/sven.js';
+import { userGuild } from '../types/userGuild.type.js';
 
 const createCookies = (res: Response, oauthData: DiscordOAuthTokenResponse) => {
     res.cookie('access_token', oauthData.access_token, {
@@ -12,6 +14,11 @@ const createCookies = (res: Response, oauthData: DiscordOAuthTokenResponse) => {
         sameSite: 'lax',
         maxAge: 3600 * 1000,
     });
+};
+
+const canLogIn = async (userGuilds: Array<userGuild>): Promise<boolean> => {
+    const botServers: Array<string> = (await svenServers()).map((server) => server.id);
+    return userGuilds.some(guild => botServers.includes(guild.id) && guild.permissions === 2147483647);
 };
 
 export const loginAttemptHandler = async (req: Request,
@@ -38,15 +45,22 @@ export const loginAttemptHandler = async (req: Request,
             return;
         }
 
-        const guilds = await getUserServersService(oauthData.token_type, oauthData.access_token);
+        const guilds: Array<userGuild> | null = await getUserServersService(oauthData.token_type, oauthData.access_token);
         if (guilds === null) {
             res.redirect('/error');
             return;
         }
 
-        createCookies(res, oauthData);
-        logger.info(`Successful login with username: ${username}`);
-        res.redirect('/home');
+        if (await canLogIn(guilds)) {
+            createCookies(res, oauthData);
+            logger.info(`Successful login with username: ${username.username}`);
+            res.redirect('/home');
+        } else {
+            logger.error(`Unsuccesfull login because of insufficient permissions with username: ${username.username}`);
+            res.redirect('/error');
+            return;
+        };
+
     } catch (error) {
         logger.error(error);
         next();

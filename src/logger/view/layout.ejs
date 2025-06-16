@@ -19,22 +19,23 @@
                         type="module"></script>
 </head>
 
-<body class="flex flex-col md:flex-row min-h-screen bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100">
-    <%- include('partials/navbar') %>
+<body class="grid min-h-screen bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100">
+    <div class="grid grid-cols-1 md:grid-cols-[auto_1fr] grid-rows-[auto_1fr_auto] min-h-screen">
+        <%- include('partials/navbar', { colSpanClass: 'md:col-start-1 md:row-span-full' }) %>
 
-        <main class="flex-1 p-8 overflow-y-auto">
-            <%- body %>
-        </main>
+            <main class="col-span-1 md:col-start-2 row-start-2 overflow-y-auto">
+                <%- body %>
+            </main>
 
-        <footer>
-
-        </footer>
-
-        <% if (scripts) { %>
-            <% scripts.forEach(script=> { %>
-                <script defer src="<%= script %>"></script>
-                <% }) %>
-                    <% } %>
+            <footer class="col-span-1 md:col-start-2 row-start-3 text-gray-400 text-sm text-center py-4 px-6 mt-auto">
+                &copy; <%= new Date().getFullYear() %> Server Logs. All rights reserved.
+            </footer>
+    </div>
+    <% if (scripts) { %>
+        <% scripts.forEach(script=> { %>
+            <script defer src="<%= script %>"></script>
+            <% }) %>
+                <% } %>
 </body>
 
 </html>

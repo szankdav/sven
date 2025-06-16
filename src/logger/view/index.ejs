@@ -1,17 +1,10 @@
-<div class="container mx-auto">
-    <div class="grid grid-cols-1 px-4">
-        <%if(isLoggedIn!==true ){%>
-            <div>
-                <h1 data-testid="welcomeH1">Welcome to our site! Please log in with
-                    your Discord account to browse your server's statistics!</h1>
-                <a class="uk-btn uk-btn-default"
-                    href="https://discord.com/oauth2/authorize?client_id=1352273717623001209&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Flogin&scope=guilds+identify">Click
-                    here!</a>
-            </div>
-            <%}else{%>
-                <div>
-                    <h1>Welcome to your Discord Server Monitoring site!</h1>
-                </div>
-                <%}%>
+<div class="container mx-auto flex flex-col items-center justify-center min-h-screen">
+    <div class="text-center space-y-4">
+        <h1 class="text-base md:text-2xl font-bold" data-testid="welcomeH1">Know Your Server</h1>
+        <p class="text-sm text-gray-600">Monitor, Collect Statistics, Make Conclusions</p>
+        <a class="mt-6 inline-block py-2 px-6 rounded-lg bg-gray-700 hover:bg-gray-600 text-white border border-white transition duration-300 ease-in-out"
+            href="https://discord.com/oauth2/authorize?client_id=1352273717623001209&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Flogin&scope=guilds+identify">
+            Login
+        </a>
     </div>
 </div>

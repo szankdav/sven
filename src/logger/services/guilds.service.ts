@@ -1,7 +1,8 @@
 import { request } from 'undici';
 import { logger } from '../../winston/winston.js';
+import { userGuild } from '../types/userGuild.type.js';
 
-export const getUserServersService = async (token_type: string, access_token: string) => {
+export const getUserServersService = async (token_type: string, access_token: string): Promise<Array<userGuild> | null> => {
     try {
         const guildsResponse = await request('https://discord.com/api/users/@me/guilds', {
             headers: {
@@ -13,7 +14,7 @@ export const getUserServersService = async (token_type: string, access_token: st
             logger.error('Discord API guilds request denied!');
             return null;
         }
-        const guilds = await guildsResponse.body.json();
+        const guilds = await guildsResponse.body.json() as Array<userGuild>;
 
         return guilds;
     } catch (error) {

@@ -7,13 +7,17 @@ export const indexHandler = async (req: Request,
     next: NextFunction,): Promise<void> => {
     try {
         const isLoggedIn = await authUserService(req);
-        res.render('index', {
-            isLoggedIn,
-            title: 'Discord Server Monitoring',
-            layout: 'layout',
-            styles: ['/css/index.css'],
-            scripts: ['/js/searchbar.js', '/js/navbar.js'],
-        });
+        if (!isLoggedIn) {
+            res.render('index', {
+                isLoggedIn,
+                title: 'Discord Server Monitoring',
+                layout: 'layout',
+                styles: ['/css/index.css'],
+                scripts: ['/js/navbar.js'],
+            });
+        } else {
+            res.redirect('/home');
+        }
     } catch (error) {
         logger.error(error);
         next(error);

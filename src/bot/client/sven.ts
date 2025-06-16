@@ -1,4 +1,4 @@
-import { ChannelType, Client } from 'discord.js';
+import { ChannelType, Client, Collection, OAuth2Guild } from 'discord.js';
 import { config } from '../../config.js';
 import { deployCommandsForSven } from './deploy-commands.js';
 import { cooldownForInteraction } from '../interactions/cooldown.interaction.js';
@@ -66,3 +66,5 @@ client.on('messageCreate', async (message) => {
 export function startSven() {
   client.login(config.DISCORD_TOKEN_SVEN_DEV);
 }
+
+export const svenServers = async (): Promise<Collection<string, OAuth2Guild>> => client.guilds.fetch();

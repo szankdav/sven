@@ -1,50 +1,68 @@
-<div class="container mx-auto">
-    <%if(error==="" ){%>
-        <div>
-            <%- include('partials/search'); %>
+<div class="flex-grow container mx-auto px-4 py-8">
+    <% if (error==="" ) { %>
+        <div class="rounded-lg shadow-lg p-6 mb-8">
+            <h1 class="text-3xl font-bold text-white mb-4">Server Authors</h1>
+            <p class="text-gray-400 mb-6">Here you can see who sent a message on your server. Click on an author to see
+                their messages!</p>
+
+            <div class="flex flex-col space-y-4 mb-6">
+                <div class="w-full">
+                    <%- include('partials/search'); %>
+                </div>
+                <div class="w-full">
+                    <%- include('partials/pagination'); %>
+                </div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <div class="min-w-full inline-block align-middle">
+                    <div class="border rounded-lg overflow-hidden">
+                        <div
+                            class="grid grid-cols-3 bg-gray-700 text-gray-200 text-sm font-semibold uppercase tracking-wider py-3 px-6">
+                            <div>ID</div>
+                            <div>Name</div>
+                            <div>Created</div>
+                        </div>
+
+                        <% if (authorsSlicedByTen && authorsSlicedByTen.length> 0) { %>
+                            <% authorsSlicedByTen.forEach(row=> { %>
+                                <a href="/messages/author/<%= row.id %>"
+                                    class="grid grid-cols-3 py-4 px-6 border-t hover:bg-gray-700 transition-colors duration-200 cursor-pointer group">
+                                    <div class="text-gray-300 group-hover:text-white">
+                                        <%= row.id %>
+                                    </div>
+                                    <div class="font-medium text-white">
+                                        <%= row.name %>
+                                    </div>
+                                    <div class="text-gray-400 group-hover:text-gray-300">
+                                        <%= new Date(row.createdAt).toLocaleDateString() %>
+                                    </div>
+                                </a>
+                                <% }) %>
+                                    <% } else { %>
+                                        <div class="py-8 px-6 text-center text-gray-400">No authors found.</div>
+                                        <% } %>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div>
-            <%- include('partials/pagination'); %>
-        </div>
-        <div>
-            <h4>Here you can see the who sent a message on your server. If you want to see the messages for
-                an author, click on an author!</h4>
-        </div>
-        <div>
-            <table class="uk-table uk-table-striped">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Created</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% authorsSlicedByTen.forEach(row=> { %>
-                        <tr class="authorRow" data-id="<%= row.id %>">
-                            <td uk-table-link>
-                                <%= row.id %>
-                            </td uk-table-link>
-                            <td>
-                                <%= row.name %>
-                            </td>
-                            <td uk-table-link>
-                                <%= row.createdAt %>
-                            </td>
-                        </tr>
-                        <% }) %>
-                </tbody>
-            </table>
-        </div>
-        <%}else{%>
-            <div>
-                <h4>
+        <% } else { %>
+            <div
+                class="text-red-900 font-bold px-4 py-3 rounded-lg text-center mb-6">
+                <p class="text-lg">
                     <%= error %>
-                </h4>
+                </p>
             </div>
-            <div>
-                <a data-testid="goBack" class="uk-btn uk-btn-default" href="/home">Go back to
-                    home page</a>
+            <div class="text-center">
+                <a data-testid="goBack" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm
+                      text-white bg-gray-900 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors duration-200" href="/home">
+                    <svg class="-ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                        fill="currentColor" aria-hidden="true">
+                        <path
+                            d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                    </svg>
+                    Go back to home page
+                </a>
             </div>
-            <%}%>
+            <% } %>
 </div>

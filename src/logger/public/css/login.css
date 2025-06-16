@@ -5,14 +5,14 @@
     transform: translate(-50%, -50%);
 } */
 
-img {
+#loadingImg {
     width: 15em;
     animation: spin 5s linear infinite;
 }
 
 .loading .dots::after {
     content: "";
-    animation: dots 1s steps(3, end) infinite;
+    animation: dots 2s steps(3, end) infinite;
 }
 
 @keyframes spin {
