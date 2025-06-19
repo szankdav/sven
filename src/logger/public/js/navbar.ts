@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 if(logoutButton){
-    document.addEventListener('click', async () => {
+    logoutButton.addEventListener('click', async () => {
         const result = await fetch('/logout', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

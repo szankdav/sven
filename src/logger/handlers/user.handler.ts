@@ -9,6 +9,7 @@ export const userDataHandler = async (req: Request,
         const token = req.cookies?.access_token;
 
         if (!token) {
+            res.sendStatus(401);
             return;
         }
 

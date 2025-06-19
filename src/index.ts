@@ -11,6 +11,7 @@ import { authorsHandler } from './logger/handlers/authors.handler.js';
 import {
   messagesHandler,
   messagesByAuthorsHandler,
+  messageHandler,
 } from './logger/handlers/messages.handler.js';
 import { statisticsByAuthorHandler } from './logger/handlers/statistics.handler.js';
 import { messageLoggerHandler } from './logger/handlers/messageLogger.handler.js';
@@ -66,6 +67,7 @@ authRouter.get('/messages/author/:id', messagesByAuthorsHandler);
 authRouter.get('/statistics/author/:id', statisticsByAuthorHandler);
 authRouter.post('/search', searchHandler);
 authRouter.get('/api/userdata', userDataHandler);
+authRouter.post('/api/message', messageHandler);
 authRouter.post('/logout', logoutHandler);
 // authRouter.get('/api/useravatar', userAvatarHandler);
 

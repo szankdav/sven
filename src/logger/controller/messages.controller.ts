@@ -4,6 +4,7 @@ import {
   getTenMessages,
   getMessagesByAuthorId,
   MessageModel,
+  getMessageById,
 } from '../model/message.model.js';
 import { SqlParams } from '../types/sqlparams.type.js';
 import { MessagesError } from '../utils/customErrorClasses/messagesError.class.js';
@@ -97,5 +98,18 @@ export const messagesByAuthorsController = async (
   } catch (error) {
     logger.error('Error creating messages renderObject:', error);
     throw new MessagesError('Error fetching messages!', 500);
+  }
+};
+
+export const messageController = async (
+  db: Database,
+  messageId: SqlParams,
+): Promise<string | null> => {
+  try {
+    const messageById = await getMessageById(db, messageId);
+    return messageById;
+  } catch (error) {
+    logger.error('Error fetching message by id:', error);
+    throw new MessagesError('Error fetching message!', 500);
   }
 };

@@ -1,8 +1,9 @@
 <div class="flex-grow container mx-auto px-4 py-8">
     <% if (error==="" ) { %>
         <div class="rounded-lg shadow-lg p-6 mb-8">
-            <h1 class="text-3xl font-bold text-white mb-4">Server Authors</h1>
-            <p class="text-gray-400 mb-6">Here you can see who sent a message on your server. Click on an author to see
+            <h1 class="text-3xl font-bold mb-4">Server Authors</h1>
+            <p class="text-xl md:text-2xl font-semibold mb-4">Here you can see who sent a message on your server. Click
+                on an author to see
                 their messages!</p>
 
             <div class="flex flex-col space-y-4 mb-6">
@@ -24,38 +25,34 @@
                             <div>Created</div>
                         </div>
 
-                        <% if (authorsSlicedByTen && authorsSlicedByTen.length> 0) { %>
-                            <% authorsSlicedByTen.forEach(row=> { %>
-                                <a href="/messages/author/<%= row.id %>"
-                                    class="grid grid-cols-3 py-4 px-6 border-t hover:bg-gray-700 transition-colors duration-200 cursor-pointer group">
-                                    <div class="text-gray-300 group-hover:text-white">
-                                        <%= row.id %>
-                                    </div>
-                                    <div class="font-medium text-white">
-                                        <%= row.name %>
-                                    </div>
-                                    <div class="text-gray-400 group-hover:text-gray-300">
-                                        <%= new Date(row.createdAt).toLocaleDateString() %>
-                                    </div>
-                                </a>
-                                <% }) %>
-                                    <% } else { %>
-                                        <div class="py-8 px-6 text-center text-gray-400">No authors found.</div>
-                                        <% } %>
+                        <% authorsSlicedByTen.forEach(row=> { %>
+                            <a href="/messages/author/<%= row.id %>"
+                                class="grid grid-cols-3 py-4 px-6 border-t hover:bg-gray-700 transition-colors duration-200 cursor-pointer group">
+                                <div class="group-hover:text-white">
+                                    <%= row.id %>
+                                </div>
+                                <div class="font-medium group-hover:text-white">
+                                    <%= row.name %>
+                                </div>
+                                <div class="group-hover:text-white">
+                                    <%= new Date(row.createdAt).toLocaleDateString() %>
+                                </div>
+                            </a>
+                            <% }) %>
                     </div>
                 </div>
             </div>
         </div>
         <% } else { %>
-            <div
-                class="text-red-900 font-bold px-4 py-3 rounded-lg text-center mb-6">
+            <div class="text-red-900 font-bold px-4 py-3 rounded-lg text-center mb-6">
                 <p class="text-lg">
                     <%= error %>
                 </p>
             </div>
             <div class="text-center">
-                <a data-testid="goBack" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm
-                      text-white bg-gray-900 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors duration-200" href="/home">
+                <a class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm
+                      text-white bg-gray-900 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors duration-200"
+                    href="/home">
                     <svg class="-ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                         fill="currentColor" aria-hidden="true">
                         <path

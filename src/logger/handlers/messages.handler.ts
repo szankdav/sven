@@ -1,5 +1,6 @@
 import { NextFunction, Response, Request } from 'express';
 import {
+  messageController,
   messagesByAuthorsController,
   messagesController,
 } from '../controller/messages.controller.js';
@@ -40,6 +41,24 @@ export const messagesByAuthorsHandler = async (
     }
   } catch (error) {
     logger.error('Messages handler error:', error);
+    next(error);
+  }
+};
+
+export const messageHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  try {
+    const { messageid } = req.body;
+    const message = await messageController(db, [Number(messageid)]);
+
+    if(message){
+      res.send({ content: message });
+    }
+  } catch (error) {
+    logger.error('Message handler error:', error);
     next(error);
   }
 };

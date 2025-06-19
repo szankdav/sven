@@ -83,17 +83,17 @@ const updatePagination = (currentPage: number): void => {
   if (previousButton) {
     previousButton.href = `${currentPage - 1}`;
     previousButton.classList.toggle('disabled:opacity-50', currentPage <= 1);
-    previousButton.classList.toggle('pointer-events-none', currentPage <= 1); // Disable clicks too
+    previousButton.classList.toggle('pointer-events-none', currentPage <= 1); 
     previousButton.setAttribute('aria-disabled', (currentPage <= 1).toString());
-    previousButton.tabIndex = currentPage <= 1 ? -1 : 0; // Accessibility
+    previousButton.tabIndex = currentPage <= 1 ? -1 : 0; 
   }
 
   if (nextButton) {
     nextButton.href = `${currentPage + 1}`;
     nextButton.classList.toggle('disabled:opacity-50', currentPage >= maxPageNumber);
-    nextButton.classList.toggle('pointer-events-none', currentPage >= maxPageNumber); // Disable clicks too
+    nextButton.classList.toggle('pointer-events-none', currentPage >= maxPageNumber); 
     nextButton.setAttribute('aria-disabled', (currentPage >= maxPageNumber).toString());
-    nextButton.tabIndex = currentPage >= maxPageNumber ? -1 : 0; // Accessibility
+    nextButton.tabIndex = currentPage >= maxPageNumber ? -1 : 0; 
   }
 };
 

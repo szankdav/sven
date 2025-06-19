@@ -1,101 +1,110 @@
 import { test, expect } from '@playwright/test';
 
-test('/authors page should display the correct text with empty database', async ({
-  page,
-}) => {
-  await page.goto('http://localhost:3000/authors/100000000');
-  await expect(page).toHaveTitle('Discord Server Monitoring');
-  await expect(page.locator('h4')).toHaveText(
-    'No authors to show... Are you sure you are at the right URL?',
-  );
-  await expect(page.getByTestId('goBack')).toHaveText('Go back to home page');
-});
+const BASE_URL = 'http://localhost:3000';
 
-test('/authors page should display a list of 10 authors', async ({ page }) => {
-  await page.goto('http://localhost:3000/authors/1');
+test.describe('Dashboard Page', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto(`${BASE_URL}/authors/1`);
+  });
 
-  await page.waitForSelector('.authorRow');
+  test('should display the main heading and paragraph correctly', async ({ page }) => {
+    await expect(page).toHaveTitle(/Discord Server Monitoring/);
 
-  const authors = await page.locator('.authorRow').count();
-  expect(authors).toBe(10);
-});
+    const header = page.getByRole('heading', { name: 'Server Authors', level: 1 });
+    await expect(header).toBeVisible();
+    await expect(header).toHaveClass('text-3xl font-bold mb-4');
 
-test('/authors page navigation buttons should work correctly', async ({
-  page,
-}) => {
-  await page.goto('http://localhost:3000/authors/1');
+    const paragraph = page.getByText('Here you can see who sent a message on your server. Click on an author to see their messages!');
+    await expect(paragraph).toBeVisible();
+    await expect(paragraph).toHaveClass('text-xl md:text-2xl font-semibold mb-4');
+  });
 
-  await page.click('#nextButton');
-  await expect(page).toHaveURL(/.2/);
+  test('should display results in if a letter is written in the search bar', async ({ page }) => {
+    const searchInput = page.getByPlaceholder('Search authors...');
+    await searchInput.click();
+    await searchInput.press('a');
+    const searchDropdown = page.getByLabel('authorsList');
+    await expect(searchDropdown).toBeVisible();
+    await expect(searchDropdown.locator('li').first()).toBeVisible();
+    expect(await searchDropdown.locator('li').count()).toBeGreaterThanOrEqual(1);
+  });
 
-  await page.click('#previousButton');
-  await expect(page).toHaveURL(/.1/);
+  test('should display the proper message in searchresult if there is no result', async ({ page }) => {
+    const searchInput = page.getByPlaceholder('Search authors...');
+    await searchInput.click();
+    await searchInput.pressSequentially('aaaaaa');
+    const searchDropdown = page.getByLabel('authorsList');
+    await expect(searchDropdown).toBeVisible();
+    await expect(searchDropdown.locator('li').first()).toBeVisible();
+    expect(await searchDropdown.locator('li').textContent()).toBe('No author found!');
+  });
 
-  await page.click('#secondPageNumberButton');
-  await expect(page).toHaveURL(/.2/);
+  test('pagination buttons should work correctly', async ({
+    page,
+  }) => {
+    await page.click('#nextButton');
+    await expect(page).toHaveURL(/.2/);
 
-  await page.click('#thirdPageNumberButton');
-  await expect(page).toHaveURL(/.3/);
+    await page.click('#previousButton');
+    await expect(page).toHaveURL(/.1/);
 
-  await page.click('#thirdPageNumberButton');
-  await expect(page).toHaveURL(/.4/);
+    await page.click('#secondPageNumberButton');
+    await expect(page).toHaveURL(/.2/);
 
-  await page.click('#firstPageNumberButton');
-  await expect(page).toHaveURL(/.3/);
-});
+    await page.click('#thirdPageNumberButton');
+    await expect(page).toHaveURL(/.3/);
 
-test('/authors page click on author name should open author messages', async ({
-  page,
-}) => {
-  await page.goto('http://localhost:3000/authors/1');
+    await page.click('#thirdPageNumberButton');
+    await expect(page).toHaveURL(/.4/);
 
-  await page.waitForSelector('.authorRow');
+    await page.click('#firstPageNumberButton');
+    await expect(page).toHaveURL(/.3/);
+  });
 
-  const authors = page.locator('.authorRow');
-  const dataId = await authors.first().getAttribute('data-id');
-  await authors.first().click();
-  await expect(page).toHaveURL(
-    `http://localhost:3000/messages/author/${dataId}`,
-  );
-});
+  test('should display a list of 10 authors', async ({ page }) => {
+    const authors = page.locator('a[href^="/messages/author/"]');
+    await expect(authors).toHaveCount(10);
+  });
 
-test('/authors page should show proper message if not existing page number is requested', async ({
-  page,
-}) => {
-  await page.goto('http://localhost:3000/authors/1000');
+  test('should open messages if author is clicked', async ({
+    page,
+  }) => {
+    const authors = page.locator('a[href^="/messages/author/"]');
+    await authors.first().click();
+    await expect(page).toHaveURL(
+      'http://localhost:3000/messages/author/1',
+    );
+    await page.goBack();
+    await authors.nth(5).click();
+    await expect(page).toHaveURL(
+      'http://localhost:3000/messages/author/6',
+    );
+  });
 
-  await expect(page.locator('h4')).toHaveText(
-    'No authors to show... Are you sure you are at the right URL?',
-  );
-  await expect(page.getByTestId('goBack')).toHaveText('Go back to home page');
-});
+  test('should display the proper message if not existing page number is requested', async ({
+    page,
+  }) => {
+    await page.goto('http://localhost:3000/authors/1000');
 
-test('/authors page search bar should display results in the dropdown menu if a letter is written in it', async ({page}) => {
-  await page.goto('http://localhost:3000/authors/1');
-  const searchInput = page.getByTestId('searchInput');
-  await searchInput.click();
-  await searchInput.press('a');
-  const searchDropdown = page.getByTestId('searchDropdown');
-  await expect(searchDropdown).toBeVisible();
-  expect(await searchDropdown.locator('li').count()).toBeGreaterThanOrEqual(1);
-});
+    await expect(page.locator('p', { hasText: 'No authors to show... Are you sure you are at the right URL?' })).toBeVisible();
+  });
 
-test('/authors page search bar should display the proper message in the dropdown menu if there is no result', async ({page}) => {
-  await page.goto('http://localhost:3000/authors/1');
-  const searchInput = page.getByTestId('searchInput');
-  await searchInput.click();
-  await searchInput.pressSequentially('aaaaaa');
-  const searchDropdown = page.getByTestId('searchDropdown');
-  await expect(searchDropdown).toBeVisible();
-  expect(await searchDropdown.locator('li').textContent()).toBe('No author found!');
-});
+  test('should navigate to the home page if Go back to home page button is clicked', async ({
+    page,
+  }) => {
+    await page.goto('http://localhost:3000/authors/1000');
+    const backButton = page.locator('a[href="/home"]', { hasText: 'Go back to home page' });
+    await backButton.click();
+    await expect(page).toHaveURL('http://localhost:3000/home');
+  });
 
-test('/authors page should redirect to /home if page number parameter is not a valid number', async ({page}) => {
-  await page.goto('http://localhost:3000/authors/alma');
-  await expect(page).toHaveURL(/.*home/);
-});
+  test('should redirect to /home if page number parameter is not a valid number', async ({ page }) => {
+    await page.goto('http://localhost:3000/authors/alma');
+    await expect(page).toHaveURL(/.*home/);
+  });
 
-test('/authors page should redirect to /home if page number parameter is a negative number', async ({page}) => {
-  await page.goto('http://localhost:3000/authors/-1');
-  await expect(page).toHaveURL(/.*home/);
+  test('should redirect to /home if page number parameter is a negative number', async ({ page }) => {
+    await page.goto('http://localhost:3000/authors/-1');
+    await expect(page).toHaveURL(/.*home/);
+  });
 });

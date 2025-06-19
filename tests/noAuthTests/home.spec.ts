@@ -14,7 +14,7 @@ test.describe('Dashboard Page', () => {
         await expect(dashboardHeader).toBeVisible();
         await expect(dashboardHeader).toHaveClass(/text-4xl/);
 
-        const authorsCard = page.locator('a[href="/authors/1"]');
+        const authorsCard = page.getByRole('link', { name: 'All Authors' });
         await expect(authorsCard).toBeVisible();
         await expect(authorsCard).toHaveClass(/block/);
 
@@ -31,7 +31,7 @@ test.describe('Dashboard Page', () => {
         await expect(authorsDescription).toHaveText('Explore the list of all contributing authors.');
 
 
-        const messagesCard = page.locator('a[href="/messages/1"]');
+        const messagesCard = page.getByRole('link', { name: 'All Messages' });
         await expect(messagesCard).toBeVisible();
         await expect(messagesCard).toHaveClass(/block/);
 
@@ -49,7 +49,7 @@ test.describe('Dashboard Page', () => {
     });
 
     test('should navigate to authors page when "All Authors" card is clicked', async ({ page }) => {
-        const authorsCard = page.locator('a[href="/authors/1"]');
+        const authorsCard = page.getByRole('link', { name: 'All Authors' });
         await expect(authorsCard).toBeVisible();
 
         await authorsCard.click();
@@ -59,7 +59,7 @@ test.describe('Dashboard Page', () => {
     });
 
     test('should navigate to messages page when "All Messages" card is clicked', async ({ page }) => {
-        const messagesCard = page.locator('a[href="/messages/1"]');
+        const messagesCard = page.getByRole('link', { name: 'All Messages' });
         await expect(messagesCard).toBeVisible();
 
         await messagesCard.click();

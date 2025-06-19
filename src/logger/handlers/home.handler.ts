@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
 import { logger } from '../../winston/winston.js';
-import { authUserService } from '../services/auth.service.js';
 
 export const homeHandler = async (
   req: Request,
@@ -8,9 +7,8 @@ export const homeHandler = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const isLoggedIn = await authUserService(req);
     res.render('home', {
-            isLoggedIn,
+            isLoggedIn: true,
             title: 'Dashboard',
             layout: 'layout',
             styles: ['/css/index.css'],

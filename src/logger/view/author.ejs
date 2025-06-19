@@ -5,14 +5,14 @@
 
     <% if (authorFound) { %>
         <div class="mb-8">
-            <h4 class="text-xl md:text-2xl font-semibold text-gray-200">
+            <h4 class="text-xl md:text-2xl font-semibold">
                 Here you can see the messages sent by the selected author.
             </h4>
         </div>
 
         <div class="flex flex-col sm:flex-row justify-start items-center space-y-4 sm:space-y-0 sm:space-x-4 mb-8">
             <a class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm
-                  text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500
+                  bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500
                   transition-colors duration-200" data-testid="goBackToAuthors" href="/authors/1">
                 <svg class="-ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                     fill="currentColor">
@@ -22,7 +22,7 @@
                 Go back to authors
             </a>
             <a data-testid="goBackToMessages" href="/messages/1" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm
-                  text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500
+                  bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500
                   transition-colors duration-200">
                 <svg class="-ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                     fill="currentColor">
@@ -34,17 +34,17 @@
             </a>
         </div>
 
-        <div class="discord-card-bg rounded-lg shadow-xl p-6 mb-8 border border-gray-700">
-            <h3 class="text-2xl font-bold text-gray-100 mb-4">Author Details:</h3>
-            <p class="text-gray-300 mb-2" data-testid="id">
+        <div class="rounded-lg shadow-xl p-6 mb-8 border border-gray-700">
+            <h3 class="text-2xl font-bold mb-4">Author Details:</h3>
+            <p class="mb-2" data-testid="id">
                 <span class="font-semibold text-gray-200">ID:</span>
                 <%= author.id %>
             </p>
-            <p class="text-gray-300 mb-2" data-testid="name">
+            <p class="mb-2" data-testid="name">
                 <span class="font-semibold text-gray-200">Name:</span>
                 <%= author.name %>
             </p>
-            <p class="text-gray-300" data-testid="created">
+            <p>
                 <span class="font-semibold text-gray-200">Created:</span>
                 <%= author.createdAt %>
             </p>
@@ -52,7 +52,7 @@
 
         <div class="mb-8">
             <a data-testid="goToAuthorStatistics" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm
-                  text-white bg-discord-blurple hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-discord-blurple
+                  bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500
                   transition-colors duration-200" href="/statistics/author/<%=author.id%>">
                 <svg class="-ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                     fill="currentColor">
@@ -65,7 +65,7 @@
             </a>
         </div>
 
-        <div class="overflow-x-auto rounded-lg shadow-xl border border-gray-700 discord-card-bg">
+        <div class="overflow-x-auto rounded-lg shadow-xl border border-gray-700">
             <table class="min-w-full divide-y divide-gray-700 table-fixed">
                 <thead class="bg-gray-800">
                     <tr>
@@ -82,15 +82,15 @@
                 </thead>
                 <tbody class="divide-y divide-gray-700">
                     <% messages.forEach(row=> { %>
-                        <tr class="messageRow hover:bg-gray-700 transition-colors duration-150 cursor-pointer"
+                        <tr class="messageRow hover:bg-gray-700 transition-colors duration-150 hover:text-white"
                             data-id="<%= row.id %>">
-                            <td class="px-6 py-4 text-sm font-medium text-gray-300">
+                            <td class="px-6 py-4 text-sm font-medium">
                                 <%= row.id %>
                             </td>
-                            <td class="px-6 py-4 text-sm text-gray-300 break-words">
+                            <td class="px-6 py-4 text-sm break-words">
                                 <%= row.content %>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">
                                 <%= row.messageCreatedAt %>
                             </td>
                         </tr>
@@ -101,13 +101,15 @@
 
         <% } else { %>
             <div
-                class="bg-red-900 border border-red-700 text-red-200 px-4 py-6 rounded-lg relative text-center shadow-md">
-                <h1 class="text-3xl font-bold mb-4">Error!</h1>
-                <p class="text-xl mb-6">
-                    No author found with this ID!
-                </p>
+                class="relative text-center">
+                <div class="bg-red-900 border border-red-700 text-red-200 px-4 py-6 rounded-lg shadow-md mb-4">
+                    <h1 class="text-3xl font-bold mb-4">Error!</h1>
+                    <p class="text-xl mb-4">
+                        No author found with this ID!
+                    </p>
+                </div>
                 <a href="/home" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm
-                  text-white bg-discord-blurple hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-discord-blurple
+                  bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-discord-blurple
                   transition-colors duration-200">
                     <svg class="-ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                         fill="currentColor" aria-hidden="true">

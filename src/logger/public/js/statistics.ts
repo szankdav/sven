@@ -1,11 +1,27 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const seeStatisticsBtn = document.getElementById('seeStatistics');
-  const statisticsSection = document.getElementById('statistics');
+  const seeStatisticsBtn = document.getElementById('seeStatistics') as HTMLButtonElement;
+  const statisticsSection = document.getElementById('statistics') as HTMLElement;
+  const previousAuthorButton = document.querySelector('.previousAuthor') as HTMLAnchorElement;
+  const nextAuthorButton = document.querySelector('.nextAuthor') as HTMLAnchorElement;
+  const maxAuthors = nextAuthorButton.dataset.maxauthors;
+
+  if (previousAuthorButton) {
+    previousAuthorButton.classList.toggle('disabled:opacity-50', window.location.pathname === '/statistics/author/1');
+    previousAuthorButton.classList.toggle('pointer-events-none', window.location.pathname === '/statistics/author/1');
+    previousAuthorButton.setAttribute('aria-disabled', (window.location.pathname === '/statistics/author/1').toString());
+    previousAuthorButton.tabIndex = window.location.pathname === '/statistics/author/1' ? -1 : 0;
+  };
+
+  if (nextAuthorButton) {
+    nextAuthorButton.classList.toggle('disabled:opacity-50', window.location.pathname === `/statistics/author/${maxAuthors}`);
+    nextAuthorButton.classList.toggle('pointer-events-none', window.location.pathname === `/statistics/author/${maxAuthors}`);
+    nextAuthorButton.setAttribute('aria-disabled', (window.location.pathname === `/statistics/author/${maxAuthors}`).toString());
+    nextAuthorButton.tabIndex = window.location.pathname === `/statistics/author/${maxAuthors}` ? -1 : 0;
+  };
 
   if (seeStatisticsBtn && statisticsSection) {
     seeStatisticsBtn.addEventListener('click', () => {
       statisticsSection.classList.toggle('hidden');
-      // Optional: Change button text
       if (statisticsSection.classList.contains('hidden')) {
         seeStatisticsBtn.innerHTML = `
                         <svg class="-ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -25,3 +41,4 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
