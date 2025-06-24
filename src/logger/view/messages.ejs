@@ -17,67 +17,82 @@
             </div>
 
             <div class="overflow-x-auto">
-                <div class="min-w-full inline-block align-middle">
-                    <div class="border rounded-lg overflow-hidden">
-                        <div
-                            class="grid grid-cols-4 bg-gray-700 text-gray-200 text-sm font-semibold uppercase tracking-wider py-3 px-6">
-                            <div>ID</div>
-                            <div>Author</div>
-                            <div>Content</div>
-                            <div>Created</div>
-                        </div>
-
+                <table class="min-w-full divide-y divide-gray-700">
+                    <thead class="bg-gray-800">
+                        <tr>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                ID</th>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                Author</th>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                Content</th>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                Created</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-700">
                         <% messagesSlicedByTen.forEach(row=> { %>
-                            <div
-                                class="grid grid-cols-4 py-4 px-6 border-t hover:bg-gray-700 transition-colors duration-200 cursor-pointer group">
-                                <div class="group-hover:text-white">
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                     <%= row.id %>
-                                </div>
-                                <a href="/messages/author/<%= row.id %>" class="font-medium group-hover:text-white">
-                                    <% authors.forEach(authorRow=> { %>
-                                        <% if (row.authorId===authorRow.id) { %>
-                                            <%= authorRow.name %>
-                                                <% } %>
-                                                    <% }) %>
-                                </a>
-                                <div data-messageid="<%= row.id %>" class="shortMessage group-hover:text-white">
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold">
+                                    <a href="/messages/author/<%= row.id %>" class="font-medium group-hover:text-white">
+                                        <% authors.forEach(authorRow=> { %>
+                                            <% if (row.authorId===authorRow.id) { %>
+                                                <%= authorRow.name %>
+                                                    <% } %>
+                                                        <% }) %>
+                                    </a>
+                                </td>
+                                <td data-messageid="<%= row.id %>"
+                                    class="shortMessage px-6 py-4 whitespace-nowrap text-sm font-bold">
                                     <%= row.content %>
-                                </div>
-                                <div class="group-hover:text-white">
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm">
                                     <%= new Date(row.messageCreatedAt).toLocaleDateString() %>
-                                </div>
-                            </div>
-                            <div
-                                class="expandedMessageDiv hidden py-4 px-6 border-t hover:bg-gray-700 hover:text-white transition-colors duration-200 flex justify-between items-center">
-                                <div class="flex-grow messageContent"></div>
-                                <div>
-                                    <button
-                                        class="messageCloseButton text-xl p-2 cursor-pointer hover:text-gray-400">X</button>
-                                </div>
-                            </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4"
+                                    class="expandedMessageDiv hidden py-4 px-6 border-t hover:bg-gray-700 hover:text-white transition-colors duration-200">
+                                    <div class="flex justify-between items-center">
+                                        <div class="flex-grow messageContent"></div>
+                                        <div>
+                                            <button
+                                                class="messageCloseButton text-xl p-2 cursor-pointer hover:text-gray-400">X</button>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
                             <% }) %>
-                    </div>
-                </div>
+                    </tbody>
+                </table>
             </div>
-
-            <% } else { %>
-                <div class="text-red-900 font-bold px-4 py-3 rounded-lg text-center mb-6">
-                    <p class="text-lg">
-                        <%= error %>
-                    </p>
-                </div>
-                <div class="text-center">
-                    <a data-testid="goBack"
-                        class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm
-                      text-white bg-gray-900 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors duration-200"
-                        href="/home">
-                        <svg class="-ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                            fill="currentColor" aria-hidden="true">
-                            <path
-                                d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
-                        </svg>
-                        Go back to home page
-                    </a>
-                </div>
-                <% } %>
         </div>
+
+        <% } else { %>
+            <div class="text-red-900 font-bold px-4 py-3 rounded-lg text-center mb-6">
+                <p class="text-lg">
+                    <%= error %>
+                </p>
+            </div>
+            <div class="text-center">
+                <a data-testid="goBack"
+                    class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm
+                      text-white bg-gray-900 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors duration-200"
+                    href="/home">
+                    <svg class="-ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                        fill="currentColor" aria-hidden="true">
+                        <path
+                            d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                    </svg>
+                    Go back to home page
+                </a>
+            </div>
+            <% } %>
+</div>
