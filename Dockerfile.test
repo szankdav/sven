@@ -14,4 +14,4 @@ RUN npx playwright install --with-deps
 
 EXPOSE 3000
 
-CMD npm run start & npm run wait && npm run playwright-prod
+CMD npm run start & npm run wait && npm run playwright

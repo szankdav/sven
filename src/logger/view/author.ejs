@@ -1,80 +1,123 @@
-<!doctype html>
-<html lang="en">
+<div class="container mx-auto px-4 py-8">
+    <div class="mb-6">
+        <%- include('partials/search'); %>
+    </div>
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Discord logger statisztika</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-
-<body>
-    <%- include('core/navbar'); %>
-        <div class="container mt-3">
-            <div class="row">
-                <div class="col-12">
-                    <h4>Here you can see the messages sent by the selected author.</h4>
-                </div>
-            </div>
-            <div class="row mt-3">
-                <div class="col-12 d-flex">
-                    <div class="me-3">
-                        <a class="btn btn-success" data-testid="goBackToAuthors" href="/authors/1">Go back
-                            to
-                            authors</a>
-                    </div>
-                    <div>
-                        <a data-testid="goBackToMessages" href="/messages/1" class="btn btn-success">Go back to
-                            messages</a>
-                    </div>
-                </div>
-                <div class="col-12 mt-3">
-                    <h3>Author:</h3>
-                    <p>ID: <%= author.id %>
-                    </p>
-                    <p>Name: <%= author.name %>
-                    </p>
-                    <p>Created: <%= author.createdAt %>
-                    </p>
-                </div>
-                <div>
-                    <a data-testid="goToAuthorStatistics" class="btn btn-success" href="/statistics/author/<%=author.id%>">Go to
-                        author's statistics</a>
-                </div>
-                <div class="col-12 mt-3">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Content</th>
-                                <th>Created</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% messages.forEach(row=> { %>
-                                <tr class="messageRow" data-id="<%= row.id %>">
-                                    <td>
-                                        <%= row.id %>
-                                    </td>
-                                    <td>
-                                        <%= row.content %>
-                                    </td>
-                                    <td>
-                                        <%= row.messageCreatedAt %>
-                                    </td>
-                                </tr>
-                                <% }) %>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+    <% if (authorFound) { %>
+        <div class="mb-8">
+            <h4 class="text-xl md:text-2xl font-semibold">
+                Here you can see the messages sent by the selected author.
+            </h4>
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-            crossorigin="anonymous"></script>
-        <script src="/js/index.js"></script>
-</body>
 
-</html>
+        <div class="flex flex-col sm:flex-row justify-start items-center space-y-4 sm:space-y-0 sm:space-x-4 mb-8">
+            <a class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm
+                  bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500
+                  transition-colors duration-200" data-testid="goBackToAuthors" href="/authors/1">
+                <svg class="-ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                    fill="currentColor">
+                    <path
+                        d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
+                </svg>
+                Go back to authors
+            </a>
+            <a data-testid="goBackToMessages" href="/messages/1" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm
+                  bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500
+                  transition-colors duration-200">
+                <svg class="-ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                    fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.173-.953l-4.244 1.251c-.294.088-.614-.09-.727-.364-.08-.198-.016-.438.149-.567l1.426-1.12c-2.433-1.405-4-3.921-4-6.252 0-3.866 3.582-7 8-7s8 3.134 8 7zM9.5 7c.828 0 1.5.672 1.5 1.5V11c0 .276-.224.5-.5.5h-2a.5.5 0 01-.5-.5V8.5c0-.828.672-1.5 1.5-1.5z"
+                        clip-rule="evenodd" />
+                </svg>
+                Go back to messages
+            </a>
+        </div>
+
+        <div class="rounded-lg shadow-xl p-6 mb-8 border border-gray-700">
+            <h3 class="text-2xl font-bold mb-4">Author Details:</h3>
+            <p class="mb-2" data-testid="id">
+                <span class="font-semibold text-gray-200">ID:</span>
+                <%= author.id %>
+            </p>
+            <p class="mb-2" data-testid="name">
+                <span class="font-semibold text-gray-200">Name:</span>
+                <%= author.name %>
+            </p>
+            <p>
+                <span class="font-semibold text-gray-200">Created:</span>
+                <%= author.createdAt %>
+            </p>
+        </div>
+
+        <div class="mb-8">
+            <a data-testid="goToAuthorStatistics" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm
+                  bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500
+                  transition-colors duration-200" href="/statistics/author/<%=author.id%>">
+                <svg class="-ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                    fill="currentColor">
+                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                    <path fill-rule="evenodd"
+                        d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                        clip-rule="evenodd" />
+                </svg>
+                Go to author's statistics
+            </a>
+        </div>
+
+        <div class="overflow-x-auto rounded-lg shadow-xl border border-gray-700">
+            <table class="min-w-full divide-y divide-gray-700 table-fixed">
+                <thead class="bg-gray-800">
+                    <tr>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider w-1/12">
+                            ID</th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider w-8/12">
+                            Content</th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider w-3/12">
+                            Created</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-700">
+                    <% messages.forEach(row=> { %>
+                        <tr class="messageRow hover:bg-gray-700 transition-colors duration-150 hover:text-white"
+                            data-id="<%= row.id %>">
+                            <td class="px-6 py-4 text-sm font-medium">
+                                <%= row.id %>
+                            </td>
+                            <td class="px-6 py-4 text-sm break-words">
+                                <%= row.content %>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                <%= row.messageCreatedAt %>
+                            </td>
+                        </tr>
+                        <% }) %>
+                </tbody>
+            </table>
+        </div>
+
+        <% } else { %>
+            <div
+                class="relative text-center">
+                <div class="bg-red-900 border border-red-700 text-red-200 px-4 py-6 rounded-lg shadow-md mb-4">
+                    <h1 class="text-3xl font-bold mb-4">Error!</h1>
+                    <p class="text-xl mb-4">
+                        No author found with this ID!
+                    </p>
+                </div>
+                <a href="/home" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm
+                  bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-discord-blurple
+                  transition-colors duration-200">
+                    <svg class="-ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                        fill="currentColor" aria-hidden="true">
+                        <path
+                            d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                    </svg>
+                    Go back to home page
+                </a>
+            </div>
+            <% } %>
+</div>

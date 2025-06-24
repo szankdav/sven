@@ -52,7 +52,7 @@ export const getAuthorByName = async (
   db: Database,
   params: SqlParams,
 ): Promise<AuthorModel | undefined> => {
-  const sql = 'SELECT * FROM Authors WHERE name = ?';
+  const sql = 'SELECT * FROM Authors WHERE name = ? COLLATE NOCASE';
   return fetchFirst<{ id: number; name: string; createdAt: string }>(
     db,
     sql,

@@ -1,8 +1,9 @@
 import { NextFunction, Response, Request } from 'express';
 import {
+  messageController,
   messagesByAuthorsController,
   messagesController,
-} from '../controller/message.controller.js';
+} from '../controller/messages.controller.js';
 import { db } from '../database/database.js';
 
 export const messagesHandler = async (
@@ -11,9 +12,13 @@ export const messagesHandler = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const page = parseInt(req.params.page, 10);
-    const renderObject = await messagesController(db, page);
-    res.render(renderObject.viewName, renderObject.options);
+    const { page } = req.params;
+    const renderObject = await messagesController(db, [page]);
+    if (renderObject) {
+      res.render(renderObject.viewName, renderObject.options);
+    } else {
+      next();
+    }
   } catch (error) {
     next(error);
   }
@@ -25,10 +30,32 @@ export const messagesByAuthorsHandler = async (
   next: NextFunction,
 ) => {
   try {
-    const authorId = [parseInt(req.params.id, 10)];
-    const renderObject = await messagesByAuthorsController(db, authorId);
-    res.render(renderObject.viewName, renderObject.options);
+    const authorId = req.params.id;
+    const renderObject = await messagesByAuthorsController(db, [authorId]);
+    if (renderObject) {
+      res.render(renderObject.viewName, renderObject.options);
+    } else {
+      next();
+    }
   } catch (error) {
+    next(error);
+  }
+};
+
+export const messageHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  try {
+    const { messageid } = req.body;
+    const message = await messageController(db, [Number(messageid)]);
+
+    if(message){
+      res.send({ content: message });
+    }
+  } catch (error) {
+    logger.error('Message handler error:', error);
     next(error);
   }
 };

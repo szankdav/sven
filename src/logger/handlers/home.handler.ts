@@ -6,7 +6,13 @@ export const homeHandler = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    res.render('index');
+    res.render('home', {
+            isLoggedIn: true,
+            title: 'Dashboard',
+            layout: 'layout',
+            styles: ['/css/index.css'],
+            scripts: ['/js/navbar.js'],
+        });
   } catch (error) {
     next(error);
   }

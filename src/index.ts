@@ -1,20 +1,30 @@
 import express from 'express';
 import path from 'path';
+import cookieParser from 'cookie-parser';
+import expressLayouts from 'express-ejs-layouts';
 import { startSven } from './bot/client/sven.js';
 import { createTables } from './logger/database/tables.js';
-import { adminsDb, db } from './logger/database/database.js';
+import { db } from './logger/database/database.js';
 import { errorHandler } from './logger/handlers/error.handler.js';
 import { homeHandler } from './logger/handlers/home.handler.js';
 import { authorsHandler } from './logger/handlers/authors.handler.js';
 import {
   messagesHandler,
   messagesByAuthorsHandler,
+  messageHandler,
 } from './logger/handlers/messages.handler.js';
 import { statisticsByAuthorHandler } from './logger/handlers/statistics.handler.js';
 import { messageLoggerHandler } from './logger/handlers/messageLogger.handler.js';
 import { startFaendal } from './bot/client/faendal.js';
-import { loginAttempHandler, loginHandler } from './logger/handlers/login.handler.js';
+import { loginAttemptHandler } from './logger/handlers/loginAttempt.handler.js';
 import { searchHandler } from './logger/handlers/search.handler.js';
+import { loginHandler } from './logger/handlers/login.handler.js';
+import { discordAuthGuardHandler } from './logger/handlers/discordAuth.handler.js';
+import { authUser } from './logger/handlers/authUser.handler.js';
+import { userDataHandler } from './logger/handlers/user.handler.js';
+import { loginErrorHandler } from './logger/handlers/loginError.handler.js';
+import { indexHandler } from './logger/handlers/index.handler.js';
+import { logoutHandler } from './logger/handlers/logout.handler.js';
 import { logger } from './winston/winston.js';
 
 // Start bots
@@ -24,30 +34,48 @@ startFaendal();
 // Set filepaths
 const __dirname = import.meta.dirname;
 const app = express();
+const authRouter = express.Router({ mergeParams: true });
+const openRouter = express.Router({ mergeParams: true });
+app.use(cookieParser());
 app.set('view engine', 'ejs');
+app.use(expressLayouts);
 app.set('views', path.join(__dirname, 'logger/view'));
 app.use(express.json());
 const port = Number(process.env.PORT) || 3000;
 
+// Create the database
 try {
-  await createTables(db, adminsDb);
+  await createTables(db);
 } catch (error) {
   logger.error('Error creating tables:', error);
 }
 
-app.get('/', homeHandler);
-app.get('/authors/:page', authorsHandler);
-app.get('/messages/:page', messagesHandler);
-app.get('/messages/author/:id', messagesByAuthorsHandler);
-app.get('/statistics/author/:id', statisticsByAuthorHandler);
-app.post('/logMessage', messageLoggerHandler);
-app.get('/login', loginHandler);
-app.post('/login', loginAttempHandler);
-app.post('/search', searchHandler);
+// Public routes
+openRouter.get('/', indexHandler);
+openRouter.post('/api/logMessage', messageLoggerHandler);
+openRouter.get('/login', loginHandler);
+openRouter.post('/api/login', loginAttemptHandler);
+openRouter.get('/api/authUser', authUser);
+openRouter.get('/error', loginErrorHandler);
+
+authRouter.use(discordAuthGuardHandler);
+// Protected routes
+authRouter.get('/home', homeHandler);
+authRouter.get('/authors/:page', authorsHandler);
+authRouter.get('/messages/:page', messagesHandler);
+authRouter.get('/messages/author/:id', messagesByAuthorsHandler);
+authRouter.get('/statistics/author/:id', statisticsByAuthorHandler);
+authRouter.post('/search', searchHandler);
+authRouter.get('/api/userdata', userDataHandler);
+authRouter.post('/api/message', messageHandler);
+authRouter.post('/logout', logoutHandler);
+// authRouter.get('/api/useravatar', userAvatarHandler);
 
 app.use(express.static(path.join(__dirname, './logger/public')));
 app.use(express.static(path.join(__dirname, 'dist')));
 
+app.use(openRouter);
+app.use(authRouter);
 app.use(errorHandler);
 
 app.listen(port, () => {

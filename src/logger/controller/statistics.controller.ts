@@ -46,10 +46,15 @@ export const getLetterStatictics = async (
 export const statisticsByAuthorController = async (
   db: Database,
   params: SqlParams,
-): Promise<RenderObject> => {
+): Promise<RenderObject | null> => {
   try {
-    let author: AuthorModel | undefined = await getAuthorById(db, params);
-    let authors: AuthorModel[] = await getAllAuthors(db);
+    const authorId = Number(params[0]);
+    if (!Number.isInteger(authorId) || authorId <= 0) {
+      return null;
+    };
+
+    const author: AuthorModel | undefined = await getAuthorById(db, params);
+    const authors: AuthorModel[] = await getAllAuthors(db);
     const letterCounters: LetterModel[] = await getLetterCountersByAuthorId(
       db,
       params,
@@ -60,13 +65,38 @@ export const statisticsByAuthorController = async (
     );
 
     if (!author) {
-      author = { id: 0, name: '-', createdAt: '-' };
-      authors = [{ id: 0, name: '-', createdAt: '-' }];
+      const renderObject: RenderObject = {
+        viewName: 'statistics',
+        options: {
+          authorFound: false,
+          author: null,
+          authors: null,
+          letterCounters: null,
+          letterStatistics: null,
+          isLoggedIn: true,
+          title: 'Discord Server Monitoring',
+          layout: 'layout',
+          styles: ['/css/index.css'],
+          scripts: ['/js/statistics.js', '/js/searchbar.js', '/js/navbar.js'],
+        },
+      };
+      return renderObject;
     }
 
     const renderObject: RenderObject = {
       viewName: 'statistics',
-      options: { author, authors, letterCounters, letterStatistics },
+      options: {
+        authorFound: true,
+        author,
+        authors,
+        letterCounters,
+        letterStatistics,
+        isLoggedIn: true,
+        title: 'Discord Server Monitoring',
+        layout: 'layout',
+        styles: ['/css/index.css'],
+        scripts: ['/js/statistics.js', '/js/searchbar.js', '/js/navbar.js']
+      },
     };
 
     return renderObject;

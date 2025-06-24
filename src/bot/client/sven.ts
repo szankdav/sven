@@ -1,4 +1,4 @@
-import { ChannelType, Client, CommandInteraction, TextChannel } from 'discord.js';
+import { ChannelType, Client, Collection, CommandInteraction, OAuth2Guild, TextChannel } from 'discord.js';
 import { config } from '../../config.js';
 import { deployCommandsForSven } from './deploy-commands.js';
 import { cooldownForInteraction } from '../interactions/cooldown.interaction.js';
@@ -11,7 +11,7 @@ import { hikeConversation } from '../commands/texts/conversations.js';
 import { handleInput } from '../chat/commandHandler.js';
 
 export const client = new Client({
-  intents: ['Guilds', 'GuildMessages', 'DirectMessages', 'MessageContent'],
+  intents: ['Guilds', 'GuildMessages', 'DirectMessages', 'MessageContent', 'GuildMembers', 'GuildPresences'],
   partials: [1],
 });
 
@@ -70,3 +70,5 @@ client.on('messageCreate', async (message) => {
 export function startSven() {
   client.login(config.DISCORD_TOKEN_SVEN);
 }
+
+export const svenServers = async (): Promise<Collection<string, OAuth2Guild>> => client.guilds.fetch();
