@@ -4,7 +4,7 @@ on:
     branches:
       - production
 jobs:
-  playwright-test:
+  playwright-noAuth-test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
@@ -26,11 +26,47 @@ jobs:
           DISCORD_CLIENT_SVEN_ID: ${{ secrets.DISCORD_CLIENT_SVEN_ID }}
           DISCORD_TOKEN_FAENDAL: ${{ secrets.DISCORD_TOKEN_FAENDAL }}
           DISCORD_CLIENT_FAENDAL_ID: ${{ secrets.DISCORD_CLIENT_FAENDAL_ID }}
+          DISCORD_CLIENT_SVEN_SECRET: ${{ secrets.DISCORD_CLIENT_SVEN_SECRET }}
           GUILD_ID: ${{ secrets.GUILD_ID }}
           PORT: ${{ secrets.PORT }}
           LOG_LEVEL: ${{ secrets.LOG_LEVEL }}
           DISABLE_LOKI: true
-        run: npm start & npx wait-on http://localhost:3000 && npm run playwright-prod
+        run: NODE_ENV=playwrightTest npm start & npx wait-on http://localhost:3000 && npm run playwright-prod-noAuth
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
+  playwright-auth-test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    needs: playwright-noAuth-test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Install dependencies
+        run: npm ci
+      - name: Build the app
+        run: npm run build
+      - name: Install wait-on package
+        run: npm install wait-on
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+      - name: Start the app in the background
+        env:
+          DISCORD_TOKEN_SVEN: ${{ secrets.DISCORD_TOKEN_SVEN }}
+          DISCORD_CLIENT_SVEN_ID: ${{ secrets.DISCORD_CLIENT_SVEN_ID }}
+          DISCORD_TOKEN_FAENDAL: ${{ secrets.DISCORD_TOKEN_FAENDAL }}
+          DISCORD_CLIENT_FAENDAL_ID: ${{ secrets.DISCORD_CLIENT_FAENDAL_ID }}
+          DISCORD_CLIENT_SVEN_SECRET: ${{ secrets.DISCORD_CLIENT_SVEN_SECRET }}
+          GUILD_ID: ${{ secrets.GUILD_ID }}
+          PORT: ${{ secrets.PORT }}
+          LOG_LEVEL: ${{ secrets.LOG_LEVEL }}
+          DISABLE_LOKI: true
+        run: npm start & npx wait-on http://localhost:3000 && npm run playwright-prod-auth
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
@@ -39,7 +75,7 @@ jobs:
           retention-days: 30
   unit-test:
     runs-on: ubuntu-latest
-    needs: playwright-test
+    needs: playwright-auth-test
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

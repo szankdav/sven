@@ -10,7 +10,7 @@ import { userGuild } from '../types/userGuild.type.js';
 const createCookies = (res: Response, oauthData: DiscordOAuthTokenResponse) => {
     res.cookie('access_token', oauthData.access_token, {
         httpOnly: true,
-        secure: false,
+        secure: true,
         sameSite: 'lax',
         maxAge: 3600 * 1000,
     });
