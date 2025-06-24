@@ -69,7 +69,6 @@ authRouter.post('/search', searchHandler);
 authRouter.get('/api/userdata', userDataHandler);
 authRouter.post('/api/message', messageHandler);
 authRouter.post('/logout', logoutHandler);
-// authRouter.get('/api/useravatar', userAvatarHandler);
 
 app.use(express.static(path.join(__dirname, './logger/public')));
 app.use(express.static(path.join(__dirname, 'dist')));
