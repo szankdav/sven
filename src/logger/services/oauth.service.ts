@@ -11,11 +11,11 @@ export const oauthService = async (codeFromBody: string): Promise<null | Discord
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: new URLSearchParams({
-                client_id: config.DISCORD_CLIENT_SVEN_ID_DEV,
-                client_secret: config.DISCORD_CLIENT_SVEN_DEV_SECRET,
+                client_id: config.DISCORD_CLIENT_SVEN_ID,
+                client_secret: config.DISCORD_CLIENT_SVEN_SECRET,
                 code: codeFromBody,
                 grant_type: 'authorization_code',
-                redirect_uri: 'http://localhost:3000/login',
+                redirect_uri: 'https://svenbot.cloud/login',
                 scope: 'identify',
             }).toString(),
         });
