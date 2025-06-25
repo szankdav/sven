@@ -39,11 +39,11 @@ test.describe('Root Page', () => {
 
         await mainLoginAnchor.click();
 
-        await expect(page).toHaveURL('https://discord.com/oauth2/authorize?client_id=1352273717623001209&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Flogin&scope=guilds+identify');
+        await expect(page).toHaveURL('https://discord.com/oauth2/authorize?client_id=1352271959232086026&response_type=code&redirect_uri=https%3A%2F%2Fsvenbot.cloud%2Flogin&scope=guilds+identify');
     });
 
     test('should navigate to the /login page when Login button is clicked in the navbar', async ({ page }) => {
-        const navbarLoginAnchor = page.locator('div[class="mt-auto pt-4 border-t border-gray-700"] > a[href="https://discord.com/oauth2/authorize?client_id=1352273717623001209&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Flogin&scope=guilds+identify"]');
+        const navbarLoginAnchor = page.locator('div[class="mt-auto pt-4 border-t border-gray-700"] > a[href="https://discord.com/oauth2/authorize?client_id=1352271959232086026&response_type=code&redirect_uri=https%3A%2F%2Fsvenbot.cloud%2Flogin&scope=guilds+identify"]');
         await expect(navbarLoginAnchor).toBeVisible();
 
         await navbarLoginAnchor.click();
