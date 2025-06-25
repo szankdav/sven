@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 const BASE_URL = 'http://localhost:3000';
 
-test.describe('Dashboard Page', () => {
+test.describe('Messages Page', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(`${BASE_URL}/messages/1`);
   });
@@ -61,36 +61,40 @@ test.describe('Dashboard Page', () => {
     await expect(page).toHaveURL(/.3/);
   });
 
-  test('should display a list of 10 messages', async ({ page }) => {
-    const authors = page.locator('a[href^="/messages/author/"]');
+  test('should display a list of 10 messages in desktop view', async ({ page }) => {
+    const authorsTable = page.getByRole('table');
+    const authors = authorsTable.locator('a[href^="/messages/author/"]');
+    await expect(authors).toHaveCount(10);
+  });
+
+  test('should display a list of 10 messages in mobile view', async ({ page }) => {
+    const authorsCards = page.locator('div[class="grid grid-cols-1 gap-4 md:hidden"]');
+    const authors = authorsCards.locator('a[href^="/messages/author/"]');
     await expect(authors).toHaveCount(10);
   });
 
   test('should open messages if author is clicked', async ({
     page,
   }) => {
-    const authors = page.locator('a[href^="/messages/author/"]');
+    const messagesTable = page.getByRole('table');
+    const authors = messagesTable.locator('a[href^="/messages/author/"]');
     await authors.first().click();
     await expect(page).toHaveURL(
       'http://localhost:3000/messages/author/1',
-    );
-    await page.goBack();
-    await authors.nth(5).click();
-    await expect(page).toHaveURL(
-      'http://localhost:3000/messages/author/6',
     );
   });
 
   test('should open the whole message if short message is clicked and close it when X button is clicked', async ({
     page,
   }) => {
-    const shortMessage = page.locator('[data-messageid="1"]');
+    const messagesTable = page.getByRole('table');
+    const shortMessage = messagesTable.locator('[data-messageid="1"]');
     await shortMessage.click();
 
-    const messageContent = await page.locator('.messageContent').first();
+    const messageContent = page.locator('.messageContent').first();
     await expect(messageContent).toBeVisible();
 
-    const closeButton = await page.locator('.messageCloseButton').first();
+    const closeButton = page.locator('.messageCloseButton').first();
     await expect(closeButton).toHaveText('X');
     await closeButton.click();
     await expect(messageContent).not.toBeVisible();

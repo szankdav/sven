@@ -1,6 +1,6 @@
 <div class="flex-grow container mx-auto px-4 py-8">
     <% if (error==="" ) { %>
-        <div class="rounded-lg shadow-lg p-6 mb-8">
+        <div class="rounded-lg shadow-lg p-6">
             <h1 class="text-3xl font-bold mb-4">Server Authors</h1>
             <p class="text-xl md:text-2xl font-semibold mb-4">Here you can see who sent a message on your server. Click
                 on an author to see
@@ -15,32 +15,58 @@
                 </div>
             </div>
 
-            <div class="overflow-x-auto">
-                <div class="min-w-full inline-block align-middle">
-                    <div class="border rounded-lg overflow-hidden">
-                        <div
-                            class="grid grid-cols-3 bg-gray-700 text-gray-200 text-sm font-semibold uppercase tracking-wider py-3 px-6">
-                            <div>ID</div>
-                            <div>Name</div>
-                            <div>Created</div>
-                        </div>
-
+            <div class="hidden md:block overflow-x-auto rounded-lg shadow-xl border border-gray-700">
+                <table class="min-w-full divide-y divide-gray-700">
+                    <thead class="bg-gray-800">
+                        <tr>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                ID</th>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                Name</th>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                Created</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-700">
                         <% authorsSlicedByTen.forEach(row=> { %>
-                            <a href="/messages/author/<%= row.id %>"
-                                class="grid grid-cols-3 py-4 px-6 border-t hover:bg-gray-700 transition-colors duration-200 cursor-pointer group">
-                                <div class="group-hover:text-white">
+                            <tr class="bg-gray-800 text-white hover:bg-gray-700 transition-colors duration-150">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                     <%= row.id %>
-                                </div>
-                                <div class="font-medium group-hover:text-white">
-                                    <%= row.name %>
-                                </div>
-                                <div class="group-hover:text-white">
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold">
+                                    <a href="/messages/author/<%= row.id %>"
+                                        class="font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                                        <%= row.name %>
+                                    </a>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm">
                                     <%= new Date(row.createdAt).toLocaleDateString() %>
-                                </div>
-                            </a>
+                                </td>
+                            </tr>
                             <% }) %>
+                    </tbody>
+                </table>
+            </div>
+            <div class="grid grid-cols-1 gap-4 md:hidden">
+                <% authorsSlicedByTen.forEach(row=> { %>
+                    <div class="bg-gray-800 text-white rounded-lg p-4">
+                        <p><span class="font-bold">ID:</span>
+                            <%= row.id %>
+                        </p>
+                        <p><span class="font-bold">Author:</span>
+                            <a href="/messages/author/<%= row.id %>"
+                                class="font-medium group-hover:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                                <%= row.name %>
+                            </a>
+                        </p>
+                        <p><span class="font-bold">Created:</span>
+                            <%= new Date(row.createdAt).toLocaleDateString() %>
+                        </p>
                     </div>
-                </div>
+                    <% }) %>
             </div>
         </div>
         <% } else { %>

@@ -1,18 +1,17 @@
 <div class="container mx-auto px-4 py-8">
-    <div class="mb-6">
-        <%- include('partials/search'); %>
-    </div>
+    <div class="rounded-lg shadow-lg p-6">
+        <h4 class="text-xl md:text-2xl font-semibold mb-4">
+            Here you can see the messages sent by the selected author.
+        </h4>
 
-    <% if (authorFound) { %>
-        <div class="mb-8">
-            <h4 class="text-xl md:text-2xl font-semibold">
-                Here you can see the messages sent by the selected author.
-            </h4>
+        <div class="mb-6">
+            <%- include('partials/search'); %>
         </div>
 
-        <div class="flex flex-col sm:flex-row justify-start items-center space-y-4 sm:space-y-0 sm:space-x-4 mb-8">
+        <div
+            class="flex flex-col sm:flex-row justify-start items-center space-y-4 sm:space-y-0 sm:space-x-4 mb-8 text-white">
             <a class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm
-                  bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500
+                  bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500
                   transition-colors duration-200" data-testid="goBackToAuthors" href="/authors/1">
                 <svg class="-ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                     fill="currentColor">
@@ -22,7 +21,7 @@
                 Go back to authors
             </a>
             <a data-testid="goBackToMessages" href="/messages/1" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm
-                  bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500
+                  bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500
                   transition-colors duration-200">
                 <svg class="-ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                     fill="currentColor">
@@ -33,91 +32,96 @@
                 Go back to messages
             </a>
         </div>
+        <% if (authorFound) { %>
+            <div class="bg-gray-800 text-white rounded-lg shadow-xl p-6 mb-8 border border-gray-700">
+                <h3 class="text-2xl font-bold mb-4">Author Details:</h3>
+                <p class="mb-2" data-testid="id">
+                    <span class="font-semibold">ID:</span>
+                    <%= author.id %>
+                </p>
+                <p class="mb-2" data-testid="name">
+                    <span class="font-semibold">Name:</span>
+                    <%= author.name %>
+                </p>
+                <p>
+                    <span class="font-semibold">Created:</span>
+                    <%= author.createdAt %>
+                </p>
+            </div>
 
-        <div class="rounded-lg shadow-xl p-6 mb-8 border border-gray-700">
-            <h3 class="text-2xl font-bold mb-4">Author Details:</h3>
-            <p class="mb-2" data-testid="id">
-                <span class="font-semibold text-gray-200">ID:</span>
-                <%= author.id %>
-            </p>
-            <p class="mb-2" data-testid="name">
-                <span class="font-semibold text-gray-200">Name:</span>
-                <%= author.name %>
-            </p>
-            <p>
-                <span class="font-semibold text-gray-200">Created:</span>
-                <%= author.createdAt %>
-            </p>
-        </div>
-
-        <div class="mb-8">
-            <a data-testid="goToAuthorStatistics" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm
-                  bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500
+            <div class="mb-8 text-center md:text-left">
+                <a data-testid="goToAuthorStatistics" class="inline-flex items-center px-6 py-3 border border-transparent text-base text-white font-medium rounded-md shadow-sm
+                  bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500
                   transition-colors duration-200" href="/statistics/author/<%=author.id%>">
-                <svg class="-ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                    fill="currentColor">
-                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                    <path fill-rule="evenodd"
-                        d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-                        clip-rule="evenodd" />
-                </svg>
-                Go to author's statistics
-            </a>
-        </div>
-
-        <div class="overflow-x-auto rounded-lg shadow-xl border border-gray-700">
-            <table class="min-w-full divide-y divide-gray-700 table-fixed">
-                <thead class="bg-gray-800">
-                    <tr>
-                        <th scope="col"
-                            class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider w-1/12">
-                            ID</th>
-                        <th scope="col"
-                            class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider w-8/12">
-                            Content</th>
-                        <th scope="col"
-                            class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider w-3/12">
-                            Created</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-700">
-                    <% messages.forEach(row=> { %>
-                        <tr class="messageRow hover:bg-gray-700 transition-colors duration-150 hover:text-white"
-                            data-id="<%= row.id %>">
-                            <td class="px-6 py-4 text-sm font-medium">
-                                <%= row.id %>
-                            </td>
-                            <td class="px-6 py-4 text-sm break-words">
-                                <%= row.content %>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                <%= row.messageCreatedAt %>
-                            </td>
-                        </tr>
-                        <% }) %>
-                </tbody>
-            </table>
-        </div>
-
-        <% } else { %>
-            <div
-                class="relative text-center">
-                <div class="bg-red-900 border border-red-700 text-red-200 px-4 py-6 rounded-lg shadow-md mb-4">
-                    <h1 class="text-3xl font-bold mb-4">Error!</h1>
-                    <p class="text-xl mb-4">
-                        No author found with this ID!
-                    </p>
-                </div>
-                <a href="/home" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm
-                  bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-discord-blurple
-                  transition-colors duration-200">
                     <svg class="-ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                        fill="currentColor" aria-hidden="true">
-                        <path
-                            d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                        fill="currentColor">
+                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                        <path fill-rule="evenodd"
+                            d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                            clip-rule="evenodd" />
                     </svg>
-                    Go back to home page
+                    Go to author's statistics
                 </a>
             </div>
-            <% } %>
+
+            <div class="hidden md:block overflow-x-auto rounded-lg shadow-xl border border-gray-700">
+                <table class="min-w-full divide-y divide-gray-700">
+                    <thead class="bg-gray-800">
+                        <tr>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider w-1/12">
+                                ID</th>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider w-8/12">
+                                Content</th>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider w-3/12">
+                                Created</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-700">
+                        <% messages.forEach(row=> { %>
+                            <tr class="messageRow text-white bg-gray-800 hover:bg-gray-700 transition-colors duration-150"
+                                data-id="<%= row.id %>">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <%= row.id %>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <%= row.content %>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <%= row.messageCreatedAt %>
+                                </td>
+                            </tr>
+                            <% }) %>
+                    </tbody>
+                </table>
+            </div>
+            <div class="grid grid-cols-1 gap-4 md:hidden">
+                <% messages.forEach(row=> { %>
+                    <div class="bg-gray-800 text-white rounded-lg p-4">
+                        <p><span class="font-bold">ID:</span>
+                            <%= row.id %>
+                        </p>
+                        <p><span class="font-bold">Content:</span>
+                            <%= row.content %>
+                        </p>
+                        <p><span class="font-bold">Created:</span>
+                            <%= new Date(row.messageCreatedAt).toLocaleDateString() %>
+                        </p>
+                    </div>
+                    <% }) %>
+            </div>
+
+            <% } else { %>
+                <div class="relative text-center">
+                    <div class="bg-red-900 border border-red-700 text-red-200 px-4 py-6 rounded-lg shadow-md mb-4">
+                        <h1 class="text-3xl font-bold mb-4">Error!</h1>
+                        <p class="text-xl mb-4">
+                            No author found with this ID!
+                        </p>
+                    </div>
+                </div>
+                <% } %>
+    </div>
 </div>

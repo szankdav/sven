@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 const BASE_URL = 'http://localhost:3000';
 
-test.describe('Dashboard Page', () => {
+test.describe('Authors Page', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(`${BASE_URL}/authors/1`);
   });
@@ -61,8 +61,15 @@ test.describe('Dashboard Page', () => {
     await expect(page).toHaveURL(/.3/);
   });
 
-  test('should display a list of 10 authors', async ({ page }) => {
-    const authors = page.locator('a[href^="/messages/author/"]');
+  test('should display a list of 10 authors in desktop view', async ({ page }) => {
+    const authorsTable = page.getByRole('table');
+    const authors = authorsTable.locator('a[href^="/messages/author/"]');
+    await expect(authors).toHaveCount(10);
+  });
+
+  test('should display a list of 10 authors in mobile view', async ({ page }) => {
+    const authorsCards = page.locator('div[class="grid grid-cols-1 gap-4 md:hidden"]');
+    const authors = authorsCards.locator('a[href^="/messages/author/"]');
     await expect(authors).toHaveCount(10);
   });
 

@@ -1,20 +1,21 @@
 <header class="bg-gray-800 md:hidden">
   <div class="container mx-auto px-4 flex items-center justify-between h-16">
     <a href="<%= isLoggedIn ? '/home' : '/' %>" class="text-xl font-bold text-white">Server Logs</a>
-    <button id="mobile-menu-button" class="text-white hover:text-gray-100 focus:outline-none">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
-      </svg>
-    </button>
+    <%if(isLoggedIn===true ){%>
+      <button id="mobile-menu-button" class="text-white hover:text-gray-100 focus:outline-none">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
   </div>
-  <%if(isLoggedIn===true ){%>
-    <div id="mobile-menu" class="hidden px-4 pb-4 bg-gray-800">
-      <a href="/home" class="block py-2 text-white hover:text-gray-100">Dashboard</a>
-      <a href="/authors/1" class="block py-2 text-white hover:text-gray-100">Authors</a>
-      <a href="/messages/1" class="block py-2 text-white hover:text-gray-100">Messages</a>
-    </div>
-    <%}%>
+  <div id="mobile-menu" class="hidden px-4 pb-4 bg-gray-800">
+    <a href="/home" class="block py-2 text-white hover:text-gray-100">Dashboard</a>
+    <a href="/authors/1" class="block py-2 text-white hover:text-gray-100">Authors</a>
+    <a href="/messages/1" class="block py-2 text-white hover:text-gray-100">Messages</a>
+    <button class="logoutButton block py-2 text-white hover:text-gray-100 cursor-pointer">Logout</button>
+  </div>
+  <%}%>
 </header>
 
 <nav
@@ -30,7 +31,7 @@
     <div class="mt-auto pt-4 border-t border-gray-700 flex flex-col items-center">
       <img id="discordPic" alt="Discord Avatar" class="w-24 h-24 rounded-full object-cover mb-2">
       <p id="discordName" class="text-white text-sm"></p>
-      <button id="logoutButton" class="block py-2 px-3 rounded hover:bg-gray-700 text-sm cursor-pointer">Logout</button>
+      <button class="logoutButton block py-2 px-3 rounded hover:bg-gray-700 text-sm cursor-pointer">Logout</button>
     </div>
     <%} else {%>
       <div class="mt-auto pt-4 border-t border-gray-700">

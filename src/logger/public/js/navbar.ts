@@ -1,6 +1,6 @@
 const usernameInNavbar = document.getElementById('discordName') as HTMLElement;
 const userAvatarInNavbar = document.getElementById('discordPic') as HTMLImageElement;
-const logoutButton = document.getElementById('logoutButton') as HTMLButtonElement;
+const logoutButtons = document.getElementsByClassName('logoutButton') as HTMLCollectionOf<HTMLButtonElement>;
 
 const getLoggedInUserData = async () => {
     const result = await fetch('/api/userdata', {
@@ -31,16 +31,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-if(logoutButton){
-    logoutButton.addEventListener('click', async () => {
-        const result = await fetch('/logout', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username: usernameInNavbar.innerText }),
-        });
+if (logoutButtons) {
+    for (let i = 0; i < logoutButtons.length; i++) {
+        logoutButtons[i].addEventListener('click', async () => {
+            const result = await fetch('/logout', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: usernameInNavbar.innerText }),
+            });
 
-        if(result.status === 200){
-            window.location.href = '/';
-        };
-    });
+            if (result.status === 200) {
+                window.location.href = '/';
+            };
+        });
+    }
 };
