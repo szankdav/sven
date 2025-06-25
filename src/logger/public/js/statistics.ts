@@ -3,7 +3,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const statisticsSection = document.getElementById('statistics') as HTMLElement;
   const previousAuthorButton = document.querySelector('.previousAuthor') as HTMLAnchorElement;
   const nextAuthorButton = document.querySelector('.nextAuthor') as HTMLAnchorElement;
-  const maxAuthors = nextAuthorButton.dataset.maxauthors;
+  let maxAuthors;
+  if (nextAuthorButton) {
+    maxAuthors = nextAuthorButton.dataset.maxauthors;
+  };
 
   if (previousAuthorButton) {
     previousAuthorButton.classList.toggle('disabled:opacity-50', window.location.pathname === '/statistics/author/1');
