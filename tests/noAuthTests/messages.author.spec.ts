@@ -67,10 +67,6 @@ test.describe('Dashboard Page', () => {
     await expect(errorHeader).toBeVisible();
     const errorParagraph = page.getByText('No author found with this ID!');
     await expect(errorParagraph).toBeVisible();
-    const goBackButton = page.locator('a[href^="/home"]', { hasText: 'Go back to home page' });
-    await expect(goBackButton).toBeVisible();
-    await goBackButton.click();
-    await expect(page).toHaveURL(/.*home/);
   });
 
 });

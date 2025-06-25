@@ -68,34 +68,6 @@
                     </div>
                     <% }) %>
             </div>
-
-            <!-- <div class="overflow-x-auto">
-                <div class="min-w-full inline-block align-middle">
-                    <div class="border rounded-lg overflow-hidden">
-                        <div
-                            class="grid grid-cols-3 bg-gray-700 text-gray-200 text-sm font-semibold uppercase tracking-wider py-3 px-6">
-                            <div>ID</div>
-                            <div>Name</div>
-                            <div>Created</div>
-                        </div>
-
-                        <% authorsSlicedByTen.forEach(row=> { %>
-                            <a href="/messages/author/<%= row.id %>"
-                                class="grid grid-cols-3 py-4 px-6 border-t hover:bg-gray-700 transition-colors duration-200 cursor-pointer group">
-                                <div class="group-hover:text-white">
-                                    <%= row.id %>
-                                </div>
-                                <div class="font-medium group-hover:text-white">
-                                    <%= row.name %>
-                                </div>
-                                <div class="group-hover:text-white">
-                                    <%= new Date(row.createdAt).toLocaleDateString() %>
-                                </div>
-                            </a>
-                            <% }) %>
-                    </div>
-                </div>
-            </div> -->
         </div>
         <% } else { %>
             <div class="text-red-900 font-bold px-4 py-3 rounded-lg text-center mb-6">

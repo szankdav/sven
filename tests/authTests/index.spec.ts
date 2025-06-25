@@ -39,7 +39,7 @@ test.describe('Root Page', () => {
     const navbarLogin = navbar.locator('a[href="https://discord.com/oauth2/authorize?client_id=1352273717623001209&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Flogin&scope=guilds+identify"]');
     await expect(navbarLogin).toBeVisible();
     await navbarLogin.click();
-    await expect(page).toHaveURL('https://discord.com/login?redirect_to=%2Foauth2%2Fauthorize%3Fclient_id%3D1352273717623001209%26response_type%3Dcode%26redirect_uri%3Dhttp%253A%252F%252Flocalhost%253A3000%252Flogin%26scope%3Dguilds%2Bidentify');
+    await expect(page).toHaveURL('https://discord.com/oauth2/authorize?client_id=1352273717623001209&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Flogin&scope=guilds+identify');
 
     await page.goto(`${BASE_URL}/`);
 
@@ -47,6 +47,6 @@ test.describe('Root Page', () => {
     await expect(rootLogin).toBeVisible();
     await expect(rootLogin).toHaveText('Login');
     await rootLogin.click();
-    await expect(page).toHaveURL('https://discord.com/login?redirect_to=%2Foauth2%2Fauthorize%3Fclient_id%3D1352273717623001209%26response_type%3Dcode%26redirect_uri%3Dhttp%253A%252F%252Flocalhost%253A3000%252Flogin%26scope%3Dguilds%2Bidentify');
+    await expect(page).toHaveURL('https://discord.com/oauth2/authorize?client_id=1352273717623001209&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Flogin&scope=guilds+identify');
   });
 });

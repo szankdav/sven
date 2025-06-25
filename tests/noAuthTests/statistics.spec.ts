@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 const BASE_URL = 'http://localhost:3000';
 
-test.describe('Dashboard Page', () => {
+test.describe('Statistics Page', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(`${BASE_URL}/statistics/author/1`);
   });
@@ -52,19 +52,20 @@ test.describe('Dashboard Page', () => {
   });
 
   test('should display the main texts in author card', async ({ page }) => {
-    const header = page.getByRole('heading', { name: 'Author Details:', level: 4 });
+    const authorCard = page.locator('div[class="rounded-lg shadow-xl p-6 mb-8 border border-gray-700 bg-gray-800 text-white"]');
+    const header = authorCard.getByRole('heading', { name: 'Author Details:', level: 4 });
     await expect(header).toBeVisible();
     await expect(header).toHaveClass('text-2xl font-bold mb-4');
 
-    const idSpan = page.getByText('ID:');
+    const idSpan = authorCard.getByText('ID:');
     await expect(idSpan).toBeVisible();
     await expect(idSpan).toHaveClass('font-semibold');
 
-    const nameSpan = page.getByText('Name:');
+    const nameSpan = authorCard.getByText('Name:');
     await expect(nameSpan).toBeVisible();
     await expect(nameSpan).toHaveClass('font-semibold');
 
-    const createdSpan = page.getByText('Created:');
+    const createdSpan = authorCard.getByText('Created:');
     await expect(createdSpan).toBeVisible();
     await expect(createdSpan).toHaveClass('font-semibold');
   });
