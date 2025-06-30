@@ -51,11 +51,11 @@ export async function answerBotMention(
     return;
   }
   if (user.username === 'SvenDevBot') {
-    message.channel.send(`Szia ${message.author.displayName}!`);
-    message.channel.send(
-      "Az elérhető parancsaimat a '/' jellel tudod előhozni! :)",
+    message.author.send(`Szia ${message.author.displayName}!`);
+    message.author.send(
+      "Az elérhető parancsaimat a szerveren a '/' jellel tudod előhozni! :)",
     );
-    message.channel.send(
+    message.author.send(
       'Közvetlen üzenetben cseveghetsz is velem!',
     );
     logger.info(`SvenDevBot mentioned by: ${message.author}`);

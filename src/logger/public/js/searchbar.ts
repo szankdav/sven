@@ -15,8 +15,7 @@ const debounce = <T extends unknown[]>(
     };
 };
 
-const searchForAuthors = async () => {
-    const searchInputValue = (document.getElementById('searchInput') as HTMLInputElement).value;
+const searchForAuthors = async (searchInputValue: string) => {
     const result = await fetch('/search', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -28,7 +27,12 @@ const searchForAuthors = async () => {
 };
 
 const displaySearchResult = async () => {
-    const matchingAuthors = await searchForAuthors();
+    const searchInputValue = (document.getElementById('searchInput') as HTMLInputElement).value;
+    if (searchInputValue.length === 0) {
+        searchResults.setAttribute('data-show', 'false');
+        return;
+    };
+    const matchingAuthors = await searchForAuthors(searchInputValue);
     if (matchingAuthors.length === 0) {
         searchResults.innerHTML = '';
         const li = document.createElement('li');
@@ -36,6 +40,7 @@ const displaySearchResult = async () => {
         li.classList.add(...classes);
         li.innerText = 'No author found!';
         searchResults.append(li);
+        searchResults.setAttribute('data-show', 'true');
     } else {
         searchResults.innerHTML = '';
         for (let i = 0; i < matchingAuthors.length; i++) {
