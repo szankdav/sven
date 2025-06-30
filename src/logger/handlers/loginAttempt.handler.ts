@@ -29,7 +29,7 @@ export const loginAttemptHandler = async (req: Request,
 
         if (!codeFromBody) {
             logger.error('Code not found in header for Discord Oauth login!');
-            res.redirect('/error?code=401');
+            res.redirect('/error');
             return;
         }
 
@@ -57,7 +57,7 @@ export const loginAttemptHandler = async (req: Request,
             res.redirect('/home');
         } else {
             logger.error(`Unsuccesfull login because of insufficient permissions with username: ${username.username}`);
-            res.redirect('/error');
+            res.redirect('/error?code=401');
             return;
         };
 
