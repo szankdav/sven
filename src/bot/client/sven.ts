@@ -1,4 +1,5 @@
 import { ChannelType, Client, Collection, CommandInteraction, OAuth2Guild, TextChannel } from 'discord.js';
+import cron from 'node-cron';
 import { config } from '../../config.js';
 import { deployCommandsForSven } from './deploy-commands.js';
 import { cooldownForInteraction } from '../interactions/cooldown.interaction.js';
@@ -9,15 +10,46 @@ import {
 import { logger } from '../../winston/winston.js';
 import { hikeConversation } from '../commands/texts/conversations.js';
 import { handleInput } from '../chat/commandHandler.js';
+import { Article } from '../../logger/types/foremArticle.type.js';
 
 export const client = new Client({
   intents: ['Guilds', 'GuildMessages', 'DirectMessages', 'MessageContent', 'GuildMembers', 'GuildPresences'],
   partials: [1],
 });
 
+export const getDailyArticles = async () => {
+  const response = await fetch('https://dev.to/api/articles?per_page=10', {
+    headers: { 'Content-Type': 'application/json' },
+  });
+
+  const articles = await response.json();
+  return articles;
+};
+
+export const scheduleDailyArticleMessage = async (bot: Client) => {
+  cron.schedule('* * * * *', async () => {
+    const user = bot.users.cache.get('1069676407715807252');
+    const articles: Array<Article> = await getDailyArticles();
+    if (user) {
+      await user.send('Jó reggelt! Küldöm a 10 legnépszerűbb cikket, amelyiket szeretnéd, hogy kitegyem az "Olvass egy cikket" csatornára, annak küld nekem vissza a címét!');
+      for (let i = 0; i < articles.length; i++) {
+        // await user.send(`Cím: ${articles[i].title}`);
+        // await user.send(`URL: ${articles[i].url}`);
+        // await user.send(`Leírás: ${articles[i].description}`);
+        // await user.send(`Címkék: ${articles[i].tags}`);
+        // await user.send(`Olvasási idő: ${articles[i].reading_time_minutes}`);
+        // await user.send(`Pozitív reakciók: ${articles[i].positive_reactions_count}`);
+        // await user.send(`Publikálva: ${articles[i].readable_publish_date}`);
+        // await user.send('-----------------------------------------------------------------');
+      };
+    };
+  });
+};
+
 client.once('ready', async () => {
   try {
     await deployCommandsForSven();
+    // await scheduleDailyArticleMessage(client);
     /* eslint no-console: ["error", { allow: ["log"] }] */
     console.log('Sven is ready! 🤖');
     logger.info('Sven is ready! 🤖');

@@ -57,7 +57,7 @@ export const loginAttemptHandler = async (req: Request,
             res.redirect('/home');
         } else {
             logger.error(`Unsuccesfull login because of insufficient permissions with username: ${username.username}`);
-            res.redirect('/error');
+            res.redirect('/error?code=401');
             return;
         };
 

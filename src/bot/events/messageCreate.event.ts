@@ -42,12 +42,12 @@ export async function answerBotMention(
   if (user === undefined) {
     return;
   }
-  if (!message.author.bot && user.username === 'SvenBot') {
-    message.channel.send(`Szia ${message.author}!`);
-    message.channel.send(
-      "Az elérhető parancsaimat a '/' jellel tudod előhozni! :)",
+  if (user.username === 'SvenDevBot') {
+    message.author.send(`Szia ${message.author.displayName}!`);
+    message.author.send(
+      "Az elérhető parancsaimat a szerveren a '/' jellel tudod előhozni! :)",
     );
-    message.channel.send(
+    message.author.send(
       'Közvetlen üzenetben cseveghetsz is velem!',
     );
     logger.info(`SvenDevBot mentioned by: ${message.author}`);

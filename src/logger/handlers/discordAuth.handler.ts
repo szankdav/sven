@@ -20,6 +20,7 @@ export const discordAuthGuardHandler = async (req: Request, res: Response, next:
     });
 
     if (userResponse.statusCode !== 200) {
+      res.statusCode = 500;
       res.redirect('/error');
     }
 
