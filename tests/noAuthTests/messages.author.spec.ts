@@ -7,7 +7,7 @@ test.describe('Dashboard Page', () => {
     await page.goto(`${BASE_URL}/messages/author/1`);
   });
 
-  test('should display results in if a letter is written in the search bar', async ({ page }) => {
+  test('should display results if a letter is written in the search bar', async ({ page }) => {
     const searchInput = page.getByPlaceholder('Search authors...');
     await searchInput.click();
     await searchInput.press('a');
@@ -17,11 +17,31 @@ test.describe('Dashboard Page', () => {
     expect(await searchDropdown.locator('li').count()).toBeGreaterThanOrEqual(1);
   });
 
+  test('should display results if a letter is written in the searchbar', async ({ page }) => {
+    await page.route('http://localhost:3000/search', async route => {
+      const json = [
+        {
+          id: 1,
+          name: 'Test User',
+          createdAt: '2025. 07. 01. 16:19:10'
+        }
+      ];
+      route.fulfill({ json });
+    });
+    const resultUl = page.locator('#searchResults');
+
+    await page.locator('#searchInput').press('t');
+    
+    await expect(resultUl.locator('li')).toHaveText('Test User');
+  });
+
   test('should display the proper message in searchresult if there is no result', async ({ page }) => {
     const searchInput = page.getByPlaceholder('Search authors...');
     await searchInput.click();
-    await searchInput.pressSequentially('aaaaaa');
     const searchDropdown = page.getByLabel('authorsList');
+    
+    await searchInput.pressSequentially('aaaaaa');
+    
     await expect(searchDropdown).toBeVisible();
     await expect(searchDropdown.locator('li').first()).toBeVisible();
     expect(await searchDropdown.locator('li').textContent()).toBe('No author found!');

@@ -19,7 +19,7 @@ test.describe('Authors Page', () => {
     await expect(paragraph).toHaveClass('text-xl md:text-2xl font-semibold mb-4');
   });
 
-  test('should display results in if a letter is written in the search bar', async ({ page }) => {
+  test('should display results if a letter is written in the search bar', async ({ page }) => {
     const searchInput = page.getByPlaceholder('Search authors...');
     await searchInput.click();
     await searchInput.press('a');

@@ -26,10 +26,12 @@ import { userDataHandler } from './logger/handlers/user.handler.js';
 import { loginErrorHandler } from './logger/handlers/loginError.handler.js';
 import { indexHandler } from './logger/handlers/index.handler.js';
 import { logoutHandler } from './logger/handlers/logout.handler.js';
+import { getHWSWNews } from './bot/services/api/hwsw.service.js';
 
 // Start bots
 startSven();
 startFaendal();
+getHWSWNews();
 
 // Set filepaths
 const __dirname = import.meta.dirname;

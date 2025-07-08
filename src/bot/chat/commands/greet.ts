@@ -1,4 +1,4 @@
-import { Command } from '../../interfaces/types.js';
+import { Command } from '../../interfaces/types.interface.js';
 
 export const greetCommand: Command = {
     name: 'greet',

@@ -1,4 +1,4 @@
-import { Command } from '../interfaces/types.js';
+import { Command } from '../interfaces/types.interface.js';
 import { greetCommand } from './commands/greet.js';
 import { unknownCommand } from './commands/unknown.js';
 

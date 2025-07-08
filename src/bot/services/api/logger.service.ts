@@ -1,5 +1,5 @@
 import { logger } from '../../../winston/winston.js';
-import { DiscordMessage } from '../../../logger/types/discordMessage.type';
+import { DiscordMessage } from '../../../logger/types/discordMessage.type.js';
 
 export const logMessages = async (messageData: DiscordMessage) => {
   const result = await fetch('/api/logMessage', {
