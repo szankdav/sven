@@ -1,4 +1,4 @@
-import { CacheType, ChannelType, Client, Collection, Interaction, Message, MessageReaction, OAuth2Guild, OmitPartialGroupDMChannel, PartialMessageReaction, PartialUser, User } from 'discord.js';
+import { CacheType, ChannelType, Client, Collection, Interaction, Message, OAuth2Guild, OmitPartialGroupDMChannel } from 'discord.js';
 import { config } from '../../config.js';
 import { deployCommandsForSven } from './deploy-commands.js';
 import { cooldownForInteraction } from '../interactions/cooldown.interaction.js';
@@ -8,8 +8,7 @@ import {
 } from '../events/messageCreate.event.js';
 import { logger } from '../../winston/winston.js';
 import { handleInput } from '../chat/commandHandler.js';
-import { talkWithFaendal, sendArticlesToTheChannel, sendNewsToTheChannel, createNewDiscordEvent, judgeNewDiscordEvent, scheduleDailyArticleMessage } from '../services/sven.service.js';
-import reactionSwitch from './shared/canChoose.js';
+import { talkWithFaendal, sendArticlesToTheChannel, sendNewsToTheChannel, createNewDiscordEvent, scheduleDailyArticleMessage } from '../services/sven.service.js';
 import canChoose from './shared/canChoose.js';
 
 export const client = new Client({
