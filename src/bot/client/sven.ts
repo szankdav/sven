@@ -8,8 +8,9 @@ import {
 } from '../events/messageCreate.event.js';
 import { logger } from '../../winston/winston.js';
 import { handleInput } from '../chat/commandHandler.js';
-import { talkWithFaendal, sendArticlesToTheChannel, sendNewsToTheChannel, createNewDiscordEvent, judgeNewDiscordEvent } from '../services/sven.service.js';
-import reactionSwitch from './shared/articlesAndNewsReaction.js';
+import { talkWithFaendal, sendArticlesToTheChannel, sendNewsToTheChannel, createNewDiscordEvent, judgeNewDiscordEvent, scheduleDailyArticleMessage } from '../services/sven.service.js';
+import reactionSwitch from './shared/canChoose.js';
+import canChoose from './shared/canChoose.js';
 
 export const client = new Client({
   intents: ['Guilds', 'GuildMessages', 'GuildScheduledEvents', 'DirectMessages', 'MessageContent', 'GuildMembers', 'GuildPresences', 'DirectMessageReactions'],
@@ -19,7 +20,7 @@ export const client = new Client({
 client.once('ready', async () => {
   try {
     await deployCommandsForSven();
-    // await scheduleDailyArticleMessage(client);
+    await scheduleDailyArticleMessage(client);
     /* eslint no-console: ["error", { allow: ["log"] }] */
     console.log('Sven is ready! 🤖');
     logger.info('Sven is ready! 🤖');
@@ -28,24 +29,38 @@ client.once('ready', async () => {
   }
 });
 
-client.on('messageReactionAdd', async (reaction: MessageReaction | PartialMessageReaction, user: User | PartialUser) => {
-  if (reactionSwitch.articleReaction) {
-    await sendArticlesToTheChannel(reaction, user, client);
-  };
+// client.on('messageReactionAdd', async (reaction: MessageReaction | PartialMessageReaction, user: User | PartialUser) => {
+//   if (reactionSwitch.articleReaction) {
+//     await sendArticlesToTheChannel(reaction, user, client);
+//   };
 
-  if (reactionSwitch.newsReaction) {
-    await sendNewsToTheChannel(reaction, user, client);
-  };
+//   if (reactionSwitch.newsReaction) {
+//     await sendNewsToTheChannel(reaction, user, client);
+//   };
 
-  if (reaction.message.content?.includes('Új eseményt szeretne létrehozni')) {
-    await judgeNewDiscordEvent(reaction, user, client);
-  };
+//   if (reaction.message.content?.includes('Új eseményt szeretne létrehozni')) {
+//     await judgeNewDiscordEvent(reaction, user, client);
+//   };
 
-});
+// });
 
 client.on('interactionCreate', async (interaction: Interaction<CacheType>) => {
   try {
     await cooldownForInteraction(interaction);
+    if (interaction.isButton()) {
+      await interaction.deferUpdate();
+      const id = interaction.customId.split('_')[1];
+      const type = interaction.customId.split('_')[2];
+      if (canChoose.canChooseArticle && (type === 'article' || interaction.customId === 'done_articles')) {
+        await sendArticlesToTheChannel(interaction, id, client);
+      } else if (canChoose.canChooseArticle === false) {
+        await interaction.message.edit({ content: 'Már publikáltam a mai cikkeket. Legközelebb holnap tudsz újra választani!', components: [] });
+      } else if (canChoose.canChooseHWSWNew && (type === 'hwswNew' || interaction.customId === 'done_hwswNews')) {
+        await sendNewsToTheChannel(interaction, id, client);
+      } else if (canChoose.canChooseHWSWNew === false) {
+        await interaction.message.edit({ content: 'Már publikáltam a mai híreket. Legközelebb holnap tudsz újra választani!', components: [] });
+      };
+    };
     await createNewDiscordEvent(interaction, client);
   } catch (error) {
     logger.error('Error during set of interactions cooldown: ', error);

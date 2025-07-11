@@ -1,4 +1,5 @@
 export type HWSWNew = {
+    id: number;
     creator: string;
     title: string;
     link: string;
