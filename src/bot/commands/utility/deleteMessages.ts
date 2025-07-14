@@ -17,7 +17,7 @@ import { db } from '../../../logger/database/database.js';
     const channelProps: TextChannel = channelParent?.toJSON() as TextChannel;
     await interaction.channel?.delete();
     await interaction.guild?.channels.create({
-        name: 'általános',
+        name: channelProps.name,
         type: 0,
         parent: channelProps.parentId,
     });

@@ -1,70 +1,20 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, CacheType, Client, Guild, Interaction, Message, MessageFlags, MessageReaction, OmitPartialGroupDMChannel, PartialMessageReaction, PartialUser, TextChannel, User } from 'discord.js';
+import { CacheType, Client, Collection, Guild, Interaction, Message, MessageFlags, MessageReaction, OmitPartialGroupDMChannel, PartialMessageReaction, PartialUser, TextChannel, User } from 'discord.js';
 import cron from 'node-cron';
-import { getArticleById, getDailyArticles } from './api/forem.service.js';
 import { logger } from '../../winston/winston.js';
 import { config } from '../../config.js';
 import { hikeConversation } from '../commands/texts/conversations.js';
-import { getHWSWNews, news } from './api/hwsw.service.js';
-import { HWSWNew } from '../types/hwswNew.type.js';
-import { Article } from '../types/foremArticle.type.js';
 import { DiscordEvent } from '../interfaces/discordEvent.interface.js';
 import ObservableArray from '../utils/observableArray.js';
 import canChoose from '../client/shared/canChoose.js';
+import { filterAlreadyPublishedNewsAndArticles, sendNewsAndArticlesToAdmin } from './publish.service.js';
 
 const discordEvents = new ObservableArray<DiscordEvent>();
 
-const createAcceptButtonForNewsAndArticles = (id: number, type: string) => {
-    const row = new ActionRowBuilder<ButtonBuilder>()
-        .addComponents(
-            new ButtonBuilder()
-                .setCustomId(`accept_${id}_${type}`)
-                .setLabel('Mehet')
-                .setStyle(ButtonStyle.Success),
-        );
+const getChannelMessages = async (channelId: string, bot: Client): Promise<Collection<string, Message<true>>> => {
+    const channel = await bot.channels.fetch(channelId) as TextChannel;
+    const channelMessages = await channel.messages.fetch();
 
-    return row;
-};
-
-const createCancelButtonForNewsAndArticles = (id: number, type: string) => {
-    const row = new ActionRowBuilder<ButtonBuilder>()
-        .addComponents(
-            new ButtonBuilder()
-                .setCustomId(`cancel_${id}_${type}`)
-                .setLabel('Mégse')
-                .setStyle(ButtonStyle.Danger),
-        );
-
-    return row;
-};
-
-const createDoneButtonForNewsAndArticles = (type: string) => {
-    const row = new ActionRowBuilder<ButtonBuilder>()
-        .addComponents(
-            new ButtonBuilder()
-                .setCustomId(`done_${type}`)
-                .setLabel('Kész')
-                .setStyle(ButtonStyle.Success),
-        );
-
-    return row;
-};
-
-const disableButton = async (interaction: ButtonInteraction, cancelButton?: ActionRowBuilder<ButtonBuilder>) => {
-    const updatedRow = new ActionRowBuilder<ButtonBuilder>()
-        .addComponents(
-            ButtonBuilder.from(interaction.component).setDisabled(true)
-        );
-
-    if (cancelButton) {
-        await interaction.message.edit({
-            components: [updatedRow, cancelButton],
-        });
-        return;
-    }
-
-    await interaction.message.edit({
-        components: [updatedRow],
-    });
+    return channelMessages;
 };
 
 export const scheduleDailyArticleMessage = async (bot: Client) => {
@@ -72,123 +22,11 @@ export const scheduleDailyArticleMessage = async (bot: Client) => {
         canChoose.canChooseArticle = true;
         canChoose.canChooseHWSWNew = true;
         const user = bot.users.cache.get(config.SZANKDAV_ID);
-        const tenForemArticles = await getDailyArticles();
-        const tenHWSWArticles = await getHWSWNews();
-        const articlesChannel = await bot.channels.fetch(config.DEVBOT_CIKKEK_CHANNEL) as TextChannel;
-        const articlesChannelMessages = await articlesChannel.messages.fetch();
-        const newsChannel = await bot.channels.fetch(config.DEVBOT_HIREK_CHANNEL) as TextChannel;
-        const newsChannelMessages = await newsChannel.messages.fetch();
-
-        articlesChannelMessages.forEach(message => {
-            if (tenForemArticles?.find(article => article.url === message.content)) {
-                tenForemArticles.splice(tenForemArticles.findIndex(article => article.url === message.content), 1);
-            };
-        });
-
-        newsChannelMessages.forEach(message => {
-            if (tenHWSWArticles?.find(hwswNew => hwswNew.link === message.content)) {
-                tenHWSWArticles.splice(tenHWSWArticles.findIndex(hwswNew => hwswNew.link === message.content), 1);
-            };
-        });
-
-        if (tenForemArticles === null) {
-            logger.error('Could not get articles from forem!');
-            return;
-        };
-
-        if (tenHWSWArticles === null) {
-            logger.error('Could not get news from HWSW!');
-            return;
-        };
-
-        if (user && tenForemArticles && tenHWSWArticles) {
-            await user.send('Jó reggelt! Küldöm a legnépszerűbb cikkeket a Forem-ről! Kérlek válassz ki öt cikket a "Mehet" gombbal, amiket szeretnéd, hogy kitegyek a "#cikkek" csatornára! A cikkeket csak akkor teszem ki a csatornára, ha kiválasztottad mind az ötöt!');
-            for (let i = 0; i < tenForemArticles!.length; i++) {
-                const button = createAcceptButtonForNewsAndArticles(tenForemArticles[i].id, 'article');
-                // eslint-disable-next-line no-await-in-loop
-                await user.send({ content: `Cím: ${tenForemArticles![i].title}\nURL: ${tenForemArticles![i].url}\nLeírás: ${tenForemArticles![i].description}\nCímkék: ${tenForemArticles![i].tags}\nOlvasási idő: ${tenForemArticles![i].reading_time_minutes} perc\nPozitív reakciók: ${tenForemArticles![i].positive_reactions_count}\nPublikálva: ${tenForemArticles![i].readable_publish_date}\nID: ${tenForemArticles![i].id}\n-----------------------------------------------------------------`, components: [button] });
-            };
-            await user.send({ content: 'Ha kiválasztottad a cikkeket katt ide: ', components: [createDoneButtonForNewsAndArticles('articles')] });
-            await user.send('És itt van a HWSW aktuális RSS feedje! Kérlek innen is válassz ki öt hírt a "Mehet" gombbal, amiket szeretnéd, hogy kitegyek a "hírek" csatornára! A híreket csak akkor teszem ki a csatornára, ha kiválasztottad mind az ötöt!');
-            for (let i = 0; i < tenHWSWArticles!.length; i++) {
-                const date = new Date(`${tenHWSWArticles[i].isoDate}`);
-                const button = createAcceptButtonForNewsAndArticles(tenHWSWArticles[i].id, 'hwswNew');
-                // eslint-disable-next-line no-await-in-loop
-                await user.send({ content: `Cím: ${tenHWSWArticles[i].title}\nTartalom: ${tenHWSWArticles[i].content}\nLink: ${tenHWSWArticles[i].link}\nDátum: ${date.toLocaleString()}\n-----------------------------------------------------------------`, components: [button] });
-            };
-            await user.send({ content: 'Ha kiválasztottad a híreket katt ide: ', components: [createDoneButtonForNewsAndArticles('hwswNews')] });
-        };
+        const articlesChannelMessages = await getChannelMessages(config.DEVBOT_CIKKEK_CHANNEL, bot);
+        const newsChannelMessages = await getChannelMessages(config.DEVBOT_HIREK_CHANNEL, bot);
+        await filterAlreadyPublishedNewsAndArticles(articlesChannelMessages, newsChannelMessages);
+        await sendNewsAndArticlesToAdmin(user);
     });
-};
-
-const choosenArticles: Array<Article> = [];
-export const sendArticlesToTheChannel = async (interaction: ButtonInteraction, id: string, bot: Client) => {
-    if (interaction.user.id === config.SZANKDAV_ID) {
-        const channel = await bot.channels.fetch(config.DEVBOT_CIKKEK_CHANNEL) as TextChannel;
-
-        if (interaction.customId.split('_')[0] === 'accept') {
-            const article = await getArticleById(id);
-            if (article) {
-                choosenArticles.push(article);
-                await disableButton(interaction, createCancelButtonForNewsAndArticles(Number(id), 'article'));
-            };
-        }
-
-        if (interaction.customId.split('_')[0] === 'cancel') {
-            choosenArticles.splice(choosenArticles.findIndex(article => article.id === Number(interaction.customId.split('_')[1])));
-            await interaction.message.edit({
-                components: [createAcceptButtonForNewsAndArticles(Number(id), 'article')],
-            });
-        }
-
-        if (interaction.customId === 'done_articles' && choosenArticles.length > 0) {
-            await disableButton(interaction);
-            await interaction.message.edit('Már mennek is a csatornára a kiválasztott cikkek! :)');
-            await channel.send('@everyone Sziasztok! Itt van néhány cikk a reggeli mellé, amit szeretnék a figyelmetekbe ajánlani! Jó olvasást! :)');
-            choosenArticles.forEach(async choosenArticle => {
-                await channel.send(`${choosenArticle.url}`);
-            });
-            choosenArticles.length = 0;
-            canChoose.canChooseArticle = false;
-        } else if (interaction.customId === 'done_articles' && choosenArticles.length === 0) {
-            await interaction.message.edit({ content: 'Még nem választottál ki egyetlen cikket sem!', components: [createDoneButtonForNewsAndArticles('articles')] });
-        };;
-    };
-};
-
-const choosenNews: HWSWNew[] = [];
-export const sendNewsToTheChannel = async (interaction: ButtonInteraction, id: string, bot: Client) => {
-    if (interaction.user.id === config.SZANKDAV_ID) {
-        const channel = await bot.channels.fetch(config.DEVBOT_HIREK_CHANNEL) as TextChannel;
-
-        if (interaction.customId.split('_')[0] === 'accept') {
-            const choosenNew: HWSWNew | undefined = news.find(n => n.id === Number(id));
-            if (choosenNew) {
-                choosenNews.push(choosenNew);
-                await disableButton(interaction, createCancelButtonForNewsAndArticles(Number(id), 'hwswNew'));
-            };
-        };
-
-        if (interaction.customId.split('_')[0] === 'cancel') {
-            choosenNews.splice(choosenNews.findIndex(hwswNew => hwswNew.id === Number(interaction.customId.split('_')[1])));
-            await interaction.message.edit({
-                components: [createAcceptButtonForNewsAndArticles(Number(id), 'hwswNew')],
-            });
-        }
-
-        if (interaction.customId === 'done_hwswNews' && choosenNews.length > 0) {
-            await disableButton(interaction);
-            await interaction.message.edit('Már mennek is a csatornára a kiválasztott hírek! :)');
-            await channel.send('@everyone Sziasztok! Itt van néhány hír a reggeli mellé, amit szeretnék a figyelmetekbe ajánlani! Jó olvasást! :)');
-            choosenNews.forEach(async choosenNew => {
-                await channel.send(`${choosenNew.link}`);
-            });
-            choosenNews.length = 0;
-            canChoose.canChooseHWSWNew = false;
-        } else if (interaction.customId === 'done_hwswNews' && choosenNews.length === 0) {
-            await interaction.message.edit({ content: 'Még nem választottál ki egyetlen hírt sem!', components: [createDoneButtonForNewsAndArticles('hwswNews')] });
-        };
-    };
 };
 
 let index = 1;

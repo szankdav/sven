@@ -8,8 +8,8 @@ import {
 } from '../events/messageCreate.event.js';
 import { logger } from '../../winston/winston.js';
 import { handleInput } from '../chat/commandHandler.js';
-import { talkWithFaendal, sendArticlesToTheChannel, sendNewsToTheChannel, createNewDiscordEvent, scheduleDailyArticleMessage } from '../services/sven.service.js';
-import canChoose from './shared/canChoose.js';
+import { talkWithFaendal, createNewDiscordEvent, scheduleDailyArticleMessage } from '../services/sven.service.js';
+import { acceptButtonClick, cancelButtonClick, doneButtonClick } from '../services/publish.service.js';
 
 export const client = new Client({
   intents: ['Guilds', 'GuildMessages', 'GuildScheduledEvents', 'DirectMessages', 'MessageContent', 'GuildMembers', 'GuildPresences', 'DirectMessageReactions'],
@@ -50,15 +50,25 @@ client.on('interactionCreate', async (interaction: Interaction<CacheType>) => {
       await interaction.deferUpdate();
       const id = interaction.customId.split('_')[1];
       const type = interaction.customId.split('_')[2];
-      if (canChoose.canChooseArticle && (type === 'article' || interaction.customId === 'done_articles')) {
-        await sendArticlesToTheChannel(interaction, id, client);
-      } else if (canChoose.canChooseArticle === false) {
-        await interaction.message.edit({ content: 'Már publikáltam a mai cikkeket. Legközelebb holnap tudsz újra választani!', components: [] });
-      } else if (canChoose.canChooseHWSWNew && (type === 'hwswNew' || interaction.customId === 'done_hwswNews')) {
-        await sendNewsToTheChannel(interaction, id, client);
-      } else if (canChoose.canChooseHWSWNew === false) {
-        await interaction.message.edit({ content: 'Már publikáltam a mai híreket. Legközelebb holnap tudsz újra választani!', components: [] });
+
+      if (interaction.user.id === config.SZANKDAV_ID) {
+        if (interaction.customId.split('_')[0] === 'accept') {
+          await acceptButtonClick(interaction, type, id);
+        } else if (interaction.customId.split('_')[0] === 'cancel') {
+          await cancelButtonClick(interaction, type, id);
+        } else if (interaction.customId.split('_')[0] === 'done') {
+          await doneButtonClick(interaction, client);
+        };
       };
+      // if (canChoose.canChooseArticle && (type === 'article' || interaction.customId === 'done_articles')) {
+      //   await sendArticlesToTheChannel(interaction, id, client);
+      // } else if (canChoose.canChooseArticle === false && type === 'article') {
+      //   await interaction.message.edit({ content: `${interaction.message.content}\nMár publikáltam a mai cikkeket. Legközelebb holnap tudsz újra választani!`, components: [] });
+      // } else if (canChoose.canChooseHWSWNew && (type === 'hwswNew' || interaction.customId === 'done_hwswNews')) {
+      //   await sendNewsToTheChannel(interaction, id, client);
+      // } else if (canChoose.canChooseHWSWNew === false && type === 'hwswNew') {
+      //   await interaction.message.edit({ content: `${interaction.message.content}\nMár publikáltam a mai híreket. Legközelebb holnap tudsz újra választani!`, components: [] });
+      // };
     };
     await createNewDiscordEvent(interaction, client);
   } catch (error) {

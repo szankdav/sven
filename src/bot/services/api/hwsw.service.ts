@@ -8,8 +8,8 @@ export const news: HWSWNew[] = [];
 export const getHWSWNews = async (): Promise<HWSWNew[] | null> => {
   try {
     const feed = await parser.parseURL('http://hwsw.hu/xml/latest_news_rss.xml');
+    let id = 1;
     for (let i = 0; i < feed.items.length; i++) {
-      let id = 1;
       const hwswNew: HWSWNew = {
         id,
         creator: feed.items[i].creator!,
@@ -24,7 +24,6 @@ export const getHWSWNews = async (): Promise<HWSWNew[] | null> => {
       id += 1;
       news.push(hwswNew);
     };
-
     return news;
   } catch (error) {
     logger.error('Error parsing rss feed: ', error);
