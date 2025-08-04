@@ -27,6 +27,9 @@ import { loginErrorHandler } from './logger/handlers/loginError.handler.js';
 import { indexHandler } from './logger/handlers/index.handler.js';
 import { logoutHandler } from './logger/handlers/logout.handler.js';
 import { getHWSWNews } from './bot/services/api/hwsw.service.js';
+import { publishHandler } from './logger/handlers/publish.handler.js';
+import { selectArticlesAndNewsHandler } from './logger/handlers/selectArticlesAndNews.handler.js';
+import { cancelArticlesAndNewsHandler } from './logger/handlers/cancelArticlesAndNewsHandler.js';
 
 // Start bots
 startSven();
@@ -71,6 +74,9 @@ authRouter.post('/search', searchHandler);
 authRouter.get('/api/userdata', userDataHandler);
 authRouter.post('/api/message', messageHandler);
 authRouter.post('/logout', logoutHandler);
+authRouter.get('/publish', publishHandler);
+authRouter.post('/api/select', selectArticlesAndNewsHandler);
+authRouter.post('/api/cancel', cancelArticlesAndNewsHandler);
 // authRouter.get('/api/useravatar', userAvatarHandler);
 
 app.use(express.static(path.join(__dirname, './logger/public')));

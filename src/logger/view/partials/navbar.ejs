@@ -13,19 +13,21 @@
     <a href="/home" class="block py-2 text-white hover:text-gray-100">Dashboard</a>
     <a href="/authors/1" class="block py-2 text-white hover:text-gray-100">Authors</a>
     <a href="/messages/1" class="block py-2 text-white hover:text-gray-100">Messages</a>
+    <a href="/publish" class="block py-2 px-3 rounded hover:bg-gray-700">Publish</a>
     <button class="logoutButton block py-2 text-white hover:text-gray-100 cursor-pointer">Logout</button>
   </div>
   <%}%>
 </header>
 
 <nav
-  class="hidden md:flex md:w-64 bg-gray-900 text-white flex-col p-4 shadow-lg h-screen sticky top-0 <%= typeof colSpanClass !== 'undefined' ? colSpanClass : '' %>">
+  class="hidden md:flex md:w-64 bg-gray-900 text-white flex-col p-4 shadow-md shadow-gray-100 h-screen sticky top-0 <%= typeof colSpanClass !== 'undefined' ? colSpanClass : '' %>">
   <div class="mb-8 text-2xl font-bold">Server Logs</div>
   <%if(isLoggedIn===true ){%>
     <ul class="space-y-4 flex-grow">
       <li><a href="/home" class="block py-2 px-3 rounded hover:bg-gray-700">Home</a></li>
       <li><a href="/authors/1" class="block py-2 px-3 rounded hover:bg-gray-700">Authors</a></li>
       <li><a href="/messages/1" class="block py-2 px-3 rounded hover:bg-gray-700">Messages</a></li>
+      <li><a href="/publish" class="block py-2 px-3 rounded hover:bg-gray-700">Publish</a></li>
     </ul>
 
     <div class="mt-auto pt-4 border-t border-gray-700 flex flex-col items-center">

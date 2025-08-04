@@ -4,9 +4,9 @@ import { logger } from '../../winston/winston.js';
 import { config } from '../../config.js';
 import { hikeConversation } from '../commands/texts/conversations.js';
 import { DiscordEvent } from '../interfaces/discordEvent.interface.js';
-import ObservableArray from '../utils/observableArray.js';
+import ObservableArray from '../utils/observableArray.util.js';
 import canChoose from '../client/shared/canChoose.js';
-import { filterAlreadyPublishedNewsAndArticles, sendNewsAndArticlesToAdmin } from './publish.service.js';
+import { filterAlreadyPublishedNewsAndArticles, initializeArticlesAndNewsArrays, sendNewsAndArticlesToAdmin, sendNewsToAdminDashboard } from './publish.service.js';
 
 const discordEvents = new ObservableArray<DiscordEvent>();
 
@@ -17,7 +17,7 @@ const getChannelMessages = async (channelId: string, bot: Client): Promise<Colle
     return channelMessages;
 };
 
-export const scheduleDailyArticleMessage = async (bot: Client) => {
+export const scheduleDailyPublishInDM = async (bot: Client) => {
     cron.schedule('*/2 * * * *', async () => {
         canChoose.canChooseArticle = true;
         canChoose.canChooseHWSWNew = true;
@@ -26,6 +26,19 @@ export const scheduleDailyArticleMessage = async (bot: Client) => {
         const newsChannelMessages = await getChannelMessages(config.DEVBOT_HIREK_CHANNEL, bot);
         await filterAlreadyPublishedNewsAndArticles(articlesChannelMessages, newsChannelMessages);
         await sendNewsAndArticlesToAdmin(user);
+    });
+};
+
+export const scheduleDailyPublishInDomain = async (bot: Client) => {
+    cron.schedule('*/2 * * * *', async () => {
+        await initializeArticlesAndNewsArrays();
+        canChoose.canChooseArticle = true;
+        canChoose.canChooseHWSWNew = true;
+        const user = bot.users.cache.get(config.SZANKDAV_ID);
+        const articlesChannelMessages = await getChannelMessages(config.DEVBOT_CIKKEK_CHANNEL, bot);
+        const newsChannelMessages = await getChannelMessages(config.DEVBOT_HIREK_CHANNEL, bot);
+        await filterAlreadyPublishedNewsAndArticles(articlesChannelMessages, newsChannelMessages);
+        await sendNewsToAdminDashboard(user);
     });
 };
 

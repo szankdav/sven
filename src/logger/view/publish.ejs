@@ -1,0 +1,123 @@
+<div class="container mx-auto px-4 py-8">
+    <% if (error==="" ) { %>
+        <div class="rounded-lg shadow-lg p-6">
+            <h1 class="text-3xl font-bold mb-4">HWSW News and Articles</h1>
+            <p class="text-xl md:text-2xl font-semibold mb-4">
+                Here you can see the HWSW news and Forem articles curated by Sven. Use the 'Select' button on each card
+                to mark the ones you want to publish. If you change your mind, click on the 'X' to remove them from the
+                selection list. Once you've chosen all the items you'd like Sven to publish on the server, click the
+                'Done'
+                button.
+            </p>
+
+            <div class="grid grid-cols-1 gap-4 md:flex justify-evenly mb-4">
+                <button id="foremArticlesButton"
+                    class="rounded-lg border-2 border-white text-xl p-2 cursor-pointer hover:text-gray-400 disabled:text-gray-500 disabled:border-gray-500 disabled:cursor-not-allowed disabled:hover:text-gray-500">Forem
+                    Articles</button>
+                <button id="hwswNewsButton"
+                    class="rounded-lg border-2 border-white text-xl p-2 cursor-pointer hover:text-gray-400 disabled:text-gray-500 disabled:border-gray-500 disabled:cursor-not-allowed disabled:hover:text-gray-500">HWSW
+                    News</button>
+            </div>
+
+
+            <div id="foremArticles" class="hidden grid grid-cols-1 gap-4">
+                <% if (foremArticles.length> 0) { %>
+                    <div id="articlesListWindow"
+                        class="hidden w-128 fixed bottom-4 right-4 bg-gray-800 border border-white text-white p-4 rounded-lg shadow-lg z-50 flex flex-col">
+                        <p class="font-bold border-b border-gray-700">Choosen Articles</p>
+                        <div id="articlesList" class="flex-1"></div>
+                        <button class="mt-2 self-center border-2 border-white rounded-lg p-1 w-16 cursor-pointer hover:text-gray-400">Done</button>
+                    </div>
+                    <% foremArticles.forEach(foremArticle=> { %>
+                        <div id="<%= 'foremArticles-' + foremArticle.id %>" class="bg-gray-800 text-white rounded-lg p-4">
+                            <p><span class="font-bold">Title:</span>
+                                <%= foremArticle.title %>
+                            </p>
+                            <p><span class="font-bold">Link:</span>
+                                <%= foremArticle.url %>
+                            </p>
+                            <p class="cursor-pointer"><span class="font-bold">Description:</span>
+                                <%= foremArticle.description %>
+                            </p>
+                            <p><span class="font-bold">Tags:</span>
+                                <%= foremArticle.tags %>
+                            </p>
+                            <p><span class="font-bold">Reading time:</span>
+                                <%= foremArticle.reading_time_minutes %>
+                            </p>
+                            <p><span class="font-bold">Positive reactions:</span>
+                                <%= foremArticle.positive_reactions_count %>
+                            </p>
+                            <p><span class="font-bold">Published on Forem:</span>
+                                <%= foremArticle.readable_publish_date %>
+                            </p>
+                            <button data-type="article" data-id="<%= foremArticle.id %>"
+                                class="select text-xl p-2 cursor-pointer hover:text-gray-400">Select</button>
+                        </div>
+                        <% }) %>
+                            <% } else { %>
+                                <div class="bg-gray-800 text-white rounded-lg p-4">
+                                    <p class="text-xl md:text-2xl font-semibold">There is nothing to show you yet.
+                                        :(</p>
+                                </div>
+                                <% } %>
+            </div>
+
+            <div id="hwswNews" class="hidden grid grid-cols-1 gap-4">
+                <% if (hwswNews.length> 0) { %>
+                    <div id="hwswNewsListWindow"
+                        class="hidden w-128 fixed bottom-4 right-4 bg-gray-800 border border-white text-white p-4 rounded-lg shadow-lg z-50 flex flex-col">
+                        <p class="font-bold border-b border-gray-700">Choosen News</p>
+                        <div id="hwswNewsList" class="flex-1"></div>
+                        <button class="mt-2 self-center border-2 border-white rounded-lg p-1 w-16 cursor-pointer hover:text-gray-400">Done</button>
+                    </div>
+                    <% hwswNews.forEach(hwswNew=> { %>
+                        <div id="<%= 'hwswNews-' + hwswNew.id %>" class="bg-gray-800 text-white rounded-lg p-4">
+                            <p><span class="font-bold">Title:</span>
+                                <%= hwswNew.title %>
+                            </p>
+                            <p><span class="font-bold">Content:</span>
+                                <%= hwswNew.content %>
+                            </p>
+                            <p class="cursor-pointer"><span class="font-bold">Link:</span>
+                                <%= hwswNew.link %>
+                            </p>
+                            <p><span class="font-bold">Publish date:</span>
+                                <%= hwswNew.isoDate.toLocaleString() %>
+                            </p>
+                            <button data-type="hwswNew" data-id="<%= hwswNew.id %>"
+                                class="select text-xl p-2 cursor-pointer hover:text-gray-400">Select</button>
+                        </div>
+                        <% }) %>
+                            <div class="bg-gray-800 text-white rounded-lg p-4">
+                                <button class="text-xl p-2 cursor-pointer hover:text-gray-400">Done</button>
+                            </div>
+                            <% } else { %>
+                                <div class="bg-gray-800 text-white rounded-lg p-4">
+                                    <p class="text-xl md:text-2xl font-semibold">There is nothing to show you yet.
+                                        :(</p>
+                                </div>
+                                <% } %>
+            </div>
+        </div>
+        <% } else { %>
+            <div class="text-red-900 font-bold px-4 py-3 rounded-lg text-center mb-6">
+                <p class="text-lg">
+                    <%= error %>
+                </p>
+            </div>
+            <div class="text-center">
+                <a data-testid="goBack"
+                    class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm
+                      text-white bg-gray-900 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors duration-200"
+                    href="/home">
+                    <svg class="-ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                        fill="currentColor" aria-hidden="true">
+                        <path
+                            d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                    </svg>
+                    Go back to home page
+                </a>
+            </div>
+            <% } %>
+</div>

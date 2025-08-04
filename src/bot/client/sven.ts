@@ -8,8 +8,8 @@ import {
 } from '../events/messageCreate.event.js';
 import { logger } from '../../winston/winston.js';
 import { handleInput } from '../chat/commandHandler.js';
-import { talkWithFaendal, createNewDiscordEvent, scheduleDailyArticleMessage } from '../services/sven.service.js';
-import { acceptButtonClick, cancelButtonClick, doneButtonClick } from '../services/publish.service.js';
+import { talkWithFaendal, createNewDiscordEvent, scheduleDailyPublishInDM, scheduleDailyPublishInDomain } from '../services/sven.service.js';
+import { acceptButtonClickInDM, cancelButtonClickInDM, doneButtonClickInDM } from '../services/publish.service.js';
 
 export const client = new Client({
   intents: ['Guilds', 'GuildMessages', 'GuildScheduledEvents', 'DirectMessages', 'MessageContent', 'GuildMembers', 'GuildPresences', 'DirectMessageReactions'],
@@ -19,7 +19,8 @@ export const client = new Client({
 client.once('ready', async () => {
   try {
     await deployCommandsForSven();
-    await scheduleDailyArticleMessage(client);
+    // await scheduleDailyPublishInDM(client);
+    await scheduleDailyPublishInDomain(client);
     /* eslint no-console: ["error", { allow: ["log"] }] */
     console.log('Sven is ready! 🤖');
     logger.info('Sven is ready! 🤖');
@@ -53,11 +54,11 @@ client.on('interactionCreate', async (interaction: Interaction<CacheType>) => {
 
       if (interaction.user.id === config.SZANKDAV_ID) {
         if (interaction.customId.split('_')[0] === 'accept') {
-          await acceptButtonClick(interaction, type, id);
+          await acceptButtonClickInDM(interaction, type, id);
         } else if (interaction.customId.split('_')[0] === 'cancel') {
-          await cancelButtonClick(interaction, type, id);
+          await cancelButtonClickInDM(interaction, type, id);
         } else if (interaction.customId.split('_')[0] === 'done') {
-          await doneButtonClick(interaction, client);
+          await doneButtonClickInDM(interaction, client);
         };
       };
       // if (canChoose.canChooseArticle && (type === 'article' || interaction.customId === 'done_articles')) {

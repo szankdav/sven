@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 import { test, expect } from '@playwright/test';
 
 const BASE_URL = 'http://localhost:3000';

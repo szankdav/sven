@@ -9,7 +9,7 @@ export const getHWSWNews = async (): Promise<HWSWNew[] | null> => {
   try {
     const feed = await parser.parseURL('http://hwsw.hu/xml/latest_news_rss.xml');
     let id = 1;
-    for (let i = 0; i < feed.items.length; i++) {
+    for (let i = 0; i < 10; i++) {
       const hwswNew: HWSWNew = {
         id,
         creator: feed.items[i].creator!,

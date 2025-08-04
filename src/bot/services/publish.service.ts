@@ -2,16 +2,24 @@ import { ButtonInteraction, CacheType, Client, Collection, Message, TextChannel,
 import { getArticleById, getDailyArticles } from './api/forem.service.js';
 import { getHWSWNews, news } from './api/hwsw.service.js';
 import { logger } from '../../winston/winston.js';
-import { createAcceptButtonForNewsAndArticles, createCancelButtonForNewsAndArticles, createDoneButtonForNewsAndArticles, disableButton } from './discordButtons.service.js';
+import { createAcceptButtonForNewsAndArticles, createCancelButtonForNewsAndArticles, createDoneButtonForNewsAndArticles, disableButton } from '../utils/discordButtons.util.js';
 import { config } from '../../config.js';
 import { Article } from '../types/foremArticle.type.js';
 import { HWSWNew } from '../types/hwswNew.type.js';
 import canChoose from '../client/shared/canChoose.js';
 
-export const tenForemArticles = await getDailyArticles();
-export const tenHWSWArticles = await getHWSWNews();
+let tenForemArticles: Article[] | null = [];
+let tenHWSWNews: HWSWNew[] | null = [];
 const choosenArticles: Array<Article> = [];
 const choosenNews: HWSWNew[] = [];
+
+export const initializeArticlesAndNewsArrays = async () => {
+    tenForemArticles = await getDailyArticles();
+    tenHWSWNews = await getHWSWNews();
+};
+
+export const getArticleArray = () => tenForemArticles;
+export const getNewsArray = () => tenHWSWNews;
 
 export const filterAlreadyPublishedNewsAndArticles = async (articlesChannelMessages: Collection<string, Message<true>>, newsChannelMessages: Collection<string, Message<true>>) => {
     if (tenForemArticles === null) {
@@ -19,30 +27,30 @@ export const filterAlreadyPublishedNewsAndArticles = async (articlesChannelMessa
         return;
     };
 
-    if (tenHWSWArticles === null) {
+    if (tenHWSWNews === null) {
         logger.error('Could not get news from HWSW!');
         return;
     };
 
     const articlesChannelMessagesArray = Array.from(articlesChannelMessages);
-    for (let i = 0; i < tenForemArticles.length; i++) {
-        const match = articlesChannelMessagesArray.find(message => message[1].content.includes(tenForemArticles[i].url));
-        if (match) {
-            tenForemArticles.splice(tenForemArticles.findIndex(article => article.url === match[1].content), 1);
-        };
-    };
+    tenForemArticles = tenForemArticles?.filter(article => {
+        const match = articlesChannelMessagesArray.find(message =>
+            message[1].content.includes(article.url)
+        );
+        return !match;
+    }) ?? null;
 
     const newsChannelMessagesArray = Array.from(newsChannelMessages);
-    for (let i = 0; i < tenHWSWArticles.length; i++) {
-        const match = newsChannelMessagesArray.find(message => message[1].content.includes(tenHWSWArticles[i].link));
-        if (match) {
-            tenHWSWArticles.splice(tenHWSWArticles.findIndex(hwswNew => hwswNew.link === match[1].content), 1);
-        };
-    };
+    tenHWSWNews = tenHWSWNews?.filter(hwswNew => {
+        const match = newsChannelMessagesArray.find(message =>
+            message[1].content.includes(hwswNew.link)
+        );
+        return !match;
+    }) ?? null;
 };
 
 export const sendNewsAndArticlesToAdmin = async (user: User | undefined) => {
-    if (user && tenForemArticles && tenHWSWArticles) {
+    if (user && tenForemArticles && tenHWSWNews) {
         if (tenForemArticles.length === 0) {
             await user.send('Sajnos ma semmit nem találtam, ami megosztásra érdemes... :(');
         } else {
@@ -54,22 +62,22 @@ export const sendNewsAndArticlesToAdmin = async (user: User | undefined) => {
             };
             await user.send({ content: 'Ha kiválasztottad a cikkeket katt ide: ', components: [createDoneButtonForNewsAndArticles('articles')] });
         };
-        if (tenHWSWArticles.length === 0) {
+        if (tenHWSWNews.length === 0) {
             await user.send('Sajnos ma semmit nem találtam, ami megosztásra érdemes... :(');
         } else {
             await user.send('És itt van a HWSW aktuális RSS feedje! Kérlek innen is válaszd ki azokat a híreket a "Mehet" gombbal, amiket szeretnéd, hogy kitegyek a "hírek" csatornára! Ha valamit mégsem szeretnél megosztani, a "Mégse" gombbal visszavonhatod a választásodat. Ha kész vagy, nyomj a lista alján a "Kész" gombra!');
-            for (let i = 0; i < tenHWSWArticles!.length; i++) {
-                const date = new Date(`${tenHWSWArticles[i].isoDate}`);
-                const button = createAcceptButtonForNewsAndArticles(tenHWSWArticles[i].id, 'hwswNew');
+            for (let i = 0; i < tenHWSWNews!.length; i++) {
+                const date = new Date(`${tenHWSWNews[i].isoDate}`);
+                const button = createAcceptButtonForNewsAndArticles(tenHWSWNews[i].id, 'hwswNew');
                 // eslint-disable-next-line no-await-in-loop
-                await user.send({ content: `Cím: ${tenHWSWArticles[i].title}\nTartalom: ${tenHWSWArticles[i].content}\nLink: ${tenHWSWArticles[i].link}\nDátum: ${date.toLocaleString()}\n-----------------------------------------------------------------`, components: [button] });
+                await user.send({ content: `Cím: ${tenHWSWNews[i].title}\nTartalom: ${tenHWSWNews[i].content}\nLink: ${tenHWSWNews[i].link}\nDátum: ${date.toLocaleString()}\n-----------------------------------------------------------------`, components: [button] });
             };
             await user.send({ content: 'Ha kiválasztottad a híreket katt ide: ', components: [createDoneButtonForNewsAndArticles('hwswNews')] });
         };
     };
 };
 
-export const acceptButtonClick = async (interaction: ButtonInteraction<CacheType>, type: string, id: string) => {
+export const acceptButtonClickInDM = async (interaction: ButtonInteraction<CacheType>, type: string, id: string) => {
     if (type === 'article' && canChoose.canChooseArticle) {
         const article = await getArticleById(id);
         if (article) {
@@ -89,7 +97,7 @@ export const acceptButtonClick = async (interaction: ButtonInteraction<CacheType
     };
 };
 
-export const cancelButtonClick = async (interaction: ButtonInteraction<CacheType>, type: string, id: string) => {
+export const cancelButtonClickInDM = async (interaction: ButtonInteraction<CacheType>, type: string, id: string) => {
     if (type === 'article' && canChoose.canChooseArticle) {
         choosenArticles.splice(choosenArticles.findIndex(article => article.id === Number(interaction.customId.split('_')[1])));
         await interaction.message.edit({
@@ -107,7 +115,7 @@ export const cancelButtonClick = async (interaction: ButtonInteraction<CacheType
     };
 };
 
-export const doneButtonClick = async (interaction: ButtonInteraction, bot: Client) => {
+export const doneButtonClickInDM = async (interaction: ButtonInteraction, bot: Client) => {
     if (interaction.customId === 'done_articles' && choosenArticles.length > 0) {
         const channel = await bot.channels.fetch(config.DEVBOT_CIKKEK_CHANNEL) as TextChannel;
         await disableButton(interaction);
@@ -135,4 +143,57 @@ export const doneButtonClick = async (interaction: ButtonInteraction, bot: Clien
     } else if (interaction.customId === 'done_hwswNews' && choosenNews.length === 0) {
         await interaction.message.edit({ content: 'Még nem választottál ki egyetlen hírt sem!', components: [createDoneButtonForNewsAndArticles('hwswNews')] });
     };
+};
+
+export const sendNewsToAdminDashboard = async (user: User | undefined) => {
+    if (!user) {
+        logger.error('The user you wanted to send the news and articles is not valid.');
+        return;
+    }
+
+    await user.send('Jó reggelt! Az oldalon megtalálod a friss, publikálásra alkalmas tartalmakat! :) http://localhost:3000');
+};
+
+export const acceptButtonClickInAdminDashboard = async (type: string, id: string): Promise<string | null> => {
+    // Done gomb nyomasara uritsuk a kivalasztott tomboket, es toltsuk ujra az oldalt
+    if (type === 'article' && canChoose.canChooseArticle) {
+        const article = await getArticleById(id);
+        if (article) {
+            choosenArticles.push(article);
+            console.log('Article pushed into the array: ', article.title);
+            console.log('Article array length: ', choosenArticles.length);
+            return article.title;
+        };
+    } else if (type === 'hwswNew' && canChoose.canChooseHWSWNew) {
+        const choosenNew: HWSWNew | undefined = news.find(n => n.id === Number(id));
+        if (choosenNew) {
+            choosenNews.push(choosenNew);
+            console.log('New pushed into the array: ', choosenNew.title);
+            console.log('News array length: ', choosenNews.length);
+            return choosenNew.title;
+        };
+    };
+    return null;
+};
+
+export const cancelButtonClickInAdminDashboard = async (type: string, id: string): Promise<boolean> => {
+    // Done gomb nyomasara uritsuk a kivalasztott tomboket, es toltsuk ujra az oldalt
+    if (type === 'article' && canChoose.canChooseArticle) {
+        const article = await getArticleById(id);
+        if (article) {
+            choosenArticles.splice(choosenArticles.findIndex(x => x === article), 1);
+            console.log('Article removed from the array: ', article.title);
+            console.log('Article array length: ', choosenArticles.length);
+            return true;
+        };
+    } else if (type === 'hwswNew' && canChoose.canChooseHWSWNew) {
+        const choosenNew: HWSWNew | undefined = news.find(n => n.id === Number(id));
+        if (choosenNew) {
+            choosenNews.splice(choosenNews.findIndex(x => x === choosenNew), 1);
+            console.log('New removed from the array: ', choosenNew.title);
+            console.log('News array length: ', choosenNews.length);
+            return true;
+        };
+    };
+    return false;
 };
